@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+<Resource
+name="jdbc/db" type="javax.sql.DataSource"
+maxActive="100" maxIdle="30" maxWait="10000"
+url="jdbc:mysql://li328.lip6.fr:33306/gr3_jeud_mich"
+driverClassName="com.mysql.jdbc.Driver"
+username="gr3_jeud_mich" password="jeud_mich"
+/>
+</Context>

@@ -1,0 +1,101 @@
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
+
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-weight: normal;
+    margin: 0;
+    outline: 0 none;
+    font-family: "Open Sans";
+    padding: 0;
+}
+ img {
+  margin-top: 100px;
+  max-width: 200px;
+  max-height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body > p {
+  text-align: center;
+}
+body {
+  background: #007CC8;
+  font-family: "Open Sans";
+}
+
+.login {
+    width: 300px;
+    margin: 0 auto;
+
+}
+.login form {
+  width: 100%;
+}
+
+
+input {
+    /*background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);*/
+    color: #007CC8;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 -5px 45px rgba(100, 100, 100, 0.2) inset, 0 1px 1px rgba(255, 255, 255, 0.2);
+    font-size: 13px;
+    margin-bottom: 10px;
+    outline: medium none;
+    padding: 10px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+button {
+    background: linear-gradient(to bottom, #009EFF 0px, #0075BC 100%) repeat scroll 0 0 transparent;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 1px 0 #E6F5FF inset;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    padding: 10px 25px;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+    width: 100%;
+}
+
+
+a {
+  color:#FFFFFF;
+  text-decoration:none;
+  font-family: sans-serif;
+}
+
+
+a:hover {
+  color: blue;
+}
+
+
+footer {
+  position: fixed;
+  background-color: transparent;
+  background-color: #1FA1F1;
+  font-family: 'Work Sans', Arial, Helvetica, sans-serif;
+  text-shadow: 1px 1px 1px #fff;
+  display: block;
+  bottom: 0;
+  left: 0;
+  height: 11vh;
+  width: 100%;
+}
+
+footer p {
+  float: right;
+  margin-right: 30px;
+  margin-top: 20px;
+  color: black;
+
+}
