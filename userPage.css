@@ -1,0 +1,83 @@
+
+
+header {
+	display: flex;
+	justify-content: space-between;
+	background: #0052cc;
+}
+
+header form{
+	margin: auto;
+}
+
+header div{
+	margin-top:auto;
+	margin-bottom: auto;
+}
+
+
+
+header img {
+	max-width: 80px;
+	max-height: 80px;
+}
+
+aside{
+	background:#cce0ff;
+	width:39vh;
+	height:100vh;
+	align-items:stretch;
+}
+
+
+
+
+aside ul{
+	flex-direction:column;
+	flex-wrap:wrap;
+	list-style: none;
+}
+
+aside h1{
+	text-align: center;
+	text-shadow: 1px 1px 1px #fff;
+
+}
+
+section{
+	align-items:stretch;
+	height:100vh;
+}
+footer {
+  position: fixed;
+  background-color: transparent;
+  background-color: #1FA1F1;
+  font-family: 'Work Sans', Arial, Helvetica, sans-serif;
+  text-shadow: 1px 1px 1px #fff;
+  display: block;
+  bottom: 0;
+  left: 0;
+  height: 11vh;
+  width: 100%;
+}
+
+#container{
+	display: flex;
+}
+
+div > ul{
+	list-style: none;
+}
+
+.message p{
+	 text-overflow: ellipsis;
+}
+.message{
+	border: 1px solid grey;
+	margin-bottom: 5vh;
+	
+}
+.message #dateMessage{
+	float: right
+	
+}
