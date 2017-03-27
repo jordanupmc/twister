@@ -149,9 +149,9 @@ function init(){
 	env = new Object();
 	env.noConnection = true;
 	setVirtualMessage();
-	document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
-	completeMessages();
-	// makeEnregistrementPanel();
+	// document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
+	// completeMessages();
+	makeEnregistrementPanel();
 }
 
 
