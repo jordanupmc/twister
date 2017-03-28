@@ -1,0 +1,12 @@
+Pour ajouter des modifs sur le git:
+1) Recuperer la version la plus a jour (eviter les conflits)
+git pull origin master
+
+2)Ajouter tout les fichiers qu'on a modifié
+git add *
+
+3)Commit
+git commit -m "unechaine"
+
+4)Envoyé sur le serveur
+git push origin master

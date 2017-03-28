@@ -149,9 +149,15 @@ function init(){
 	env = new Object();
 	env.noConnection = true;
 	setVirtualMessage();
+<<<<<<< HEAD
 	//document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
 	//completeMessages();
 	 makeEnregistrementPanel();
+=======
+	// document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
+	// completeMessages();
+	makeEnregistrementPanel();
+>>>>>>> 27c07d4c1cd53872d20c43585ea0d1abc082c19b
 }
 
 
