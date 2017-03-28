@@ -143,7 +143,7 @@ public class UserTools {
 			c.close();
 			
 		}catch(Exception e){
-			throw new BDException("Echec creation d'un user"+e);
+			throw new BDException("Echec creation d'un user "+e);
 		}
 		return true;
 	}
