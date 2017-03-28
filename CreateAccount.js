@@ -36,7 +36,7 @@ function makeEnregistrementPanel(){
     err.text("Login trop court");
 
   if( password1.val()<8) 
-    err.text("Mot de passe 1 trop court");
+    err.text("Mot de passe trop court");
 
   if( password2.val() != password1.val())
     err.text("Mot de passe différent");
@@ -55,6 +55,7 @@ function Create(login, password,nom, prenom){
     success: function(r){
         //TEST CODE+ afficher textError
         console.log(r);
+        
         //alert("Votre inscription a bien été prise en compte ");
      },
      error: function(jqXHR,textStatus,errTHrown){

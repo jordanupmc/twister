@@ -1,5 +1,5 @@
 function makeConnectionPanel(){
-	var s="<p style=\"color:red\" id=\"errMsg\"></p>"
+	var s="<div id=\"login\"> <p style=\"color:red\" id=\"errMsg\"></p>"
 	+"<p> <img src=\"image/logo.png\" alt=\"Smiley face\"></p>"
 	+"<div class=\"login\">"
 	+"<form action=\"javascript:(function(){return;}())\" method=\"get\" onsubmit=\"javascript:ConnectionLogin()\">"
@@ -8,7 +8,7 @@ function makeConnectionPanel(){
 	+"<button type=\"submit\" class=\"btn btn-primary btn-block btn-large\">Login</button>"
 	+"<a href=\"LoginPage.html\">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Vous n'avez pas de compte?</a>"
 	+"</form>"
-	+"</div>"
+	+"</div></div>"
 	var res = document.getElementsByTagName('body')[0];   
 	res.innerHTML=s;
 	//$('body').html(s);
@@ -45,7 +45,7 @@ function Connectex(login,password){
 			success: function(result){
 				//GERER les codes d'err
 				console.log(result.status+" "+result.textError)
-
+				console.log(result)
 			},
 			error: function(jqXHR,textStatus,errorThrown) {
 				console.log(textStatus);

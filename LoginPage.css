@@ -1,7 +1,17 @@
 
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
+#login{
+  height: 100%;
+  padding: 0;
+  margin:0;
+}
+html,
+body {
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+}
 
-*, *:after, *:before {
+#login *, *:after, *:before {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -11,7 +21,9 @@
     font-family: "Open Sans";
     padding: 0;
 }
- img {
+
+
+#login  img {
   margin-top: 100px;
   max-width: 200px;
   max-height: 200px;
@@ -19,25 +31,29 @@
   margin-right: auto;
 }
 
-body {
+body #login  {
   background: #007CC8;
   font-family: "Open Sans";
+  min-height: 100%;
+   margin:0;
+ position: relative;
+  
 }
 
-body > p{
+body >  #login  p{
   text-align: center;
 }
 
-.login {
+#login  .login {
     width: 300px;
     margin: 0 auto;
 }
-.login form {
+#login  .login form {
   width: 100%;
 }
 
 
-input {
+#login  input {
     color: #007CC8;
     background: #FFFFFF;
     /*background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);*/
@@ -52,7 +68,7 @@ input {
     width: 100%;
 }
 
-button {
+#login  button {
     background: linear-gradient(to bottom, #009EFF 0px, #0075BC 100%) repeat scroll 0 0 transparent;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
@@ -68,18 +84,18 @@ button {
 }
 
 
-a {
+#login a {
   color:#FFFFFF;
   text-decoration:none;
   font-family: sans-serif;
 }
 
 
-a:hover {
+#login  a:hover {
   color: blue;
 }
 
-footer {
+#login  footer {
   position: fixed;
   background-color: transparent;
   background-color: #1FA1F1;
@@ -91,7 +107,7 @@ footer {
   height: 11vh;
   width: 100%;
 }
-footer p {
+#login  footer p {
   float: right;
   margin-right: 30px;
   margin-top: 20px;
