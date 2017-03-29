@@ -7,7 +7,7 @@ function makeConnectionPanel(){
 	+"<input id=\"logIN\" name=\"login\" placeholder=\"Login\" required type=\"text\" value=''>"
 	+"<input id=\"pass\" name=\"pass\" placeholder=\"Password\" required type=\"password\">"
 	+"<button type=\"submit\" class=\"btn btn-primary btn-block btn-large\">Login</button>"
-	+"<a href=\"\" onclick=\"javascript:makeEnregistrementPanel()\">  &nbsp;Vous n'avez pas de compte?</a>"
+	+"<a href=\"javascript:void(0);\" onclick=\"javascript:makeEnregistrementPanel()\">  &nbsp;Vous n'avez pas de compte?</a>"
 	+"</form>"
 	+"</div>\n</div>"
 	var res = document.getElementsByTagName('body')[0];   

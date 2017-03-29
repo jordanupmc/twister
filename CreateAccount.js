@@ -10,7 +10,7 @@ function makeEnregistrementPanel(){
   +"<input id=\"password1\"  name=\"password1\" placeholder=\"Password\" required=\"required\" type=\"password\">"
   +"<input id=\"password2\"  name=\"password2\" placeholder=\"Confirm Password\" required type=\"password\">"
   +"<button type=\"submit\" class=\"btn btn-primary btn-block btn-large\">Rejoindre</button>"
-  +"<a href=\"\" onclick=\"javascript:makeConnectionPanel()\"> Vous avez déjà un compte? </a>"
+  +"<a href=\"javascript:void(0);\" onclick=\"javascript:makeConnectionPanel()\"> Vous avez déjà un compte? </a>"
   +"</form>"
   +"</div>\n</div>"
 
