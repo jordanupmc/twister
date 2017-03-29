@@ -151,14 +151,12 @@ function init(){
 	setVirtualMessage();
 	
 	makeConnectionPanel();
+	//makeEnregistrementPanel();
 
 	//document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
 	//completeMessages();
-	//makeEnregistrementPanel();
-
 	// document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
 	// completeMessages();
-	//makeEnregistrementPanel();
 }
 
 
