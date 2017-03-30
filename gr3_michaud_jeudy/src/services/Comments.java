@@ -134,15 +134,10 @@ public class Comments {
 			
 			author_id=Session.getIdUser(token);
 			
-
-			 
-			
 			request.put("author_id", author_id);
 			request.put("date", today);
 		
 			mess.put("like", request);
-			
-			
 			
 			if(author_id==-1){
 				return false;
@@ -175,24 +170,37 @@ public class Comments {
 			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
 			DB db= m.getDB(DBStatic.mysqldb);
 			DBCollection collection = db.getCollection("comments");
+			
 			BasicDBObject request = new BasicDBObject();
 			BasicDBObject request2 = new BasicDBObject();
 			
 			request.put("like.author_id", author_id);
 			request2.put("_id", new ObjectId(com_id));
 			
+			System.out.println(request);
+			
 			BasicDBList or = new BasicDBList();
 			or.add(request);
 			or.add(request2);
 			
 			DBObject query = new BasicDBObject("$and", or);
-			
+
 			System.out.println(collection.find(query));
+			DBObject db2 = collection.findOne(request2);
 			
-			if(collection.findOne(query) != null)
-				return true;
-			
-			
+			if(db2 != null){
+				
+				
+				BasicDBList likes = (BasicDBList)  db2.get("like");
+				BasicDBObject[] likeArr = likes.toArray(new BasicDBObject[0]);
+				
+				for(BasicDBObject l: likeArr){
+					System.out.println(l.getString("author_id"));
+					if(l.getInt("author_id")==Integer.parseInt(author_id))
+						return true;
+				}
+			}
+
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

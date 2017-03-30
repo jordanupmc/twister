@@ -70,6 +70,7 @@ public class TestService {
 			System.out.println("isLIKE !");
 		else
 			System.out.println("PAS LIKE");
+		
 //		try {
 //			System.out.println(Comments.getListMessage("-1082458812", 4));
 //		} catch (BDException e) {
