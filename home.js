@@ -150,8 +150,8 @@ function init(){
 	env.noConnection = true;
 	setVirtualMessage();
 	
-	makeConnectionPanel();
-	//makeEnregistrementPanel();
+	//makeConnectionPanel();
+	makeEnregistrementPanel();
 
 	//document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
 	//completeMessages();
@@ -217,7 +217,9 @@ function makeMainPanel(fromId, fromLogin, query){
 	// else{
 	// 	s+=;
 
-	return s;
+	document.getElementsByTagName('body')[0].innerHTML= s;
+	completeMessages();
+
 }
 
 function completeMessages(){

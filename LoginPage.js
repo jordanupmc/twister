@@ -21,35 +21,47 @@ function ConnectionLogin(){
 	var lg=$("#logIN");
 	var password1=$("#pass");
 	var err=$("#errMsg");
+	var noFail = true;
 
-	console.log(lg.val());
-	console.log(password1.val());
+
 
 	if( lg.val()==undefined){
 		err.text("Login trop court");
+		noFail = false;
+
 	}
 	if( lg.length==undefined){
 		err.text("Login INDEFINI");
+		noFail = false;
+
 	}
 	if( password1.val().length<4){
 		err.text("Mot de passe trop court");
+		noFail = false;
+
 	}
-	Connectex(lg.val(),password1.val());
+	if(noFail){
+		Connectex(lg.val(),password1.val());
+	}
 
 }
 
 function Connectex(login,password){
+	var err1=$("#errMsg");
 	$.ajax({
 		type:"POST",
 		url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/login",
 		data:"login="+login+"&password="+password,
 		dataType:"json",
 		success: function(result){
-			if(result.code==1){
-				console.log("status : "+result.status);
-				console.log("code : "+result.code);
+			if(result.status=="KO"){
+				err1.text("Message Error : "+result.textError);
+				console.log("code error : "+result.code);
+				console.log("Message Error : "+result.textError);
+
 			}else{
-				console.log("Inscription terminée");
+				env.token=result.token;
+          		makeMainPanel(result.id, result.login);
 			}
 		},
 		error: function(jqXHR,textStatus,errTHrown){
