@@ -19,6 +19,7 @@ function makeEnregistrementPanel(){
 }
 
 function enregistrement(){
+
  var nom=$("#name");
  var prenom=$("#prenom");
  var login=$("#logIN");
@@ -26,27 +27,27 @@ function enregistrement(){
  var password2=$("#password2");
  var noFail = true;
  var err=$("#errMsg");
-
-console.log("nom: "+nom.val());
-console.log("prenom :"+ prenom.val());
-console.log("login :" +login.val());
-console.log("mdp:"+password1.val());
+ // err.text("");
+ // console.log("nom: "+nom.val());
+ // console.log("prenom :"+ prenom.val());
+ // console.log("login :" +login.val());
+ // console.log("mdp:"+password1.val());
 
  if( nom.val()==0){
   err.text("Nom trop court");
   noFail = false;
 }
 
-  if( prenom.val()==0){
-    err.text("Prenom trop court");
-    noFail = false;
+if( prenom.val()==0){
+  err.text("Prenom trop court");
+  noFail = false;
 
-  }
+}
 
-  if( login.val()==0){
-    err.text("Login trop court");
-    noFail = false;
-  }
+if( login.val()==0){
+  err.text("Login trop court");
+  noFail = false;
+}
 
   // Aucune restriction sur la taille du mot de passe dans le servlet
   if( password1.val().length<4) {
@@ -59,13 +60,14 @@ console.log("mdp:"+password1.val());
     noFail = false;
   }
 
-    if(noFail){
+  if(noFail){
+
     Create(login.val(),password2.val(),nom.val(),prenom.val());
   }
 }
 
 function Create(login, pass,nom, prenom){
-
+  var err1=$("#errMsg");
   $.ajax({
     type: "POST",
     url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/createUser",
@@ -73,12 +75,12 @@ function Create(login, pass,nom, prenom){
     dataType: "json",  
     success: function(r){
         //TEST CODE+ afficher textError
-          if(r.code==1){
-          console.log("status : "+r.status);
-          console.log("code : "+r.code);
-          }else{
-            console.log("Inscription terminée");
-          }
+        if(r.status=="KO"){
+          err1.text("Message Error : "+r.textError);
+        }else{
+          env.token=r.token;
+          makeMainPanel(r.id,r.login);
+        }
       },
       error: function(jqXHR,textStatus,errTHrown){
         console.log(textStatus);
