@@ -30,6 +30,8 @@ body {
   text-align: center;
 }
 
+
+
 body #signUp {
   background: #007CC8;
   font-family: "Open Sans";
@@ -42,7 +44,7 @@ body #signUp {
 
 #signUp .login {
     width: 300px;
-    margin: 0 auto;
+    margin:  auto;
 
 }
 #signUp .login form {
@@ -93,7 +95,7 @@ body #signUp {
 }
 
 
-/*#signUp footer {
+#signUp footer {
   position: fixed;
   background-color: transparent;
   background-color: #1FA1F1;
@@ -104,7 +106,7 @@ body #signUp {
   left: 0;
   height: 11vh;
   width: 100%;
-}*/
+}
 
 #signUp footer p {
   float: right;
