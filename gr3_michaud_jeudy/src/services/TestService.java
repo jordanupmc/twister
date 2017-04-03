@@ -63,20 +63,22 @@ public class TestService {
 		
 		
 		//Comments.comment("-1082458812", "FINALLY", "58a5d3c2e4b04b3161813170");
-		//Comments.like("-1082458812", "58a5d3c2e4b04b3161813170");
-		//new token =208794995
+		//Comments.like("-1162521849", "58a5d3c2e4b04b3161813170");
+		//new token =-1162521849
 		
-		if(Comments.isLike("4","58a5d3c2e4b04b3161813170"))
-			System.out.println("isLIKE !");
-		else
-			System.out.println("PAS LIKE");
+//		if(Comments.isLike("2","58a5d3c2e4b04b3161813170"))
+//			System.out.println("isLIKE !");
+//		else
+//			System.out.println("PAS LIKE");
+//		
+		try {
+			System.out.println(Comments.getListMessage("-1162521849", 4,
+					"58a5d3d0e4b04b3161813171","58a2ff92e4b08c81a0af3b92",4));
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-//		try {
-//			System.out.println(Comments.getListMessage("-1082458812", 4));
-//		} catch (BDException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		System.out.println(Comments.getMessageByIdDB("58a5d3c2e4b04b3161813170"));
 		
 //		System.out.println(Comments.isExist("58a2fe57e4b0994508dcc8e7"));

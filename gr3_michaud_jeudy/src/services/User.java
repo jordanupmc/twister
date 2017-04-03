@@ -18,19 +18,20 @@ public class User {
 				
 
 		}catch(BDException bd){
-			return ErrorService.serviceRefused(1000, "ce compte est existe deja");
+			return ErrorService.serviceRefused(1000, "Echec création de compte");
 		}
 		try {
 			j= bd.UserTools.connect(login,password);
 		} catch (BDException e1) {
 			// TODO Auto-generated catch block
+			
 			return ErrorService.serviceRefused(1000, "Echec connexion");
 		}
-		
 		
 		try {
 			j.put("status","OK");
 			j.put("login", login);
+			j.put("friends", services.Friend.getFriendList(j.getString("token")));
 		//	j.put("token",token);
 			
 		} catch (JSONException e) {
@@ -44,7 +45,6 @@ public class User {
 
 		JSONObject j = null;
 
-		String token="";
 		
 		try {
 			j=bd.UserTools.connect(login,password);
@@ -52,10 +52,12 @@ public class User {
 			// TODO Auto-generated catch block
 			return ErrorService.serviceRefused(100000, "Echec connexion");
 		}
-		
-		
+
 		try {
 			j.put("status","OK");
+			j.put("login", login);
+			j.put("friends", services.Friend.getFriendList(j.getString("token")));
+			
 			//j.put("token",token);
 			
 		} catch (JSONException e) {

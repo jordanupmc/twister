@@ -34,7 +34,7 @@ public class CreateUser extends HttpServlet {
  protected void doGet(HttpServletRequest request,
  HttpServletResponse response) throws ServletException, IOException {
 	 
- 	response.setContentType( " application / json " );
+ 	response.setContentType( "text / plain"  );
  	String prenom=request.getParameter("prenom");
  	String nom=request.getParameter("nom");
 

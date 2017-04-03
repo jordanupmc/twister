@@ -23,7 +23,7 @@ public class DeleteFriend extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			 HttpServletResponse response) throws ServletException, IOException {
 				 
-			 	response.setContentType( " application / json " );
+			 	response.setContentType( "text / plain"  );
 			 	String token=request.getParameter("token");
 			 	String id=request.getParameter("id");
 

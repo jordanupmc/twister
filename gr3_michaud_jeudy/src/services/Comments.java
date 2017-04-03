@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import bd.BDException;
 import bd.DBStatic;
 import bd.Database;
+import bd.FriendTools;
 import bd.Session;
 import bd.UserTools;
 
@@ -116,7 +117,7 @@ public class Comments {
 		return true;
 		
 	}
-	
+	//Like et Dislike
 	public static boolean like(String token, String msgId){
 		Mongo m;
 		int author_id;
@@ -142,12 +143,20 @@ public class Comments {
 			if(author_id==-1){
 				return false;
 			}
+			
+			if(isLike(author_id+"", msgId)){ //Dislike
+				BasicDBObject tmp = new BasicDBObject(
+						"like", new BasicDBObject("author_id", author_id));
+				
+				collection.update(new BasicDBObject("_id", new ObjectId(msgId)),
+						new BasicDBObject("$pull", tmp));
+			}else{ //Like
 			collection.update(
 					new BasicDBObject("_id", new ObjectId(msgId))
 					,
 					new BasicDBObject("$push", mess)
 					);
-			
+			}
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -313,21 +322,52 @@ public class Comments {
 //	
 //	
 	
-	public static List<DBObject> getListMessage(String token, int author_id) throws BDException{
-		try {
-			
+	public static List<DBObject> getListMessage(String token, int author_id,
+			String maxid, String minid ,int nb) throws BDException{
+		try {	
 			
 			Mongo m =new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
 			DB db= m.getDB(DBStatic.mysqldb);
 			DBCollection collection = db.getCollection("comments");
 			BasicDBObject request = new BasicDBObject();
-			
-			request.put("author_id", author_id);
+			BasicDBList or = new BasicDBList();
+			BasicDBList and = new BasicDBList();
 		
-			return collection.find(request).toArray();
+			if(author_id != -1){
+				JSONObject flist= FriendTools.getFriendList(token);
+				JSONArray arr=flist.getJSONArray("friendList");
+				
+				for(int i=0; i<arr.length(); i++){
+					or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
+					// System.out.println(or);
+				}
+			
+				or.add(new BasicDBObject("author_id", author_id));
+				//request.put("$or",or);
+				
+				if(!maxid.equals("-1"))
+					and.add(new BasicDBObject("_id", new BasicDBObject("$lt",new ObjectId(maxid))));
+				if( !minid.equals("-1"))
+					and.add(new BasicDBObject("_id", new BasicDBObject("$gt",new ObjectId(minid))));
+					System.out.println(and);
+					and.add(new BasicDBObject("$or", or));
+				request.put("$and", and);
+				
+				
+			}
+			//Voir si request vide retourne TOUT
+			
+			if(nb == -1)
+				return collection.find(request).toArray();
+			
+			return collection.find(request).limit(nb).toArray();
 			
 			
 		}catch(UnknownHostException e){
+			e.printStackTrace();
+			return null;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

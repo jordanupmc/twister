@@ -86,7 +86,7 @@ public class FriendTools {
 				return f;
 			}
 			
-			String query = "SELECT nom,prenom FROM USER WHERE id=?";
+			String query = "SELECT nom,prenom,id,login FROM USER WHERE id=?";
 
 			PreparedStatement pstmt = c.prepareStatement(query);
 			pstmt.setInt(1, id);
@@ -98,6 +98,8 @@ public class FriendTools {
 			if (rs.next()){
 				f.put("nom", rs.getString(1));
 				f.put("prenom", rs.getString(2));
+				f.put("id", rs.getString(3));
+				f.put("login", rs.getString(4));
 			}
 				
 			rs.close();

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import services.ErrorService;
@@ -41,6 +42,8 @@ public class Login extends HttpServlet {
 	 	String mdp=request.getParameter("password");
 	 	
 	 	JSONObject obj=services.User.login(login, mdp);
+	 	
+	 	
 	 	PrintWriter out = response.getWriter ();
 		out.print(obj);
 

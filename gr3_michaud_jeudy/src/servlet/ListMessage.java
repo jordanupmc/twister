@@ -32,19 +32,39 @@ public class ListMessage extends HttpServlet {
 
 		 response.setContentType( " application / json " );
 		 PrintWriter out = response.getWriter ();
+		 
 		 String token=request.getParameter("token");
+		 String query=request.getParameter("query");
+		 String from=request.getParameter("from");
+		 String idmax=request.getParameter("id_max");
+		 String idmin=request.getParameter("id_min");
+		 String nb=request.getParameter("nb");
+		 
 		 int id=0;
+		 
 		 try{
 
-			 id=Integer.parseInt(request.getParameter("id"));
+			 id=Integer.parseInt(from);
 
 		 }catch(NumberFormatException e){
 			 out.println(ErrorService.serviceRefused(-1,"Param null"));
 			 return;
 		 }
 
+		 if(query == null)
+			 query="";
+		 
+		 if(idmax == null)
+			 idmax=-1+"";
 
-		 if(token==null){
+		 if(idmin == null)
+			 idmin=-1+"";
+		
+		 if(nb == null)
+			 nb=-1+"";
+		
+		 
+		 if(token==null || from == null){
 			 out.println(ErrorService.serviceRefused(-1,"Param null"));
 			 return;
 		 }
@@ -68,7 +88,7 @@ public class ListMessage extends HttpServlet {
 		 JSONObject obj=new JSONObject();
 
 		 try {
-			 list = Comments.getListMessage(token, id);
+			 list = Comments.getListMessage(token, id, idmax, idmin , Integer.parseInt(nb));
 
 			 if(list == null){
 				 obj.put("messages", new JSONArray());
@@ -86,6 +106,8 @@ public class ListMessage extends HttpServlet {
 			 // TODO Auto-generated catch block
 			 e1.printStackTrace();
 			 out.println(ErrorService.serviceRefused(1000,e1.getMessage()));
+		 }catch(NumberFormatException e2){
+			 out.println(ErrorService.serviceRefused(-1,"Erreur param "));
 		 }
 		 out.print(obj);
 	 }

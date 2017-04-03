@@ -23,7 +23,7 @@ public class InsertMessage extends HttpServlet {
 	 protected void doGet(HttpServletRequest request,
 			 HttpServletResponse response) throws ServletException, IOException {
 		 
-		 response.setContentType( " application / json " );
+		 response.setContentType( "text / plain"  );
 		 String post=request.getParameter("post");
 		 String token=request.getParameter("token");
 		 
