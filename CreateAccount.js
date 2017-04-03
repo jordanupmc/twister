@@ -27,11 +27,7 @@ function enregistrement(){
  var password2=$("#password2");
  var noFail = true;
  var err=$("#errMsg");
- // err.text("");
- // console.log("nom: "+nom.val());
- // console.log("prenom :"+ prenom.val());
- // console.log("login :" +login.val());
- // console.log("mdp:"+password1.val());
+
 
  if( nom.val()==0){
   err.text("Nom trop court");
@@ -64,6 +60,10 @@ if( login.val()==0){
 
     Create(login.val(),password2.val(),nom.val(),prenom.val());
   }
+  else{
+   
+
+  }
 }
 
 function Create(login, pass,nom, prenom){
@@ -74,7 +74,6 @@ function Create(login, pass,nom, prenom){
     data:"login="+login+"&password="+pass+"&nom="+nom+"&prenom="+prenom,
     dataType: "json",  
     success: function(r){
-        //TEST CODE+ afficher textError
         if(r.status=="KO"){
           err1.text("Message Error : "+r.textError);
         }else{
