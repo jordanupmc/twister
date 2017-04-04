@@ -52,8 +52,7 @@
 	
 	<td>login&password</td>
 	<td>Succes {status:OK,token:} || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà
+	<td>-1: au moins un param est null
 	</td>
       </tr>
 
@@ -65,7 +64,6 @@
 	<td>token</td>
 	<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
 	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
 	    1000 Token obsolete
 	</td>
       </tr>
@@ -77,7 +75,6 @@
 	<td>token&post</td>
 	<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
 	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
 	    1000 Token obsolete
 	</td>
       </tr>
@@ -86,10 +83,9 @@
       <tr>
 	<td>listMessage</td>
 	
-	<td>token</td>
-	<td>Succes {status:OK, messages: [ {"post","_id","author_id","date"} ] } || Echec {status:KO, code: , textError:}</td>
+	<td>token&query&from&id_max&id_min&nb</td>
+	<td>Succes {status:OK, messages: [ {"post","_id","author_id","login","date"} ] } || Echec {status:KO, code: , textError:}</td>
 	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
 	    1000 Token obsolete
 	</td>
       </tr>
@@ -99,9 +95,8 @@
 	<td>getFriendList</td>
 	
 	<td>token</td>
-	<td>Succes {status:OK, friendList: [ {"prenom","nom"} ]  || Echec {status:KO, code: , textError:}</td>
+	<td>Succes {status:OK, friendList: [ {"prenom","nom","id","login"} ]  || Echec {status:KO, code: , textError:}</td>
 	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
 	    1000 Token obsolete
 	</td>
       </tr>
@@ -110,9 +105,8 @@
 	<td>getFriend</td>
 	
 	<td>token</td>
-	<td>Succes {status:OK, friend: [ {"prenom","nom"} ]  || Echec {status:KO, code: , textError:}</td>
+	<td>Succes {status:OK, friend: [ {"prenom","nom","id","login"} ]  || Echec {status:KO, code: , textError:}</td>
 	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
 	    1000 Token obsolete
 	</td>
       </tr>
@@ -124,8 +118,7 @@
 	
 	<td>token&id</td>
 	<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
-	<td>0: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
+	<td>0: au moins un param est null<br>
 	    1000 Token obsolete
 	</td>
       </tr>
@@ -136,7 +129,6 @@
 	<td>token&query&friends</td>
 	<td>Succes {status:OK,search:[{"post","_id","author_id","date"}]} || Echec {status:KO, code: , textError:}</td>
 	<td>0: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
 	  1000 Token obsolete
 	</td>
       </tr>

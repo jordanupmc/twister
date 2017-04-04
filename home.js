@@ -254,7 +254,7 @@ function completeMessagesReponse(reponse){
 	var tab = JSON.parse(reponse, revival);
 	var lastId = undefined;
 
-	for(var i =0; i < tab.length; i++){
+	for(var i =tab.length-1; i >= 0; i--){
 		$("#cont_message > ul").append(tab[i].getHtml());
 
 		env.msg[tab[i].id] = tab[i];
@@ -268,6 +268,8 @@ function completeMessagesReponse(reponse){
 	}
 
 	$("#message_"+lastId).css("border-bottom","none");
+	
+	//A REVOIR
 	env.minId=tab[0];
 	env.maxId=lastId;
 }
