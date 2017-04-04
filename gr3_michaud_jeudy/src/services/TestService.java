@@ -1,5 +1,6 @@
 package services;
 
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -8,14 +9,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import bd.BDException;
+import bd.DBStatic;
 import bd.FriendTools;
 import bd.Session;
 import bd.UserTools;
 
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.Mongo;
 
 public class TestService {
-	public static void main(String [] args){
+	public static void main(String [] args) throws UnknownHostException{
 		//JSONObject o=User.createUser("MAMAN","papa","fortiche","secret");
 
 		//User.test("toto");
@@ -70,16 +75,17 @@ public class TestService {
 //			System.out.println("isLIKE !");
 //		else
 //			System.out.println("PAS LIKE");
-//		
+		
 		try {
 			System.out.println(Comments.getListMessage("-1162521849", 4,
-					"58a5d3d0e4b04b3161813171","58a2ff92e4b08c81a0af3b92",4));
+					"58a5d3d0e4b04b3161813171","58a2ff92e4b08c81a0af3b92",-1));
+
+//						System.out.println(Comments.getListMessage("-1162521849", 4,
+//					"-1","-1",-1));
 		} catch (BDException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		System.out.println(Comments.getMessageByIdDB("58a5d3c2e4b04b3161813170"));
 		
 //		System.out.println(Comments.isExist("58a2fe57e4b0994508dcc8e7"));
 //		

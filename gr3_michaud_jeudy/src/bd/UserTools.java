@@ -38,6 +38,8 @@ public class UserTools {
 		}
 		return isExist;
 	}
+	
+	
 
 	public static JSONObject connect(String login, String password) throws BDException{
 		/*
@@ -122,6 +124,30 @@ public class UserTools {
 		return id;
 	}
 	
+	public static String getLogin(String id) throws BDException {
+	
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Connection c = Database.getMySQLConnection();
+			Statement st = c.createStatement();
+			String query = "SELECT login FROM USER WHERE id='" + id + "';";
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next())
+				id=rs.getString(1);
+			else
+				id="inconnu";
+			
+			rs.close();
+			st.close();
+			c.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+			throw new BDException("echec recuperation de login");
+		}
+		return id;
+	}
 	public static boolean insertUser(String prenom, String nom, String login, String password) throws BDException{
 		try {
 			

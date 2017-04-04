@@ -49,8 +49,12 @@ public class Comments {
 			}
 			
 			request.put("author_id", author_id);
+			request.put("login", UserTools.getLogin(author_id+""));
+
 			request.put("post", message);
 			request.put("date", today);
+			request.put("comments", new BasicDBList());
+			
 			
 			collection.insert(request);
 			
@@ -77,6 +81,7 @@ public class Comments {
 			DBCollection collection = db.getCollection("comments");
 			BasicDBObject request = new BasicDBObject();
 			BasicDBObject mess = new BasicDBObject();
+		
 			//List<BasicDBObject> comments = new ArrayList<BasicDBObject>();
 	
 			GregorianCalendar calendar = new GregorianCalendar();
@@ -89,6 +94,9 @@ public class Comments {
 			}
 			
 			request.put("author_id", author_id);
+			request.put("login", UserTools.getLogin(author_id+""));
+						
+			
 			request.put("post", message);
 			request.put("date", today);
 			request.put("_id",new ObjectId());
@@ -343,24 +351,26 @@ public class Comments {
 				}
 			
 				or.add(new BasicDBObject("author_id", author_id));
-				//request.put("$or",or);
+				request.put("$or",or);
 				
 				if(!maxid.equals("-1"))
 					and.add(new BasicDBObject("_id", new BasicDBObject("$lt",new ObjectId(maxid))));
 				if( !minid.equals("-1"))
 					and.add(new BasicDBObject("_id", new BasicDBObject("$gt",new ObjectId(minid))));
-					System.out.println(and);
-					and.add(new BasicDBObject("$or", or));
-				request.put("$and", and);
+				//System.out.println(and);
+				//and.add(new BasicDBObject("$or", or));
 				
+				if(!and.isEmpty())
+					request.put("$and", and);
+//				System.out.println(request);
 				
 			}
 			//Voir si request vide retourne TOUT
 			
 			if(nb == -1)
-				return collection.find(request).toArray();
+				return collection.find(request).sort(new BasicDBObject("_id",1)).toArray();
 			
-			return collection.find(request).limit(nb).toArray();
+			return collection.find(request).sort(new BasicDBObject("_id",1)).limit(nb).toArray();
 			
 			
 		}catch(UnknownHostException e){

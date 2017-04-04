@@ -1,4 +1,5 @@
 Pour ajouter des modifs sur le git:
+A la fac-> export https_proxy=proxy:3128
 1) Recuperer la version la plus a jour (eviter les conflits)
 git pull origin master
 
