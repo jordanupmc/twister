@@ -1,6 +1,6 @@
 function makeConnectionPanel(){
-	var s="";
-	s="<div id=\"connecting\"> <p style=\"color:red\" id=\"errMsg\"></p>"
+	var s=""
+	+"<div id=\"connecting\"> <p style=\"color:red\" id=\"errMsg\"></p>"
 	+"<p> <img src=\"image/logo.png\" alt=\"Smiley face\"></p>"
 	+"<div class=\"login\">"
 	+"<form action=\"javascript:(function(){return;}())\" method=\"post\" onsubmit=\"javascript:ConnectionLogin()\">"
@@ -10,6 +10,7 @@ function makeConnectionPanel(){
 	+"<a href=\"javascript:void(0);\" onclick=\"javascript:makeEnregistrementPanel()\">  &nbsp;Vous n'avez pas de compte?</a>"
 	+"</form>"
 	+"</div>\n</div>"
+
 	var res = document.getElementsByTagName('body')[0];   
 	res.innerHTML=s;
 	//$('body').html(s);
