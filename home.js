@@ -396,23 +396,23 @@ function newComment(id){
 	if(!env.noConnection){
 		$.ajax({
 			type:"POST",
-			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/insertMessage",
-			data:"token="+env.token+"&post="+texte,
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/addComment",
+			data:"token="+env.token+"&text="+texte+"&id_post="+id,
 			dataType:"json",
 			success: function(result){
 				if(result.status =='OK')
-					refreshMessage();
+					refreshComment();
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
 			}
 		});
 	}else{
-		newComment_response(id,JSON.stringify(new Commentaire(env.msg[id].comments.length+1
-			, {"id": env.fromId, "login":env.fromLogin}, texte ,new Date())))
+	//	newComment_response(id,JSON.stringify(new Commentaire(env.msg[id].comments.length+1
+	//		, {"id": env.fromId, "login":env.fromLogin}, texte ,new Date())))
 	}
 }
-function newComment_response(id, rep){
+function refreshComment(id, rep){
 	var com=JSON.parse(rep,revival);
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#message_"+id+" > .liste_message_comment");

@@ -132,6 +132,16 @@
 	</servlet-mapping>
 	
 	<servlet-mapping>
+		<servlet-name>Like</servlet-name>
+		<url-pattern>/like</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AddComment</servlet-name>
+		<url-pattern>/addComment</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
