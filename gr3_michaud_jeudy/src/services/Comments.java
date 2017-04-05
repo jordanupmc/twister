@@ -368,9 +368,9 @@ public class Comments {
 			//Voir si request vide retourne TOUT
 			
 			if(nb == -1)
-				return collection.find(request).sort(new BasicDBObject("_id",1)).toArray();
+				return collection.find(request).sort(new BasicDBObject("_id",-1)).toArray();
 			
-			return collection.find(request).sort(new BasicDBObject("_id",1)).limit(nb).toArray();
+			return collection.find(request).sort(new BasicDBObject("_id",-1)).limit(nb).toArray();
 			
 			
 		}catch(UnknownHostException e){
