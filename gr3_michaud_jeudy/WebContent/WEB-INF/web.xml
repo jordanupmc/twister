@@ -5,8 +5,16 @@
 	<servlet> 
 		<servlet-name>Hello</servlet-name> 
 		<servlet-class>servlet.HelloWorld</servlet-class> 
-	</servlet> 
-	
+	</servlet>
+	<servlet>
+		<servlet-name>Like</servlet-name>
+		<servlet-class>servlet-Like</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AddComment</servlet-name>
+		<servlet-class>servlet-AddComment</servlet-class>
+	</servlet>
+
 	<servlet> 
 		<servlet-name>Application</servlet-name> 
 		<servlet-class>servlet.Application</servlet-class> 
