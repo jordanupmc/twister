@@ -1,6 +1,6 @@
 function makeEnregistrementPanel(){
   var s ="";    
-  s="<div id=\"signUp\"> <p style=\"color:red\" id=\"errMsg\"></p>"
+  s="<div id=\"signUp\"> <p id=\"errMsg1\"style=\"visibility:hidden\"  ></p>"
   +"<p> <img src=\"image/logo.png\" alt=\"Smiley face\"></p>"
   +"<div class=\"login\">"
   +"<form method=\"post\" onsubmit=\"enregistrement()\" action=\"javascript:(function(){return;}())\">"
@@ -12,6 +12,7 @@ function makeEnregistrementPanel(){
   +"<button type=\"submit\" class=\"btn btn-primary btn-block btn-large\">Rejoindre</button>"
   +"<a href=\"javascript:void(0);\" onclick=\"javascript:makeConnectionPanel()\"> Vous avez déjà un compte? </a>"
   +"</form>"
+  +"<div id=\"spinner2\"style=\"visibility:hidden\"></div>\n<p id=\"charge\"  style=\"visibility:hidden\"></p>"
   +"</div>\n</div>"
 
   var res = document.getElementsByTagName('body')[0]   
@@ -26,7 +27,10 @@ function enregistrement(){
  var password1=$("#password1");
  var password2=$("#password2");
  var noFail = true;
- var err=$("#errMsg");
+ var err=$("#errMsg1");
+ var charge=$("#charge");
+charge.text("Chargement...");
+
 
 
  if( nom.val()==0){
@@ -45,25 +49,25 @@ if( login.val()==0){
   noFail = false;
 }
 
-  // Aucune restriction sur la taille du mot de passe dans le servlet
-  if( password1.val().length<4) {
-    err.text("Mot de passe 1 trop court");
-    noFail = false;
-  }
+if( password1.val().length<4) {
+  err.text("Mot de passe 1 trop court");
+  noFail = false;
+}
 
-  if( password2.val() !== password1.val()){
-    err.text("Mot de passe différent");
-    noFail = false;
-  }
+if( password2.val() !== password1.val()){
+  err.text("Mot de passe différent");
+  noFail = false;
+}
 
-  if(noFail){
+if(noFail){
 
-    Create(login.val(),password2.val(),nom.val(),prenom.val());
-  }
-  else{
-   
+  Create(login.val(),password2.val(),nom.val(),prenom.val());
+}
+else{
+  document.getElementById('errMsg1').style.visibility = "visible";
 
-  }
+
+}
 }
 
 function Create(login, pass,nom, prenom){
@@ -74,18 +78,21 @@ function Create(login, pass,nom, prenom){
     data:"login="+login+"&password="+pass+"&nom="+nom+"&prenom="+prenom,
     dataType: "json",  
     success: function(r){
-        if(r.status=="KO"){
-          err1.text("Message Error : "+r.textError);
-        }else{
-          env.token=r.token;
-          makeMainPanel(r.id,r.login);
-        }
-      },
-      error: function(jqXHR,textStatus,errTHrown){
-        console.log(textStatus);
+      if(r.status=="KO"){
+        document.getElementById('errMsg').style.visibility = "visible";
+        err1.text("Message Error : "+r.textError);
+      }else{
+        document.getElementById('charge').style.visibility = "visible";
+        document.getElementById('spinner2').style.visibility = "visible";
+        env.token=r.token;
+        makeMainPanel(r.id,r.login);
       }
+    },
+    error: function(jqXHR,textStatus,errTHrown){
+      console.log(textStatus);
+    }
 
-    });
+  });
 
 
 }
