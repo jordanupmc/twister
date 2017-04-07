@@ -30,7 +30,7 @@ public class ListMessage extends HttpServlet {
 	 protected void doGet(HttpServletRequest request,
 			 HttpServletResponse response) throws ServletException, IOException {
 
-		 response.setContentType( " application / json " );
+		 response.setContentType( " text / plain" );
 		 PrintWriter out = response.getWriter ();
 		 
 		 String token=request.getParameter("token");

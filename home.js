@@ -67,6 +67,7 @@ function revival(key,value){
 	}else if(value.auteur_id != undefined){
 		return new Like(value._id, value.auteur_id, value.date);
 	}else if(key =='date'){
+		//var reggie="\D{3} \D{3} \d{2} \d{2}:\d{2}:\d{2}";
 		return value;
 	
 	//	return new Date(value).toLocaleDateString();
@@ -90,6 +91,23 @@ function getMessageFooter(id, comLength, likeLength, isLike){
     s += "<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:developpeMessage('"+id+"')\"><img src=\"image/message-bubble.png\" alt=\"\"></a><p class=\"message_comment\">"+comLength+"</p>";
     s +=  "</div>\n";
     return s;
+}
+
+function getMessageFooterComment(id, comLength, likeLength, isLike){/// TODO  --************--------->  les nb LIKE
+	var s= "<div class=\"message_footer_comment\">\n"
+	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:switchImgLike('"+id+"')\"><img id=\"like_"+id;
+	if(!isLike)
+		s+="\" src=\"image/like.png\""
+	else
+		s+="\" src=\"image/likeFill.png\""
+
+	s+= " alt=\"\"></a> <p id=\"cpt_like_"+id+"\" class=\"message_like\">"+likeLength+"</p>"
+	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:hideComments('"+id+"')\" class=\"showCommentButton\">Cacher</a>"
+	if(comLength>0 )  /// ********* FIXER A 10 en prod
+		s+="<a href=\"javascript:(function(){return;}())\" class=\"showCommentButton\"> Voir plus</a>"
+
+	s+="</div>"
+	return s;
 }
 
 function setVirtualMessage(){
@@ -150,15 +168,9 @@ function setVirtualMessage(){
 function init(){
 	env = new Object();
 	env.noConnection = false;
-	setVirtualMessage();
-	
-	//makeConnectionPanel();
-	makeEnregistrementPanel();
 
-	//document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
-	//completeMessages();
-	// document.getElementsByTagName('body')[0].innerHTML = makeMainPanel(1,"papa",'');
-	// completeMessages();
+	//setVirtualMessage();
+	makeEnregistrementPanel();
 }
 
 
@@ -185,7 +197,7 @@ function makeMainPanel(fromId, fromLogin, query){
       "<input type=\"image\" src=\"image/Search-48.png\" alt=\"err\">"+
     "</form>"+ 
     "<div >"+
-      "<a href=\"LoginPage.html\"><img id=\"logout\" src=\"image/logout.png\" alt=\"\"></a>"+
+      "<a href=\"javascript:(function(){return;}())\" onclick=\"logout()\"><img id=\"logout\" src=\"image/logout.png\" alt=\"\"></a>"+
     "</div>"+
   "</header>"+
 
@@ -227,7 +239,6 @@ function makeMainPanel(fromId, fromLogin, query){
 
 function completeMessages(){
 	if(!env.noConnection){
-		console.log(env.token);
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
@@ -254,7 +265,9 @@ function completeMessagesReponse(reponse){
 	var tab = JSON.parse(reponse, revival);
 	var lastId = undefined;
 
-	for(var i =tab.length-1; i >= 0; i--){
+	//for(var i =tab.length-1; i >= 0; i--){
+	for(var i =0; i<tab.length; i++){
+	
 		$("#cont_message > ul").append(tab[i].getHtml());
 
 		env.msg[tab[i].id] = tab[i];
@@ -268,10 +281,6 @@ function completeMessagesReponse(reponse){
 	}
 
 	$("#message_"+lastId).css("border-bottom","none");
-	
-	//A REVOIR
-	env.minId=tab[0];
-	env.maxId=lastId;
 }
 
 
@@ -304,22 +313,7 @@ function getFromLocaldb(from, minId, maxId, nbMax){
 	return tab;
 }
 
-function getMessageFooterComment(id, comLength, likeLength, isLike){/// TODO  --************--------->  les nb LIKE
-	var s= "<div class=\"message_footer_comment\">\n"
-	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:switchImgLike('"+id+"')\"><img id=\"like_"+id;
-	if(!isLike)
-		s+="\" src=\"image/like.png\""
-	else
-		s+="\" src=\"image/likeFill.png\""
 
-	s+= " alt=\"\"></a> <p id=\"cpt_like_"+id+"\" class=\"message_like\">"+likeLength+"</p>"
-	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:hideComments('"+id+"')\" class=\"showCommentButton\">Cacher</a>"
-	if(comLength>0 )  /// ********* FIXER A 10 en prod
-		s+="<a href=\"javascript:(function(){return;}())\" class=\"showCommentButton\"> Voir plus</a>"
-
-	s+="</div>"
-	return s;
-}
 
 function getFormComment(id){
 	return "<form action=\"javascript:(function(){return;}())\" onsubmit=\"newComment('"+id+"')\">"
@@ -400,16 +394,25 @@ function newComment(id){
 	$("#comment_new_"+id).val("");
 	
 	if(!env.noConnection){
-
-		
-
-
+		$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/addComment",
+			data:"token="+env.token+"&text="+texte+"&id_post="+id,
+			dataType:"json",
+			success: function(result){
+				if(result.status =='OK')
+					refreshComment();
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+			}
+		});
 	}else{
-		newComment_response(id,JSON.stringify(new Commentaire(env.msg[id].comments.length+1
-			, {"id": env.fromId, "login":env.fromLogin}, texte ,new Date())))
+	//	newComment_response(id,JSON.stringify(new Commentaire(env.msg[id].comments.length+1
+	//		, {"id": env.fromId, "login":env.fromLogin}, texte ,new Date())))
 	}
 }
-function newComment_response(id, rep){
+function refreshComment(id, rep){
 	var com=JSON.parse(rep,revival);
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#message_"+id+" > .liste_message_comment");
@@ -426,8 +429,32 @@ function newComment_response(id, rep){
 	}
 }
 
+function logout(){
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/logout",
+			data:"token="+env.token,
+			dataType:"json",
+			success: function(result){
+				if(result.status =='OK')
+					makeConnectionPanel();
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+			}
+		});
+}
+
+
 function newPost(){
 	var texte=$("#post_new").val();
+	texte=texte.trim();
+
+	if(texte ==""){
+		$("#post_new").val("");
+		return;
+	}
+
 	$("#post_new").val("");
 	if(!env.noConnection){
 
@@ -437,7 +464,8 @@ function newPost(){
 			data:"token="+env.token+"&post="+texte,
 			dataType:"json",
 			success: function(result){
-				newPost_reponse(JSON.stringify(result.messages));
+				if(result.status =='OK')
+					refreshMessage();
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
@@ -446,26 +474,62 @@ function newPost(){
 
 	}else{
 		
-		newPost_response(JSON.stringify(new Message(env.msg.length, {"id":env.fromId,"login":env.fromLogin}, texte, new Date())));
+	//	newPost_response(JSON.stringify(new Message(env.msg.length, {"id":env.fromId,"login":env.fromLogin}, texte, new Date())));
 	}
 }
 
-function newPost_response(rep){
-	var com=JSON.parse(rep,revival);
-	
-	if(com != undefined && com.erreur == undefined){
-		var el=$("#cont_message > ul");
-		el.prepend(com.getHtml());
-		
-		env.msg.push(com);
-		
-		if(!env.noConnection){
+function refreshMessage(rep){
 
-		}
-		else{
-			localdb.push(com);
+	if(!env.noConnection){
+		$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
+			data:"token="+env.token+"&from="+env.fromId+"&id_min="+env.maxId+"&id_max=-1"+"&nb=-1",
+			dataType:"json",
+			success: function(result){
+				refreshResponse(JSON.stringify(result.messages));
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+			}
+		})
+
+	}else{
+
+		var com=JSON.parse(rep,revival);
+		if(com != undefined && com.erreur == undefined){
+			var el=$("#cont_message > ul");
+			el.prepend(com.getHtml());
+			
+			env.msg.push(com);
+			
+			if(!env.noConnection){
+
+			}
+			else{
+				localdb.push(com);
+			}
 		}
 	}
+}
+
+function refreshResponse(rep){
+	var com=JSON.parse(rep,revival);
+	if(com != undefined && com.erreur == undefined){
+		var el=$("#cont_message > ul");
+		
+		for(var i=com.length-1; i>=0; i--){
+			el.prepend(com[i].getHtml());
+			env.msg[com[i].id]=com[i];
+
+			if(com[i].id > env.maxId)
+				env.maxId = com[i].id;
+			if( env.minId <0 || com[i].id < env.minId)
+				env.minId=com[i].id;			
+		}
+
+	}
+
 }
 
 
