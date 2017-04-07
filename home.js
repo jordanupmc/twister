@@ -17,7 +17,11 @@ function Message(id, auteur, texte, date, comments, likes){
 Message.prototype.getHtml=function(){
 
 	var s = "<li class=\"message\" id=\"message_"+this.id+"\">\n"
-	s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\">"+this.auteur.login+"</a></b>\n"
+	if(this.auteur.id != env.fromId)
+		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\">"+this.auteur.login+"</a></b>\n"
+	else
+		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\">"+this.auteur.login+"</a></b>\n"
+	
 	s+="<span class=\"dateMessage\">"+this.date+"</span>\n</span>\n"
 	s+="<p>"+emojione.shortnameToImage(this.post)+"</p>"
 	s+=getMessageFooter(this.id, this.comments.length, this.likes.length, findAuteurLike(this.likes)!=-1 );
@@ -127,8 +131,10 @@ function deco(){
 			data:"token="+env.token,
 			dataType:"json",
 			success: function(result){
-				if(result.status =='OK')
+				if(result.status =='OK'){
+					env={};
 					makeConnectionPanel();
+				}
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
@@ -237,13 +243,19 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
   "</header>"+
 
   "<div id=\"container\">"+
-   "<aside>"+
-     "<h1> Statistiques </h1>"+
-     "<ul>"+
-       "<li>Followers: 400</li>"+
-       "<li>Following: 400</li>"+
-       "<li>Like: 1000</li>"+
-       "<li>Twist: 900</li>"+
+   "<aside>";
+   	if(env.toId == -1)
+     	s+="<h1> Mon Activités </h1>"
+     else{
+    
+     	s+="<h1 id=\"activity\"> Activités de "+env.toLogin+" </h1>"
+		if(findFriendId(env.friends) != -1)
+			s+="<button id=\"follow\" type=\"button\" onclick=\"javascript:unfollow('"+env.toId+"')\">ne plus suivre</button>"
+		else
+			s+="<button id=\"follow\" type=\"button\" onclick=\"javascript:follow('"+env.toId+"')\">Suivre</button>"
+	}
+     s+="<ul>"+
+       "<li>Following: "+env.friends.length+" </li>"+
      "</ul>"+
    "</aside>"+
 
@@ -449,7 +461,14 @@ function findAuteurLike(tab){
 	return -1;
 }
 
-
+function findFriendId(tab){
+		for( i=tab.length-1; i>=0; i--) {
+    		if( tab[i].id == env.toId) {
+    			return i;
+    		}
+	}
+	return -1;
+}
 
 function newComment(id){
 	var texte=$("#comment_new_"+id).val();
@@ -582,6 +601,60 @@ function refreshResponse(rep){
 	}
 
 }
+
+function switchButtonFollow(code){
+	$("#follow").remove();
+	if(code == -1)
+		$("#activity").after("<button id=\"follow\" type=\"button\" onclick=\"javascript:unfollow('"+env.toId+"')\">ne plus suivre</button>");
+	else
+		$("#activity").after("<button id=\"follow\" type=\"button\" onclick=\"javascript:follow('"+env.toId+"')\">Suivre</button>")
+}
+
+function follow(id){
+
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/createFriend",
+			data:"token="+env.token+"&id="+id,
+			dataType:"json",
+			success: function(result){
+				if(result.status == "OK"){
+					switchButtonFollow(-1);
+					env.friends[id]={"id":id,"login":toLogin};
+				}
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+			}
+		})
+
+}
+
+function unfollow(id){
+
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/deleteFriend",
+			data:"token="+env.token+"&id="+id,
+			dataType:"json",
+			success: function(result){
+				if(result.status == "OK"){
+					switchButtonFollow(0);
+					for(var i=env.friends.length-1; i>=0; i--) {
+				    	if( env.friends[i].id == id) {
+				    		env.friends.splice(i,1);
+				    		break;
+				    	}
+					}
+				}
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+			}
+		})
+
+}
+
 
 
 
