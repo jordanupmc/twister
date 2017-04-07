@@ -42,9 +42,9 @@ Commentaire.prototype.getHtml=function(){
 	return s;
 }
 
-function Like(id, auteur, date){
-	this.id=id;
-	this.auteur=auteur;
+function Like(auteur, date){
+	//this.id=id;
+	this.author_id=auteur;
 	this.date=date;
 }
 
@@ -65,7 +65,7 @@ function revival(key,value){
 	}else if(value.post != undefined){
 		return new Commentaire(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date);
 	}else if(value.auteur_id != undefined){
-		return new Like(value._id, value.auteur_id, value.date);
+		return new Like(value.author_id, value.date);
 	}else if(key =='date'){
 		//var reggie="\D{3} \D{3} \d{2} \d{2}:\d{2}:\d{2}";
 		return value;
@@ -76,16 +76,21 @@ function revival(key,value){
 	}
 }
 
-function getMessageFooter(id, comLength, likeLength, isLike){
+function getMessageFooter(id, comLength, likeLength, isLike,src){
 	var s="";
 	
 	s += "<div class=\"message_footer\">"
     s += "<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:switchImgLike('"+id+"')\"><img id=\"like_"+id+"\" ";
     
-    if(!isLike)
-		s+="\" src=\"image/like.png\""
+    if(src == undefined){
+	    if(!isLike)
+			s+="\" src=\"image/like.png\""
+		else
+			s+="\" src=\"image/likeFill.png\"";
+	}
 	else
-		s+="\" src=\"image/likeFill.png\"";
+		s+="\" src=\""+src+"\""
+
     s+=" alt=\"\"></a> <p id=\"cpt_like_"+id+"\" class=\"message_like\">"+likeLength+"</p>";
   
     s += "<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:developpeMessage('"+id+"')\"><img src=\"image/message-bubble.png\" alt=\"\"></a><p class=\"message_comment\">"+comLength+"</p>";
@@ -93,13 +98,18 @@ function getMessageFooter(id, comLength, likeLength, isLike){
     return s;
 }
 
-function getMessageFooterComment(id, comLength, likeLength, isLike){/// TODO  --************--------->  les nb LIKE
+function getMessageFooterComment(id, comLength, likeLength,isLike, src){/// TODO  --************--------->  les nb LIKE
 	var s= "<div class=\"message_footer_comment\">\n"
 	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:switchImgLike('"+id+"')\"><img id=\"like_"+id;
-	if(!isLike)
-		s+="\" src=\"image/like.png\""
+	
+	if(src == undefined){
+		if(!isLike)
+			s+="\" src=\"image/like.png\""
+		else
+			s+="\" src=\"image/likeFill.png\"";
+	}
 	else
-		s+="\" src=\"image/likeFill.png\""
+		s+="\" src=\""+src+"\""
 
 	s+= " alt=\"\"></a> <p id=\"cpt_like_"+id+"\" class=\"message_like\">"+likeLength+"</p>"
 	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:hideComments('"+id+"')\" class=\"showCommentButton\">Cacher</a>"
@@ -208,7 +218,7 @@ function makeMainPanel(fromId, fromLogin, query){
 
 	var s="";
 	//getFromLocaldb(env.from, env.minId, env.maxId, 10);
-	s+="<div id=\"main\"> <header> <img src=\"image/logo.png\" alt=\"\"><form action=\"javascript:(function(){return;}())\">"+
+	s+="<div id=\"main\"> <header> <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\" ><img src=\"image/logo.png\" alt=\"\"></a><form action=\"javascript:(function(){return;}())\">"+
 	"<input type=\"text\" name=\"search\" placeholder=\"Chercher...\">"+
       "<input type=\"image\" src=\"image/Search-48.png\" alt=\"err\">"+
     "</form>"+ 
@@ -345,62 +355,23 @@ function getFormComment(id){
 
 function hideComments(id){
 	var m =env.msg[id];	
+	var src=$("#like_"+id).attr("src");
 
 	$("#message_"+id+" > .liste_message_comment").empty();
 	$("#message_"+id+" > .message_footer_comment").remove();
 
 	$("#message_"+id+" > form").remove();
 
-	$("#message_"+id).append(getMessageFooter(id,m.comments.length,m.likes.length, findAuteurLike(m.likes)!=-1));
+	$("#message_"+id).append(getMessageFooter(id,m.comments.length,m.likes.length, false, src));
 
-}
-
-//Change l'img de like
-function switchImgLike(id){
-	var m =env.msg[id];	
-	var src=$("#like_"+id).attr("src");
-	setLikeCpt(id);
-
-	if(src=="image/like.png")
-		src="image/likeFill.png";
-	else
-		src="image/like.png";
-
-	$("#like_"+id).attr("src",src);
-
-	
-
-}
-//Modifie l'affichage du cpt de like
-function setLikeCpt(id){
-
-	var findId=findAuteurLike(env.msg[id].likes);
-
-	if(findId==-1){
-		env.msg[id].likes.push(new Like( env.msg[id].likes.length, {"login":env.login, "id":env.fromId} ,new Date()));
-	}
-	else{
-    	env.msg[id].likes.splice(findId,1);
-	}
-	$("#cpt_like_"+id).text(env.msg[id].likes.length);
-
-}
-
-function findAuteurLike(tab){
-
-	for( i=tab.length-1; i>=0; i--) {
-    		if( tab[i].auteur.id == env.fromId) 
-    			return i;
-	}
-	return -1;
 }
 
 function developpeMessage(id){ 
 	var m =env.msg[id];	
-	
+	var src=$("#like_"+id).attr("src");
 	$("#message_"+id+" > .message_footer").remove();
 
-	$("#message_"+id+" > .liste_message_comment").before(getMessageFooterComment(id, m.comments.length, m.likes.length, findAuteurLike(m.likes)!=-1));
+	$("#message_"+id+" > .liste_message_comment").before(getMessageFooterComment(id, m.comments.length, m.likes.length, false,src));
 
 	for(var i = 0; i < m.comments.length ; i++){
 		var c= m.comments[i];
@@ -409,6 +380,60 @@ function developpeMessage(id){
 	$("#message_"+id).append(getFormComment(id));
 
 }
+//Change l'img de like
+function switchImgLike(id){
+	var m =env.msg[id];	
+	var src=$("#like_"+id).attr("src");
+	//setLikeCpt(id);
+
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/like",
+			data:"token="+env.token+"&id_post="+id,
+			dataType:"json",
+			success: function(result){
+				if(result.status =='OK'){
+					if(result.like.state == 1){ //DISLIKE
+						env.msg[id].likes.splice(result.author_id,1);
+						src="image/like.png";
+					}else if(result.like.state == 0){ //LIKE
+						env.msg[id].likes.push(new Like(result.author_id, result.date));
+						src="image/likeFill.png";
+					}
+					$("#like_"+id).attr("src",src);
+					$("#cpt_like_"+id).text(env.msg[id].likes.length);
+				}
+				//console.log(env.msg[id].likes);
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+			}
+	});
+
+
+	/*if(src=="image/like.png")
+		src="image/likeFill.png";
+	else
+		src="image/like.png";
+*/
+	
+
+	
+
+}
+//Modifie l'affichage du cpt de like
+
+
+function findAuteurLike(tab){
+	for( i=tab.length-1; i>=0; i--) {
+    		if( tab[i].author_id == env.fromId) {
+    			return i;
+    		}
+	}
+	return -1;
+}
+
+
 
 function newComment(id){
 	var texte=$("#comment_new_"+id).val();
@@ -422,9 +447,6 @@ function newComment(id){
 			dataType:"json",
 			success: function(result){
 				if(result.status =='OK'){
-					result.comments._id=result.comments._id.$oid;
-					result.comments.date=result.comments.date.$date;
-					console.log(result)
 					refreshComment(id,JSON.stringify(result.comments));
 				}
 			},
