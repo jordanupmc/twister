@@ -1,7 +1,7 @@
 function ScrollMessage(token){
  
 
- if($(window).scrollTop() == $(document).height() - $(window).height()){
+ // if($(window).scrollTop() == $(document).height() - $(window).height()){
   $.ajax({
     type:"POST",
     url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",

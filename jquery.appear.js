@@ -10,7 +10,7 @@
  * Version: 0.3.3
  */
 (function($) {
-  var selecteur = [];
+  var selecteur = undefined;
 
   var check_binded = false;
   var check_lock = false;
