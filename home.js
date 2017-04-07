@@ -17,7 +17,7 @@ function Message(id, auteur, texte, date, comments, likes){
 Message.prototype.getHtml=function(){
 
 	var s = "<li class=\"message\" id=\"message_"+this.id+"\">\n"
-	s+="<span>\n<b><a href=\"\">"+this.auteur.login+"</a></b>\n"
+	s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\">"+this.auteur.login+"</a></b>\n"
 	s+="<span class=\"dateMessage\">"+this.date+"</span>\n</span>\n"
 	s+="<p>"+emojione.shortnameToImage(this.post)+"</p>"
 	s+=getMessageFooter(this.id, this.comments.length, this.likes.length, findAuteurLike(this.likes)!=-1 );
@@ -200,7 +200,7 @@ function init(){
 }
 
 
-function makeMainPanel(fromId, fromLogin, query){
+function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
 	env.msg = [];
 	env.minId = -1;
 	env.maxId = -1;
@@ -208,12 +208,21 @@ function makeMainPanel(fromId, fromLogin, query){
 	env.fromLogin =fromLogin;
 	env.query = query;
 	env.limit=10; //TEMPORAIRE 
-	
+	env.toId=toId;
+	env.toLogin=toLogin;
+
 	if(fromId == undefined){
 		env.fromId = -1;
 	}
 	if(fromLogin == undefined){
 		env.fromLogin = -1;
+	}
+
+	if(toId == undefined){
+		env.toId = -1;
+	}
+	if(toLogin == undefined){
+		env.toLogin = -1;
 	}
 
 	var s="";
@@ -265,10 +274,17 @@ function makeMainPanel(fromId, fromLogin, query){
 
 function completeMessages(){
 	if(!env.noConnection){
+
+		var s ="";
+		if(env.toId == -1)
+			s="token="+env.token+"&from="+env.fromId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit;
+		else
+			s="token="+env.token+"&from="+env.toId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit;
+		
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
-			data:"token="+env.token+"&from="+env.fromId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit,
+			data: s,
 			dataType:"json",
 			success: function(result){
 				completeMessagesReponse(JSON.stringify(result.messages));

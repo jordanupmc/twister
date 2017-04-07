@@ -354,8 +354,8 @@ public class Comments {
 					or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
 					// System.out.println(or);
 				}
-				if(Session.getIdUser(token) == author_id )
-					or.add(new BasicDBObject("author_id", author_id));
+				//if(Session.getIdUser(token) == author_id )
+				or.add(new BasicDBObject("author_id", author_id));
 				
 				if(!or.isEmpty())
 					request.put("$or",or);
