@@ -347,15 +347,16 @@ public class Comments {
 			BasicDBList and = new BasicDBList();
 		
 			if(author_id != -1){
-				JSONObject flist= FriendTools.getFriendList(token);
+				JSONObject flist= FriendTools.getFriendList(author_id);
 				JSONArray arr=flist.getJSONArray("friendList");
 				
 				for(int i=0; i<arr.length(); i++){
 					or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
 					// System.out.println(or);
 				}
-			
-				or.add(new BasicDBObject("author_id", author_id));
+				if(Session.getIdUser(token) == author_id )
+					or.add(new BasicDBObject("author_id", author_id));
+				
 				request.put("$or",or);
 				
 				if(!maxid.equals("-1"))
@@ -369,6 +370,8 @@ public class Comments {
 					request.put("$and", and);
 //				System.out.println(request);
 				
+			}else{
+				return null;
 			}
 			//Voir si request vide retourne TOUT
 			
