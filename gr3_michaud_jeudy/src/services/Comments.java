@@ -112,7 +112,7 @@ public class Comments {
 					new BasicDBObject("$push", mess)
 					);
 			
-			return new JSONObject(mess.toString());
+			return new JSONObject(collection.findOne(new BasicDBObject("_id", new ObjectId(msgId))).toString());
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -170,7 +170,7 @@ public class Comments {
 					);
 			}
 			
-			return new JSONObject(mess.toString());
+			return new JSONObject(collection.findOne(new BasicDBObject("_id", new ObjectId(msgId))).toString());
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
