@@ -173,31 +173,29 @@ EndlessScroll = (function() {
 
 // Script
 $(document).ready(function() {
-    var offset = $('#msg li').length;
-    console.log($('#msg li').length);
-    // ScrollMessage(-54292251,21,21,21,1);
-
-
+ 
+  var offset = $('#msg li').length;
+  console.log($('#msg li').length);
     $('#msg').endlessScroll({
-        fireOnce: false,
-        fireDelay: false,
+      fireOnce: false,
+      fireDelay: false,
         //loader: '',
         insertAfter: '#msg li:last',
         content: function(i) {
-              console.log($('#msg li').length);
-              ScrollMessage(-994321959,21,21,21,1);
+          console.log($('#msg li').length);
+          ScrollMessage(-994321959,21,21,21,1);
 
-            return '<li>'+'<span>'+'<a href="">JEUDY JORDAN</a>'+'<span id="dateMessage2">24/02/2017</span>' +'</span>' + '<p>' + "messages n °"+(i + offset) +'</p>'+ '</li>';
+          return '<li>'+'<span>'+'<a href="">JEUDY JORDAN</a>'+'<span id="dateMessage2">24/02/2017</span>' +'</span>' + '<p>' + "messages n °"+(i + offset) +'</p>'+ '<button>'+"LIKE"+'</button>'+'<button>'+"Comments"+'</button>'+ '</li>';
         }
-    });
+      });
 
-});
+  });
 
 
 
 
 function ScrollMessage(token,from,idmin,idmax,nb){
- 
+
   $.ajax({
     type:"POST",
     url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
@@ -205,13 +203,13 @@ function ScrollMessage(token,from,idmin,idmax,nb){
     dataType:"json",
     success: function(result){
       if(result.status=="KO"){
-           console.log(result.textError);
-      }else{
-        console.log(JSON.stringify(result.messages));
-          env.fromId=from;
-          env.msg=JSON.stringify(result.messages);
-          env.limit=nb;
-          env.token=token;
+       console.log(result.textError);
+     }else{
+      console.log(JSON.stringify(result.messages));
+      env.fromId=from;
+      env.msg=JSON.stringify(result.messages);
+      env.limit=nb;
+      env.token=token;
               //makeMainPanel(env.id, env.login);
             }
           },
