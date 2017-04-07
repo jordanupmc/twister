@@ -71,6 +71,13 @@ function Connectex(login,password){
 				document.getElementById('charge').style.visibility = "visible";
 				document.getElementById('spinner2').style.visibility = "visible";
 				env.token=result.token;
+				if(result.friends.status == "OK"){
+					env.friends=result.friends.friendList;
+
+					if(env.friends == null || env.friends == undefined)
+						env.friends=[];
+				}
+				
           		makeMainPanel(result.id, result.login);
 			}
 		},
