@@ -50,18 +50,31 @@ public class AddComment extends HttpServlet {
 				ErrorService.serviceRefused(1000, e.getMessage());
 				return;
 			}
-		 JSONObject obj=services.Comments.comment(token, com, idPost);
+		 JSONObject obj= new JSONObject();
+		 try {
+			obj.put("comments",services.Comments.comment(token, com, idPost));
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		 
-		 if(obj != null ){
-			 try {
-					obj.put("status", "OK");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			 out.println(obj);
-		 }
-		else
+		 try {
+			if(obj != null && obj.get("comments") !=null ){
+				 try {
+						obj.put("status", "OK");
+					} catch (JSONException e) {
+						e.printStackTrace();
+						 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+					}
+				 out.println(obj);
+			 }
+			else
+				 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+		}
 		 
 		 
 	 }

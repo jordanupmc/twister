@@ -73,7 +73,7 @@ public class Comments {
 		
 	}
 	
-	public static JSONObject comment(String token,String message, String msgId){
+	public static DBObject comment(String token,String message, String msgId){
 		int author_id;
 		try {
 			
@@ -112,7 +112,7 @@ public class Comments {
 					new BasicDBObject("$push", mess)
 					);
 			
-			return new JSONObject(collection.findOne(new BasicDBObject("_id", new ObjectId(msgId))).toString());
+			return request;
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -121,16 +121,13 @@ public class Comments {
 		} catch (BDException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return null;
 		
 	}
 	//Like et Dislike
-	public static JSONObject like(String token, String msgId){
+	public static DBObject like(String token, String msgId){
 		Mongo m;
 		int author_id;
 		try {
@@ -162,15 +159,17 @@ public class Comments {
 				
 				collection.update(new BasicDBObject("_id", new ObjectId(msgId)),
 						new BasicDBObject("$pull", tmp));
+				request.put("state",1);
 			}else{ //Like
 			collection.update(
 					new BasicDBObject("_id", new ObjectId(msgId))
 					,
 					new BasicDBObject("$push", mess)
 					);
+				request.put("state",0);
 			}
 			
-			return new JSONObject(collection.findOne(new BasicDBObject("_id", new ObjectId(msgId))).toString());
+			return request;
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -178,10 +177,7 @@ public class Comments {
 		} catch (BDException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		
 		
 		
@@ -216,6 +212,8 @@ public class Comments {
 				
 				
 				BasicDBList likes = (BasicDBList)  db2.get("like");
+				if(likes == null)
+					return false;
 				BasicDBObject[] likeArr = likes.toArray(new BasicDBObject[0]);
 				
 				for(BasicDBObject l: likeArr){

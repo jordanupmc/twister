@@ -49,18 +49,32 @@ public class Like extends HttpServlet {
 				ErrorService.serviceRefused(1000, e.getMessage());
 				return;
 			}
-		 JSONObject obj=services.Comments.like(token, idPost);
-			
-		if(obj != null ){
-			try {
-				obj.put("status", "OK");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			out.println(obj);
+		JSONObject obj= new JSONObject();
+		try {
+			obj.put("like", services.Comments.like(token, idPost));
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		else
-			 out.println(ErrorService.serviceRefused(-2,"echec like"));
+		
+		
+		try {
+			if(obj != null && obj.get("like") != null){
+				try {
+					obj.put("status", "OK");
+				} catch (JSONException e) {
+					e.printStackTrace();
+					out.println(ErrorService.serviceRefused(-2,"echec like"));
+				}
+				out.println(obj);
+			}
+			else
+				 out.println(ErrorService.serviceRefused(-2,"echec like"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			out.println(ErrorService.serviceRefused(-2,"echec like"));
+		}
 		 
 	 }
 
