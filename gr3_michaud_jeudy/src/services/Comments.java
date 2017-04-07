@@ -357,7 +357,8 @@ public class Comments {
 				if(Session.getIdUser(token) == author_id )
 					or.add(new BasicDBObject("author_id", author_id));
 				
-				request.put("$or",or);
+				if(!or.isEmpty())
+					request.put("$or",or);
 				
 				if(!maxid.equals("-1"))
 					and.add(new BasicDBObject("_id", new BasicDBObject("$lt",new ObjectId(maxid))));
