@@ -241,7 +241,7 @@ $(document).ready(function() {
               console.log($('#msg li').length);
               ScrollMessage(-54292251,21,21,21,1);
 
-            return '<li>'+'<span>'+'<a href="">JEUDY JORDAN</a>'+'<span id="dateMessage2">24/02/2017</span>' +'</span>' + '<p>' + "messages n °"(i + offset) +'</p>'+ '</li>';
+            return '<li>'+'<span>'+'<a href="">JEUDY JORDAN</a>'+'<span id="dateMessage2">24/02/2017</span>' +'</span>' + '<p>' + "messages n °"+(i + offset) +'</p>'+ '</li>';
         }
     });
 
