@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import services.ErrorService;
 import services.SuccessService;
 import bd.BDException;
@@ -46,8 +49,16 @@ public class Like extends HttpServlet {
 				ErrorService.serviceRefused(1000, e.getMessage());
 				return;
 			}
-		if( services.Comments.like(token, idPost))
-			 out.println(SuccessService.serviceSuccess("like succes"));
+		 JSONObject obj=services.Comments.like(token, idPost);
+			
+		if(obj != null ){
+			try {
+				obj.put("status", "OK");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			out.println(obj);
+		}
 		else
 			 out.println(ErrorService.serviceRefused(-2,"echec like"));
 		 

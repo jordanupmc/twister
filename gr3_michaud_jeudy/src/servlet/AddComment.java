@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import bd.BDException;
 import bd.Session;
 import services.ErrorService;
@@ -47,10 +50,17 @@ public class AddComment extends HttpServlet {
 				ErrorService.serviceRefused(1000, e.getMessage());
 				return;
 			}
+		 JSONObject obj=services.Comments.comment(token, com, idPost);
 		 
-		 if(services.Comments.comment(token, com, idPost))
-			 out.println(SuccessService.serviceSuccess("comment ajouter avec success"));
-		 else
+		 if(obj != null ){
+			 try {
+					obj.put("status", "OK");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			 out.println(obj);
+		 }
+		else
 			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
 		 
 		 
