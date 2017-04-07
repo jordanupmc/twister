@@ -8,6 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+<<<<<<< HEAD
+=======
+import org.json.JSONException;
+import org.json.JSONObject;
+
+>>>>>>> 8830f688f9ee2e84c32c4f3e3380a9b1b304f315
 import services.ErrorService;
 import services.SuccessService;
 import bd.BDException;
@@ -46,10 +52,39 @@ public class Like extends HttpServlet {
 				ErrorService.serviceRefused(1000, e.getMessage());
 				return;
 			}
+<<<<<<< HEAD
 		if( services.Comments.like(token, idPost))
 			 out.println(SuccessService.serviceSuccess("like succes"));
 		else
 			 out.println(ErrorService.serviceRefused(-2,"echec like"));
+=======
+		JSONObject obj= new JSONObject();
+		try {
+			obj.put("like", services.Comments.like(token, idPost));
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		try {
+			if(obj != null && obj.get("like") != null){
+				try {
+					obj.put("status", "OK");
+				} catch (JSONException e) {
+					e.printStackTrace();
+					out.println(ErrorService.serviceRefused(-2,"echec like"));
+				}
+				out.println(obj);
+			}
+			else
+				 out.println(ErrorService.serviceRefused(-2,"echec like"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			out.println(ErrorService.serviceRefused(-2,"echec like"));
+		}
+>>>>>>> 8830f688f9ee2e84c32c4f3e3380a9b1b304f315
 		 
 	 }
 

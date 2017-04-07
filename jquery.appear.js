@@ -1,3 +1,4 @@
+
 /*
  * jQuery appear plugin
  *
@@ -9,7 +10,7 @@
  * Version: 0.3.3
  */
 (function($) {
-  var selecteur = undefined;
+  var selecteur = [];
 
   var check_binded = false;
   var check_lock = false;
@@ -106,3 +107,14 @@
     }
   });
 })(jQuery);
+
+
+// test1
+jQuery('.dateMessage10').appear(function(){
+    console.log("test1 :");
+});
+
+// test2
+jQuery('.dateMessage15').on('appear', function(){
+    console.log("test2 :");
+});

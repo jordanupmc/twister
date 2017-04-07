@@ -27,7 +27,8 @@ import com.mongodb.Mongo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import org.json.JSONException;
+import org.json.JSONObject;
 public class Comments {
 
 	public static boolean insertMessage(String token,String message){
@@ -72,7 +73,7 @@ public class Comments {
 		
 	}
 	
-	public static boolean comment(String token,String message, String msgId){
+	public static DBObject comment(String token,String message, String msgId){
 		int author_id;
 		try {
 			
@@ -90,7 +91,7 @@ public class Comments {
 			author_id=Session.getIdUser(token);
 			
 			if(author_id==-1){
-				return false;
+				return null;
 			}
 			
 			request.put("author_id", author_id);
@@ -111,22 +112,22 @@ public class Comments {
 					new BasicDBObject("$push", mess)
 					);
 			
+			return request;
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			
 		} catch (BDException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
 		}
 		
-		return true;
+		return null;
 		
 	}
 	//Like et Dislike
-	public static boolean like(String token, String msgId){
+	public static DBObject like(String token, String msgId){
 		Mongo m;
 		int author_id;
 		try {
@@ -149,7 +150,7 @@ public class Comments {
 			mess.put("like", request);
 			
 			if(author_id==-1){
-				return false;
+				return null;
 			}
 			
 			if(isLike(author_id+"", msgId)){ //Dislike
@@ -158,27 +159,29 @@ public class Comments {
 				
 				collection.update(new BasicDBObject("_id", new ObjectId(msgId)),
 						new BasicDBObject("$pull", tmp));
+				request.put("state",1);
 			}else{ //Like
 			collection.update(
 					new BasicDBObject("_id", new ObjectId(msgId))
 					,
 					new BasicDBObject("$push", mess)
 					);
+				request.put("state",0);
 			}
+			
+			return request;
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
 		} catch (BDException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
-		}
+		} 
 		
 		
 		
-		return true;
+		return null;
 		
 	}
 	public static boolean isLike(String author_id, String com_id){
@@ -209,6 +212,8 @@ public class Comments {
 				
 				
 				BasicDBList likes = (BasicDBList)  db2.get("like");
+				if(likes == null)
+					return false;
 				BasicDBObject[] likeArr = likes.toArray(new BasicDBObject[0]);
 				
 				for(BasicDBObject l: likeArr){
