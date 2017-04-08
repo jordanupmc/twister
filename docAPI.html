@@ -32,7 +32,7 @@
 		<tr>
 			<td>createUser</td>
 			<td>login&password&nom&prenom</td>
-			<td>Succes {status:OK,token:,login:,id:} || Echec {status:KO, code: , textError:}</td>
+			<td>Succes {status:OK,token:,login:,id:, friends:{status:OK, friendList[]}} || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null<br>
 				1000: ce compte existe déjà<br>
 			</td>
@@ -40,7 +40,7 @@
 		<tr>
 			<td>login</td>
 			<td>login&password</td>
-			<td>Succes {status:OK,token:} || Echec {status:KO, code: , textError:}</td>
+			<td>Succes {status:OK,token:, friends:{status:OK, friendList[]}} || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null
 			</td>
 		</tr>
@@ -63,11 +63,30 @@
 		<tr>
 			<td>listMessage</td>
 			<td>token&query&from&id_max&id_min&nb</td>
-			<td>Succes {status:OK, messages: [ {"post","_id","author_id","login","date"} ] } || Echec {status:KO, code: , textError:}</td>
+			<td>Succes {status:OK, messages: [ {"post","_id","author_id","login","date","like[author_id,date]", "comments[]"} ] } || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null<br>
 				1000 Token obsolete
 			</td>
 		</tr>
+
+		<tr>
+			<td>like</td>
+			<td>token&id_post&text</td>
+			<td>Succes {status:OK, like:{"state", "author_id", "date"} } || Echec {status:KO, code: , textError:}</td>
+			<td>state: 0:like, 1:dislike<br>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+
+		<tr>
+			<td>addComment</td>
+			<td>token&id_post</td>
+			<td>Succes {status:OK, "comments":{"post","_id","login","author_id","date"} } || Echec {status:KO, code: , textError:}</td>
+			<td>state: 0:like, 1:dislike<br>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+
 		<tr>
 			<td>getFriendList</td>
 			<td>token</td>
@@ -92,6 +111,16 @@
 				1000 Token obsolete
 			</td>
 		</tr>
+
+		<tr>
+			<td>deleteFriend</td>
+			<td>token&id</td>
+			<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+
 		<tr>
 			<td>search</td>
 			<td>token&query&friends</td>

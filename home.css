@@ -9,6 +9,7 @@ body {
   min-height: 100%;
   padding: 0;
   margin: 0;
+  background-color: #F2EEE8;
 }
 
 #main header {
@@ -79,7 +80,7 @@ body #main {
 	background-color: #1FA1F1;
 	color:white;
 	width:32vh;
-	margin-top: 65px; /*60*/ 
+	margin-top: 71px; /*60*/ 
 	position: fixed;
 	height:100vh;
 	

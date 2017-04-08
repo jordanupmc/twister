@@ -71,13 +71,20 @@ function revival(key,value){
 	}else if(value.auteur_id != undefined){
 		return new Like(value.author_id, value.date);
 	}else if(key =='date'){
-		//var reggie="\D{3} \D{3} \d{2} \d{2}:\d{2}:\d{2}";
-		return value;
+		value=value.replace(/CEST/, '+0200');
+		return new Date(value);
 	
 	//	return new Date(value).toLocaleDateString();
 	}else{
 		return value;
 	}
+}
+
+function parseDate(d){
+	var s="";
+	s+=d.toLocaleDateString();
+	//d.getHours();
+	return s;
 }
 
 function getMessageFooter(id, comLength, likeLength, isLike,src){
@@ -117,9 +124,10 @@ function getMessageFooterComment(id, comLength, likeLength,isLike, src){/// TODO
 
 	s+= " alt=\"\"></a> <p id=\"cpt_like_"+id+"\" class=\"message_like\">"+likeLength+"</p>"
 	+"<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:hideComments('"+id+"')\" class=\"showCommentButton\">Cacher</a>"
-	if(comLength>0 )  /// ********* FIXER A 10 en prod
-		s+="<a href=\"javascript:(function(){return;}())\" class=\"showCommentButton\"> Voir plus</a>"
-
+	/*
+	if(comLength> 5 )  /// ********* Plus de 5 commentaires on montre un bouton 
+		s+="<a href=\"javascript:(function(){return;}())\" class=\"showCommentButton\"> Voir tout</a>"
+	*/
 	s+="</div>"
 	return s;
 }
@@ -202,7 +210,8 @@ function init(){
 	env.noConnection = false;
 
 	//setVirtualMessage();
-	makeEnregistrementPanel();
+//	makeEnregistrementPanel();
+	makeConnectionPanel()
 }
 
 
@@ -260,24 +269,17 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
    "</aside>"+
 
    "<section>"+
-    "<h1> Message </h1>"+
-    "<div id=\"post_message\">"+
-     "<form action=\"javascript:(function(){return;}())\"  onsubmit=\"newPost()\" >"+
-      "<input type=\"submit\" value=\"+\">"+
-     "<input type=\"text\" name=\"comments\" id=\"post_new\" placeholder=\"Composez un nouveau Twist...\" required>"+
-    "</form>"+
-  "</div>"+
-
-  "<div id=\"cont_message\">"+
+    "<h1> Message </h1>";
+    if(env.toId == -1){
+    	s+="<div id=\"post_message\">"+
+		     "<form action=\"javascript:(function(){return;}())\"  onsubmit=\"newPost()\" >"+
+		      "<input type=\"submit\" value=\"+\">"+
+		     "<input type=\"text\" name=\"comments\" id=\"post_new\" placeholder=\"Composez un nouveau Twist...\" required>"+
+		    "</form>"+
+		  "</div>"
+	}
+  	s+="<div id=\"cont_message\">"+
   	"<ul>\n</div>";
-
-	
-
-	// if(env.fromId == -1){
-	// 	s+= "<body>\n</body>";
-	// }
-	// else{
-	// 	s+=;
 
 	document.getElementsByTagName('body')[0].innerHTML= s;
 	completeMessages();
@@ -299,11 +301,15 @@ function completeMessages(){
 			data: s,
 			dataType:"json",
 			success: function(result){
-				completeMessagesReponse(JSON.stringify(result.messages));
+				if(result.code == 1000)
+					makeConnectionPanel();
+				else
+					completeMessagesReponse(JSON.stringify(result.messages));
+				
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
-
+				makeConnectionPanel();
 			}
 		});
 
@@ -408,11 +414,10 @@ function developpeMessage(id){
 	$("#message_"+id).append(getFormComment(id));
 
 }
-//Change l'img de like
+
 function switchImgLike(id){
 	var m =env.msg[id];	
 	var src=$("#like_"+id).attr("src");
-	//setLikeCpt(id);
 
 	$.ajax({
 			type:"POST",
@@ -430,6 +435,8 @@ function switchImgLike(id){
 					}
 					$("#like_"+id).attr("src",src);
 					$("#cpt_like_"+id).text(env.msg[id].likes.length);
+				}else if(result.code == 1000){
+					makeConnectionPanel();
 				}
 				//console.log(env.msg[id].likes);
 			},
@@ -438,18 +445,7 @@ function switchImgLike(id){
 			}
 	});
 
-
-	/*if(src=="image/like.png")
-		src="image/likeFill.png";
-	else
-		src="image/like.png";
-*/
-	
-
-	
-
 }
-//Modifie l'affichage du cpt de like
 
 
 function findAuteurLike(tab){
@@ -474,6 +470,12 @@ function newComment(id){
 	var texte=$("#comment_new_"+id).val();
 	$("#comment_new_"+id).val("");
 	
+	texte=texte.trim();
+
+	if(texte == "")
+		return;
+	
+
 	if(!env.noConnection){
 		$.ajax({
 			type:"POST",
@@ -483,6 +485,8 @@ function newComment(id){
 			success: function(result){
 				if(result.status =='OK'){
 					refreshComment(id,JSON.stringify(result.comments));
+				}else if(result.code == 1000){
+					makeConnectionPanel();
 				}
 			},
 			error: function(jqXHR,textStatus,errTHrown){
@@ -501,14 +505,7 @@ function refreshComment(id, rep){
 		var el=$("#message_"+id+" > .liste_message_comment");
 		el.append(com.getHtml());
 
-		env.msg[id].comments.push(com);
-
-		if(!env.noConnection){
-
-		}
-		else{
-
-		}
+		env.msg[id].comments.push(com); // TODO A revoir
 	}
 }
 
@@ -533,7 +530,10 @@ function newPost(){
 			data:"token="+env.token+"&post="+texte,
 			dataType:"json",
 			success: function(result){
-				if(result.status =='OK')
+				
+				if(result.code == 1000){
+					makeConnectionPanel();
+				}else
 					refreshMessage();
 			},
 			error: function(jqXHR,textStatus,errTHrown){
@@ -557,7 +557,11 @@ function refreshMessage(rep){
 			data:"token="+env.token+"&from="+env.fromId+"&id_min="+env.maxId+"&id_max=-1"+"&nb=-1",
 			dataType:"json",
 			success: function(result){
-				refreshResponse(JSON.stringify(result.messages));
+					if(result.code == 1000){
+						makeConnectionPanel();
+					}
+					else
+						refreshResponse(JSON.stringify(result.messages));
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
@@ -620,7 +624,9 @@ function follow(id){
 			success: function(result){
 				if(result.status == "OK"){
 					switchButtonFollow(-1);
-					env.friends[id]={"id":id,"login":toLogin};
+					env.friends[id]={"id":id,"login": env.toLogin};
+				}else if(result.code == 1000){
+					makeConnectionPanel();
 				}
 			},
 			error: function(jqXHR,textStatus,errTHrown){
@@ -646,6 +652,8 @@ function unfollow(id){
 				    		break;
 				    	}
 					}
+				}else if(result.code == 1000){
+					makeConnectionPanel();
 				}
 			},
 			error: function(jqXHR,textStatus,errTHrown){

@@ -85,6 +85,14 @@ function Create(login, pass,nom, prenom){
         document.getElementById('charge').style.visibility = "visible";
         document.getElementById('spinner2').style.visibility = "visible";
         env.token=r.token;
+
+        if(r.friends.status == "OK"){
+          env.friends=r.friends.friendList;
+
+          if(env.friends == null || env.friends == undefined)
+            env.friends=[];
+        }
+        
         makeMainPanel(r.id,r.login);
       }
     },
