@@ -60,11 +60,7 @@ Like.prototype.getHtml=function(){
 
 
 function revival(key,value){
-	// if(value != undefined ){
-	// 	return new Message(value.id,value.auteur,value.texte,value.date,value.comments);
-	// }
-	// else
-
+	
 	if(value.comments != undefined){
 		return  new Message(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date, value.comments, value.like);;
 	}else if(value.post != undefined){
@@ -75,7 +71,6 @@ function revival(key,value){
 		value=value.replace(/CEST/, '+0200');
 		return new Date(value);
 	
-	//	return new Date(value).toLocaleDateString();
 	}else{
 		return value;
 	}
