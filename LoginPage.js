@@ -40,7 +40,6 @@ function ConnectionLogin(){
 	if( password1.val().length<4){
 		err.text("Mot de passe trop court");
 		noFail = false;
-		
 	}
 	if(noFail){
 		Connectex(lg.val(),password1.val());

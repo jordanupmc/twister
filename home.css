@@ -80,7 +80,7 @@ body #main {
 	background-color: #1FA1F1;
 	color:white;
 	width:32vh;
-	margin-top: 71px; /*60*/ 
+	margin-top: 70px; /*60*/ 
 	position: fixed;
 	height:100vh;
 	
@@ -140,7 +140,7 @@ body #main {
 
 }
 #main #post_message input[type=text]{
-	width: 90%;
+	width: 85%;
 	background-color: #1FA1F1;
 	color:white;
 	border: none;

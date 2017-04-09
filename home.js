@@ -22,7 +22,7 @@ Message.prototype.getHtml=function(){
 	else
 		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\">"+this.auteur.login+"</a></b>\n"
 	
-	s+="<span class=\"dateMessage\">"+this.date+"</span>\n</span>\n"
+	s+="<span class=\"dateMessage\">"+parseDate(this.date)+"</span>\n</span>\n"
 	s+="<p>"+emojione.shortnameToImage(this.post)+"</p>"
 	s+=getMessageFooter(this.id, this.comments.length, this.likes.length, findAuteurLike(this.likes)!=-1 );
     s += "<ul class=\"liste_message_comment\">\n</ul>\n";
@@ -41,7 +41,8 @@ function Commentaire(id, auteur, texte, date){
 
 Commentaire.prototype.getHtml=function(){
 	var s = "";
-	s+= "<li> <p> <b>"+this.auteur.login+"</b> "+emojione.shortnameToImage(this.post)+"</p> <p class=\"dateComment\">"+this.date+"</p> </li>"
+	s+= "<li> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
+	+"</p> <p class=\"dateComment\">"+parseDate(this.date)+"</p> </li>"
 	
 	return s;
 }
@@ -80,11 +81,33 @@ function revival(key,value){
 	}
 }
 
+
 function parseDate(d){
 	var s="";
-	s+=d.toLocaleDateString();
-	//d.getHours();
-	return s;
+	var now = new Date();
+	var day_diff=Math.floor( now.getTime() / (3600*24*1000)) - Math.floor( d.getTime() / (3600*24*1000));;
+
+	var diffMs = (now - d); 
+	var diffHrs = Math.floor((diffMs % 86400000) / 3600000); 
+	var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000);
+	var diffSec= (now - d) / 1000;
+
+	if(day_diff > 28)
+		return d.toLocaleDateString();
+	if(day_diff < 28 && day_diff > 1)
+		return "il y a "+day_diff+" jours";
+	if(day_diff == 1 )
+		return "hier";
+	if(diffHrs > 0)
+		return "il y a "+diffHrs+" h";
+	if(diffMins > 0)
+		return "il y a "+diffMins+" min";
+	if(diffSec < 10)
+		return "à l'instant";
+	if(diffSec > 10)
+		return "il y a "+parseInt(diffSec,10)+" s";
+
+	return d.toLocaleDateString();
 }
 
 function getMessageFooter(id, comLength, likeLength, isLike,src){
@@ -146,6 +169,8 @@ function deco(){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				env={};
+				makeConnectionPanel();
 			}
 		});
 }
@@ -344,7 +369,6 @@ function completeMessagesReponse(reponse){
 		//lastId = tab[i].id;
 	}
 	env.minId=lastId;
-	console.log("INIT "+env.maxId+" "+env.minId);
 	$("#message_"+lastId).css("border-bottom","none");
 }
 
@@ -442,6 +466,7 @@ function switchImgLike(id){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				makeConnectionPanel();
 			}
 	});
 
@@ -491,6 +516,7 @@ function newComment(id){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				makeConnectionPanel();
 			}
 		});
 	}else{
@@ -538,6 +564,7 @@ function newPost(){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				makeConnectionPanel();
 			}
 		});
 
@@ -565,6 +592,7 @@ function refreshMessage(rep){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				makeConnectionPanel();
 			}
 		})
 
@@ -631,6 +659,7 @@ function follow(id){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				makeConnectionPanel();
 			}
 		})
 
@@ -658,6 +687,7 @@ function unfollow(id){
 			},
 			error: function(jqXHR,textStatus,errTHrown){
 				console.log(textStatus);
+				makeConnectionPanel();
 			}
 		})
 
