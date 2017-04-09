@@ -235,7 +235,12 @@ body #main {
 	float:right;
 	margin-right: 1vh;
 }
-
+#main .removePostButton{
+	float:right;
+	margin-right: 1vh;
+	margin-left: auto;
+	color: red;
+}
 #main .liste_message_comment {
 	padding: 0;
     list-style-type: none;

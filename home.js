@@ -60,7 +60,7 @@ Like.prototype.getHtml=function(){
 
 
 function revival(key,value){
-	
+
 	if(value.comments != undefined){
 		return  new Message(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date, value.comments, value.like);;
 	}else if(value.post != undefined){
@@ -78,7 +78,7 @@ function revival(key,value){
 
 
 function parseDate(d){
-	var s="";
+
 	var now = new Date();
 	var day_diff=Math.floor( now.getTime() / (3600*24*1000)) - Math.floor( d.getTime() / (3600*24*1000));;
 
@@ -123,7 +123,10 @@ function getMessageFooter(id, comLength, likeLength, isLike,src){
     s+=" alt=\"\"></a> <p id=\"cpt_like_"+id+"\" class=\"message_like\">"+likeLength+"</p>";
   
     s += "<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:developpeMessage('"+id+"')\"><img src=\"image/message-bubble.png\" alt=\"\"></a><p class=\"message_comment\">"+comLength+"</p>";
-    s +=  "</div>\n";
+   
+   	if(env.fromId == env.msg[arrayObjectIndexOf(env.msg, id, "id")].auteur.id)
+    	s +=  " <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeMessage('"+id+"')\" class=\"removePostButton\">Supprimer</a>\n"
+    s+="</div>\n";
     return s;
 }
 
@@ -149,7 +152,12 @@ function getMessageFooterComment(id, comLength, likeLength,isLike, src){/// TODO
 	s+="</div>"
 	return s;
 }
-
+function arrayObjectIndexOf(myArray, searchTerm, property) {
+    for(var i = 0, len = myArray.length; i < len; i++) {
+        if (myArray[i][property] === searchTerm) return i;
+    }
+    return -1;
+}
 function deco(){
 	$.ajax({
 			type:"POST",
@@ -170,66 +178,11 @@ function deco(){
 		});
 }
 
-function setVirtualMessage(){
-	
-	localdb = [];
-	follows = [];
-	var user1 = {"id":1, "login":"papa"};
-	var user2 = {"id":2, "login":"maman"};
-	var user3 = {"id":3, "login":"fils"};
-	var user4 = {"id":4, "login":"popa"};
-	var user5 = {"id":5, "login":"pipa"};
-	var user6 = {"id":6, "login":"pupa"};
-	var user7 = {"id":7, "login":"pypa"};
-	var user8 = {"id":8, "login":"pepa"};
-	var user9 = {"id":9, "login":"mamo"};
-	var user10= {"id":10, "login":"mami"};
-	var user11= {"id":11, "login":"kiri"};
-	var user12= {"id":12, "login":"kou"};
-
-	follows[1] = new Set();
-	follows[1].add(2);
-	follows[1].add(3);
-	follows[1].add(4);
-	follows[2] = new Set();
-	follows[2].add(4);
-	follows[2].add(5);
-	follows[2].add(6);
-	follows[2].add(7);
-	follows[2].add(8);
-	follows[2].add(9);
-	follows[2].add(1);
-	follows[5] = new Set();
-	follows[5].add(1);
-	follows[5].add(10);
-	follows[5].add(11);
-	follows[8] = new Set();
-	follows[8].add(4);
-	follows[8].add(5);
-	follows[8].add(9);
-	follows[8].add(3);
-
-	
-	var mon_commentaire1 = new Commentaire(1, user4, "je like", new Date());
-	var mon_commentaire2 = new Commentaire(2, user5 ,"first", new Date());
-	var mon_commentaire3 = new Commentaire(3, user3 ," loin de moi l'idée de graver dans le marbre de tailler dans une écorce d'arbre loin de moi l'idée de suggérer que je m'en moque que je n'en ai rien à faire que guère je ne m'en soucie loin de moi ces folies mais je m'échine depuis octobre et pourquoi donc depuis début octobre même et qui m'aime me suive depuis octobre depuis ce même dernier octobre le trois du mois je crois depuis ce temps-là depuis trois mois depuis trois mois et une semaine je m'échine ailleurs et le très long texte n'a pas avancé d'un poil pas beaucoup sans doute est-ce mon côté velléitaire qui ne cesse de me jouer des tours et les méandres du très long texte se sont figés comme une gelée le long des parois d'un bocal de verre et je vitupère contre mes essais éphémères mon tempérament affreusement velléitaire et ce teint d'albâtre qui n'est pas le mien comme je voudrais qu'il fût d'albâtre ou d'ébène ou autrement même sans métaphore mais au moins qu'il ait quelque tenue que mon visage sans retenue puisse soudain passer pour un tissu une pierre un songe soit en quelque sorte un tableau fasse tableau mais ce n'est pas le cas même ce mot albâtre jeté au visage jeté tout à trac sur la page en haut de page ce mot me défigure ne me figure pas ne me représente pas ne figure rien de ce que je suis de ce que je pense être et je suis encore et toujours circonspect dans le doute et ce mot n'apporte rien aucune réponse et donc toujours je me jette à la figure ces", new Date());
-	
-	var like1 = new Like(1, user5 ,new Date());
-	var like2 = new Like(2, user1 ,new Date());
-
-	localdb[0] = new Message(1, user1,"C’est comme ça qu’il se voyait à cette époque. Un peu rebelle envers ce monde. L’informatique l’avait aidé à s’enfermer un peu plus dans cet état. Il était devenu doué d’une logique à toute épreuve et d’une intelligence remarquable, mais surtout, il était devenu insociable. Avec l’âge, le besoin de trouver l’âme sœur avait pris le dessus et il avait été un peu obligé de rencontrer des gens, de parler avec eux. Très difficile au début, il avait réussi à vaincre ces préjugés. Il avait accepté la lenteur d’esprit des autres ainsi que leur manque de logique.", new Date());
-	localdb[1] = new Message(2, user2,"loin de moi l'idée de graver dans le marbre de tailler dans une écorce d'arbre loin de moi l'idée de suggérer que je m'en moque que je n'en ai rien à faire que guère je ne m'en soucie loin de moi ces folies mais je m'échine depuis octobre et pourquoi donc depuis début octobre même et qui m'aime me suive depuis octobre depuis ce même dernier octobre le trois du mois je crois depuis ce temps-là depuis trois mois depuis trois mois et une semaine je m'échine ailleurs et le très long texte n'a pas avancé d'un poil pas beaucoup sans doute est-ce mon côté velléitaire qui ne cesse de me jouer des tours et les méandres du très long texte se sont figés comme une gelée le long des parois d'un bocal de verre et je vitupère contre mes essais éphémères mon tempérament affreusement velléitaire et ce teint d'albâtre qui n'est pas le mien comme je voudrais qu'il fût d'albâtre ou d'ébène ou autrement même sans métaphore mais au moins qu'il ait quelque tenue que mon visage sans retenue puisse soudain passer pour un tissu une pierre un songe soit en quelque sorte un tableau fasse tableau mais ce n'est pas le cas même ce mot albâtre jeté au visage jeté tout à trac sur la page en haut de page ce mot me défigure ne me figure pas ne me représente pas ne figure rien de ce que je suis de ce que je pense être et je suis encore et toujours circonspect dans le doute et ce mot n'apporte rien aucune réponse et donc toujours je me jette à la figure ces", new Date(),[mon_commentaire1, mon_commentaire2]);
-	localdb[2] = new Message(3, user1,"OH ", new Date());
-	localdb[3] = new Message(4, user1,"MAMA", new Date());
-	localdb[4] = new Message(5, user1,"#:flame::flame: :flame: :flame::flame: :flame: :flame:", new Date());
-	localdb[5] = new Message(6, user3,"yep", new Date(),[ mon_commentaire3], [like1, like2]);	
-}
 
 function init(){
 	env = new Object();
 	env.noConnection = false;
-
-	//setVirtualMessage();
+	
 //	makeEnregistrementPanel();
 	makeConnectionPanel()
 }
@@ -261,7 +214,6 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
 	}
 
 	var s="";
-	//getFromLocaldb(env.from, env.minId, env.maxId, 10);
 	s+="<div id=\"main\"> <header> <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\" ><img src=\"image/logo.png\" alt=\"\"></a><form action=\"javascript:(function(){return;}())\">"+
 	"<input type=\"text\" name=\"search\" placeholder=\"Chercher...\">"+
       "<input type=\"image\" src=\"image/Search-48.png\" alt=\"err\">"+
@@ -349,10 +301,11 @@ function completeMessagesReponse(reponse){
 	env.maxId=tab[0].id;
 	lastId=tab[tab.length-1].id;
 	for(var i =0; i<tab.length; i++){
-	
+		
+		//env.msg[tab[i].id] = tab[i];
+		env.msg.push(tab[i]);
 		$("#cont_message > ul").append(tab[i].getHtml());
 
-		env.msg[tab[i].id] = tab[i];
 	/*	if(tab[i].id > env.maxId){
 			env.maxId = tab[i].id;
 		}*/
@@ -365,38 +318,8 @@ function completeMessagesReponse(reponse){
 	}
 	env.minId=lastId;
 	$("#message_"+lastId).css("border-bottom","none");
+	//console.log(Object.keys(env.msg));
 }
-
-
-function getFromLocaldb(from, minId, maxId, nbMax){
-	var tab = [];
-	var nb = 0;
-	var f = undefined;
-	
-	if(from >= 0){ //**************************************************REVOIR LE FROM*********************************************
-		f = follows[from];
-		if(f==undefined){
-			f = new Set();
-		}
-	}
-
-	for(var i = localdb.length-1; i >= 0 ; i--){
-		if((nbMax >= 0) && (nb >= nbMax)){
-			break;
-		}
-		if(localdb[i] == undefined){
-			continue;
-		}
-		if((maxId < 0) || (localdb[i].id < maxId) && (localdb[i].id > minId)){
-			if((f==undefined)||(localdb[i].auteur.id == from)||(f.has(localdb[i].auteur.id))){
-				tab.push(localdb[i]);
-				nb++;
-			}
-		}
-	}
-	return tab;
-}
-
 
 
 function getFormComment(id){
@@ -407,7 +330,7 @@ function getFormComment(id){
 }
 
 function hideComments(id){
-	var m =env.msg[id];	
+	var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
 	var src=$("#like_"+id).attr("src");
 
 	$("#message_"+id+" > .liste_message_comment").empty();
@@ -420,7 +343,7 @@ function hideComments(id){
 }
 
 function developpeMessage(id){ 
-	var m =env.msg[id];	
+	var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
 	var src=$("#like_"+id).attr("src");
 	$("#message_"+id+" > .message_footer").remove();
 
@@ -435,7 +358,8 @@ function developpeMessage(id){
 }
 
 function switchImgLike(id){
-	var m =env.msg[id];	
+	var ind = arrayObjectIndexOf(env.msg, id, "id");
+	var m =env.msg[ind];	
 	var src=$("#like_"+id).attr("src");
 
 	$.ajax({
@@ -445,11 +369,12 @@ function switchImgLike(id){
 			dataType:"json",
 			success: function(result){
 				if(result.status =='OK'){
+					
 					if(result.like.state == 1){ //DISLIKE
-						env.msg[id].likes.splice(result.author_id,1);
+						env.msg[ind].likes.splice(result.author_id,1);
 						src="image/like.png";
 					}else if(result.like.state == 0){ //LIKE
-						env.msg[id].likes.push(new Like(result.author_id, result.date));
+						env.msg[ind].likes.push(new Like(result.author_id, result.date));
 						src="image/likeFill.png";
 					}
 					$("#like_"+id).attr("src",src);
@@ -526,7 +451,7 @@ function refreshComment(id, rep){
 		var el=$("#message_"+id+" > .liste_message_comment");
 		el.append(com.getHtml());
 
-		env.msg[id].comments.push(com); // TODO A revoir
+		env.msg[arrayObjectIndexOf(env.msg, id, "id")].comments.push(com); // TODO A revoir
 	}
 }
 
@@ -572,7 +497,7 @@ function newPost(){
 function refreshMessage(rep){
 
 	if(!env.noConnection){
-		console.log(env.maxId+" "+env.minId);
+		//console.log(env.maxId+" "+env.minId);
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
@@ -616,8 +541,11 @@ function refreshResponse(rep){
 		var el=$("#cont_message > ul");
 		
 		for(var i=com.length-1; i>=0; i--){
+
+			//env.msg[com[i].id]=com[i];
+			env.msg.unshift(com[i]);
+
 			el.prepend(com[i].getHtml());
-			env.msg[com[i].id]=com[i];
 
 			if(com[i].id > env.maxId)
 				env.maxId = com[i].id;
@@ -686,4 +614,59 @@ function unfollow(id){
 			}
 		})
 
+}
+
+function removeMessage(id){
+	if (!window.confirm("Etes vous sur de supprimer ce message ? Toute suppression est définitive."))
+		return;
+
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/deleteMessage",
+			data:"token="+env.token+"&id_post="+id,
+			dataType:"json",
+			success: function(result){
+				console.log(result);
+				if(result.status == "OK"){
+					result._id=result._id.$oid;
+					removeResponse(result);
+				}
+				else{
+			 		if(result.code == 1000)
+						makeConnectionPanel();
+					return;
+				}
+				
+
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+				makeConnectionPanel();
+			}
+		})
+
+}
+
+function removeResponse(rep){
+
+	//var mkeys=Object.keys(env.msg);
+	var index = arrayObjectIndexOf(env.msg, rep._id, "id");
+	if(index == -1)
+		return; 
+
+	if(rep._id == env.minId){
+		if(env.msg.length > 1){
+			env.minId=env.msg[index-1].id;
+			$("#message_"+env.msg[index-1].id).css("border-bottom","none");
+		}
+	}
+
+	if(rep._id == env.maxId){
+		if(env.msg.length > 1)
+			env.maxId=env.msg[index+1].id;
+	}
+
+   	env.msg.splice(index,1);
+
+	$("#message_"+rep._id).remove();
 }
