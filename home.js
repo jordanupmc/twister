@@ -620,7 +620,48 @@ function unfollow(id){
 }
 
 function removeMessage(id){
-	if (!window.confirm("Etes vous sur de supprimer ce message ? Toute suppression est définitive."))
+
+	swal({
+  title: "Êtes-vous sûr de vouloir supprimer ce message ?",
+  text: "Vou n'aurez plus accès à ce message",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "Supprimer",
+  cancelButtonText:"Annuler",
+  closeOnConfirm: false
+},
+function(){
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/deleteMessage",
+			data:"token="+env.token+"&id_post="+id,
+			dataType:"json",
+			success: function(result){
+				console.log(result);
+				if(result.status == "OK"){
+					result._id=result._id.$oid;
+					swal("Supprimer !", "Votre message a bien été supprimé", "success");
+					removeMsgResponse(result);
+				}
+				else{
+			 		if(result.code == 1000)
+						makeConnectionPanel();
+					swal("Oops", "Erreur serveur !", "error");
+					return;
+				}
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+				swal("Oops", "Erreur serveur !", "error");
+				//makeConnectionPanel();
+			}
+		})
+
+ 
+});
+
+	/*if (!window.confirm("Êtes-vous sûr de vouloir supprimer définitivement ce message ?"))
 		return;
 
 	$.ajax({
@@ -646,7 +687,7 @@ function removeMessage(id){
 				console.log(textStatus);
 				makeConnectionPanel();
 			}
-		})
+		})*/
 
 }
 
