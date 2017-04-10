@@ -300,8 +300,6 @@ function completeMessages(){
 	}
 }
 
-<<<<<<< HEAD
-=======
 function scrollMessage(){
 
 	$(function() {
@@ -335,7 +333,6 @@ function scrollMessage(){
 	});
 }
 
->>>>>>> f9da66035251d391972a94795d982afb26963059
 function completeMessagesReponse(reponse){
 
 	var tab = JSON.parse(reponse, revival);
