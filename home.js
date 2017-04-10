@@ -196,7 +196,7 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
 	env.fromId = fromId;
 	env.fromLogin =fromLogin;
 	env.query = query;
-	env.limit=6; //TEMPORAIRE 
+	env.limit=10; //TEMPORAIRE 
 	env.toId=toId;
 	env.toLogin=toLogin;
 
@@ -304,14 +304,15 @@ function scrollMessage(){
 			$.ajax({
 				type:"POST",
 				url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
-				data:"token="+env.token+"&from="+env.fromId+"&idmin="+env.fromId+"&idmax="+env.fromId+"&nb="+env.limit,
+				data:"token="+env.token+"&from="+env.fromId+"&idmin=-1"+"&idmax="+env.idmin+"&nb="+env.limit,
 				dataType:"json",
 				success: function(result){
 					if(result.status=="KO"){
 						console.log(result.textError);
 					}else{
 						console.log(JSON.stringify(result.messages));
-						refreshResponse(JSON.stringify(result.messages));
+						ScrollResponse(JSON.stringify(result.messages));
+
 						
           }
       },
@@ -585,6 +586,25 @@ function refreshResponse(rep){
 
 			if(com[i].id > env.maxId)
 				env.maxId = com[i].id;
+			if( env.minId <0 || com[i].id < env.minId)
+				env.minId=com[i].id;			
+		}
+
+	}
+
+}
+
+function ScrollResponse(rep){
+	var com=JSON.parse(rep,revival);
+	if(com != undefined && com.erreur == undefined){
+		var el=$("#cont_message > ul");
+		
+		for(var i=com.length-1; i>=0; i--){
+
+			env.msg[com[i].id]=com[i];
+			//env.msg.unshift(com[i]);
+
+			el.append(com[i].getHtml());
 			if( env.minId <0 || com[i].id < env.minId)
 				env.minId=com[i].id;			
 		}
