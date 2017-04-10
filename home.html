@@ -25,9 +25,13 @@
 	<script type="text/javascript">
 
 		$(function() {
+			console.log("vygv")
 			var $appeared = $('#appeared');
-			$('#message_58e7671ce4b021fcdff3962f').appear();
-			$(document.body).on('appear', '#message_58e7671ce4b021fcdff3962f', function(e, $affected) {
+			console.log($appeared);
+			console.log($('#message_58eb810de4b059001718e1f6'));
+			
+			$('#message_58eb810de4b059001718e1f6').appear();
+			$(document.body).on('appear', '#message_58eb810de4b059001718e1f6', function(e, $affected) {
 				console.log("yes yes yes");
     // $.ajax({
 //     type:"POST",

@@ -41,8 +41,13 @@ function Commentaire(id, auteur, texte, date){
 
 Commentaire.prototype.getHtml=function(){
 	var s = "";
-	s+= "<li> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
-	+"</p> <p class=\"dateComment\">"+parseDate(this.date)+"</p> </li>"
+	s+= "<li id=\"comment_"+this.id+"\"> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
+	+"</p> <p class=\"dateComment\">"+parseDate(this.date)+"</p>"
+
+	if(this.auteur.id == env.fromId)
+		s+="<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeComment('"+this.id+"')\" class=\"removePostButton\"><img src=\"image/delete-message.png\" alt=\"\"></a>\n"
+
+	s+= "</li>"
 	
 	return s;
 }
@@ -89,6 +94,8 @@ function parseDate(d){
 
 	if(day_diff > 28)
 		return d.toLocaleDateString();
+	if(day_diff == 1 && diffHrs < 23)
+		return "il y a "+diffHrs+" h";
 	if(day_diff < 28 && day_diff > 1)
 		return "il y a "+day_diff+" jours";
 	if(day_diff == 1 )
@@ -126,7 +133,7 @@ function getMessageFooter(id, comLength, likeLength, isLike,src){
    
    	//if(env.fromId == env.msg[arrayObjectIndexOf(env.msg, id, "id")].auteur.id)
     if(env.fromId == env.msg[id].auteur.id)
-    	s +=  " <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeMessage('"+id+"')\" class=\"removePostButton\">Supprimer</a>\n"
+    	s +=  " <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeMessage('"+id+"')\" class=\"removePostButton\"><img src=\"image/delete-message.png\" alt=\"\"></a>\n"
     s+="</div>\n";
     return s;
 }
@@ -632,6 +639,7 @@ function removeMessage(id){
   closeOnConfirm: false
 },
 function(){
+
 	$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/deleteMessage",
@@ -690,7 +698,62 @@ function(){
 		})*/
 
 }
+function removeComment(id){
 
+	swal({
+  title: "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
+  text: "Vou n'aurez plus accès à ce commentaire",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "Supprimer",
+  cancelButtonText:"Annuler",
+  closeOnConfirm: false
+},
+function(){
+	var id_post;
+	id_post=($("#comment_"+id).parent().parent()).attr('id');
+	id_post=id_post.split("_")[1];
+	
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/deleteComment",
+			data:"token="+env.token+"&id_post="+id_post+"&id_com="+id,
+			dataType:"json",
+			success: function(result){
+				console.log(result);
+				if(result.status == "OK"){
+					//result._id=result._id.$oid;
+					swal("Supprimer !", "Votre commentaire a bien été supprimé", "success");
+					removeComResponse(result);
+				}
+				else{
+			 		if(result.code == 1000)
+						makeConnectionPanel();
+					swal("Oops", "Erreur serveur !", "error");
+					return;
+				}
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+				swal("Oops", "Erreur serveur !", "error");
+				//makeConnectionPanel();
+			}
+		})
+
+ 
+});
+}
+
+function removeComResponse(rep){
+	var id_post;
+	id_post=($("#comment_"+id).parent().parent()).attr('id');
+	id_post=id_post.split("_")[1];
+	var ind=arrayObjectIndexOf(env.msg[id_post].comments, rep._id, "_id");
+	env.msg[id_post].comments.splice(ind,1);
+	
+	$("#comment_"+id).remove();
+}
 function removeMsgResponse(rep){
 
 	var arr=[];

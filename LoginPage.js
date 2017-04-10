@@ -75,7 +75,7 @@ function Connectex(login,password){
 			}
 		},
 		error: function(jqXHR,textStatus,errTHrown){
-			err.text("Erreur interne ");
+			err1.text("Erreur interne ");
 
 		}
 	});
