@@ -300,6 +300,42 @@ function completeMessages(){
 	}
 }
 
+<<<<<<< HEAD
+=======
+function scrollMessage(){
+
+	$(function() {
+		var $appeared = $('#appeared');
+		$("#message_"+env.maxId).appear();
+		$(document.body).on('appear', "#message_"+env.maxId, function(e, $affected) {
+
+			$.ajax({
+				type:"POST",
+				url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
+				data:"token="+env.token+"&from="+env.fromId+"&idmin=-1"+"&idmax="+env.idmin+"&nb="+env.limit,
+				dataType:"json",
+				success: function(result){
+					if(result.status=="KO"){
+						console.log(result.textError);
+					}else{
+						console.log(JSON.stringify(result.messages));
+						ScrollResponse(JSON.stringify(result.messages));
+
+						
+          }
+      },
+      error: function(jqXHR,textStatus,errTHrown){
+      	console.log(textStatus);
+      }
+  });
+
+		});
+
+
+	});
+}
+
+>>>>>>> f9da66035251d391972a94795d982afb26963059
 function completeMessagesReponse(reponse){
 
 	var tab = JSON.parse(reponse, revival);
@@ -559,6 +595,25 @@ function refreshResponse(rep){
 
 			if(com[i].id > env.maxId)
 				env.maxId = com[i].id;
+			if( env.minId <0 || com[i].id < env.minId)
+				env.minId=com[i].id;			
+		}
+
+	}
+
+}
+
+function ScrollResponse(rep){
+	var com=JSON.parse(rep,revival);
+	if(com != undefined && com.erreur == undefined){
+		var el=$("#cont_message > ul");
+		
+		for(var i=com.length-1; i>=0; i--){
+
+			env.msg[com[i].id]=com[i];
+			//env.msg.unshift(com[i]);
+
+			el.append(com[i].getHtml());
 			if( env.minId <0 || com[i].id < env.minId)
 				env.minId=com[i].id;			
 		}
