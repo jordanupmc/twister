@@ -129,6 +129,8 @@ public class Comments {
 		return null;
 
 	}
+	
+	
 	//Like et Dislike
 	public static DBObject like(String token, String msgId){
 		Mongo m;
@@ -327,6 +329,54 @@ public class Comments {
 			if(n > 0){
 				request.put("status", "OK");
 				return request;
+			}
+			return null;
+
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}catch(IllegalArgumentException iea){
+			iea.printStackTrace();
+			return null;
+		}
+
+	}
+	public static DBObject removeCommentByToken(String msg_id, String com_id,String token){
+		try {
+			int author_id=Session.getIdUser(token);
+			if(author_id != -1 )
+				return removeComment(msg_id, com_id,author_id+"");
+		} catch (BDException e) {
+			return null;
+		}
+		return null;
+
+	}
+	
+	
+	public static DBObject removeComment(String msg_id, String com_id, String author_id){
+		Mongo m;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection collection = db.getCollection("comments");
+
+
+			BasicDBObject tmp2 = new BasicDBObject();
+			tmp2.put("_id", new ObjectId(com_id));
+			tmp2.put("author_id", Integer.parseInt(author_id));
+			
+			BasicDBObject tmp = new BasicDBObject(
+					"comments", tmp2);
+
+			int n=collection.update(new BasicDBObject("_id", new ObjectId(msg_id)),
+					new BasicDBObject("$pull", tmp)).getN();
+			
+			//int n=collection.remove(request).getN();
+			if(n > 0){
+				tmp2.put("status", "OK");
+				return tmp2;
 			}
 			return null;
 

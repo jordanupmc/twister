@@ -72,10 +72,6 @@
 		<servlet-name>DeleteMessage</servlet-name>
 		<servlet-class>servlet.DeleteMessage</servlet-class>
 	</servlet>
-	<servlet>
-		<servlet-name>DeleteComment</servlet-name>
-		<servlet-class>servlet.DeleteComment</servlet-class>
-	</servlet>
 
 
 
@@ -83,10 +79,6 @@
 	<servlet-mapping> 
 		<servlet-name>Hello</servlet-name> 
 		<url-pattern>/hello</url-pattern> 
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DeleteComment</servlet-name>
-		<url-pattern>/deleteComment</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>DeleteMessage</servlet-name>
