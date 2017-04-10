@@ -44,14 +44,11 @@ function ConnectionLogin(){
 	if(noFail){
 		Connectex(lg.val(),password1.val());
 	}
-	else{
-		document.getElementById('errMsg').style.visibility = "visible";
-
-	}
-
+	
 }
 
 function Connectex(login,password){
+	document.getElementById('errMsg').style.visibility = "visible";
 	var err1=$("#errMsg");
 	$.ajax({
 		type:"POST",
@@ -59,16 +56,13 @@ function Connectex(login,password){
 		data:"login="+login+"&password="+password,
 		dataType:"json",
 		success: function(result){
+			document.getElementById('charge').style.visibility = "hidden";
+			document.getElementById('spinner2').style.visibility = "hidden";
 			if(result.status=="KO"){
 				err1.text("Message Error : "+result.textError);
-				console.log("code error : "+result.code);
-				console.log("Message Error : "+result.textError);
 				document.getElementById('errMsg').style.visibility = "visible";
-
-
 			}else{
-				document.getElementById('charge').style.visibility = "visible";
-				document.getElementById('spinner2').style.visibility = "visible";
+				
 				env.token=result.token;
 				if(result.friends.status == "OK"){
 					env.friends=result.friends.friendList;
@@ -77,11 +71,12 @@ function Connectex(login,password){
 						env.friends=[];
 				}
 				
-          		makeMainPanel(result.id, result.login);
+				makeMainPanel(result.id, result.login);
 			}
 		},
 		error: function(jqXHR,textStatus,errTHrown){
-			console.log(textStatus);
+			err.text("Erreur interne ");
+
 		}
 	});
 }
