@@ -43,12 +43,15 @@ function ConnectionLogin(){
 	}
 	if(noFail){
 		Connectex(lg.val(),password1.val());
+	}else{
+		document.getElementById('errMsg').style.visibility = "visible";;
 	}
 	
 }
 
 function Connectex(login,password){
 	document.getElementById('spinner2').style.visibility = "visible";
+	document.getElementById('charge').style.visibility = "visible";
 	var err1=$("#errMsg");
 	$.ajax({
 		type:"POST",
