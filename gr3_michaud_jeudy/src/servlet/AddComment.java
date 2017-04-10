@@ -8,12 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-<<<<<<< HEAD
-=======
 import org.json.JSONException;
 import org.json.JSONObject;
 
->>>>>>> 8830f688f9ee2e84c32c4f3e3380a9b1b304f315
+import com.mongodb.DBObject;
+
 import bd.BDException;
 import bd.Session;
 import services.ErrorService;
@@ -53,16 +52,15 @@ public class AddComment extends HttpServlet {
 				ErrorService.serviceRefused(1000, e.getMessage());
 				return;
 			}
-<<<<<<< HEAD
-		 
-		 if(services.Comments.comment(token, com, idPost))
-			 out.println(SuccessService.serviceSuccess("comment ajouter avec success"));
-		 else
+
+		 DBObject o=services.Comments.comment(token, com, idPost);
+		 if(o == null){
 			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
-=======
+			 return;
+		 }
 		 JSONObject obj= new JSONObject();
 		 try {
-			obj.put("comments",services.Comments.comment(token, com, idPost));
+			obj.put("comments",o);
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -85,7 +83,7 @@ public class AddComment extends HttpServlet {
 			e.printStackTrace();
 			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
 		}
->>>>>>> 8830f688f9ee2e84c32c4f3e3380a9b1b304f315
+
 		 
 		 
 	 }

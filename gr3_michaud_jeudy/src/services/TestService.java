@@ -76,16 +76,9 @@ public class TestService {
 //		else
 //			System.out.println("PAS LIKE");
 		
-		try {
-			System.out.println(Comments.getListMessage("-1162521849", 4,
-					"58a5d3d0e4b04b3161813171","58a2ff92e4b08c81a0af3b92",-1));
-
-//						System.out.println(Comments.getListMessage("-1162521849", 4,
-//					"-1","-1",-1));
-		} catch (BDException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println(Comments.removeMessage("58ea0569e4b06c887ae30519","4"));
+//			System.out.println(Comments.getListMessage("-1162521849", 4,
+//					"58a5d3d0e4b04b3161813171","58a2ff92e4b08c81a0af3b92",-1));
 		
 //		System.out.println(Comments.isExist("58a2fe57e4b0994508dcc8e7"));
 //		
