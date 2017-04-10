@@ -48,7 +48,7 @@ function ConnectionLogin(){
 }
 
 function Connectex(login,password){
-	document.getElementById('errMsg').style.visibility = "visible";
+	document.getElementById('spinner2').style.visibility = "visible";
 	var err1=$("#errMsg");
 	$.ajax({
 		type:"POST",

@@ -107,14 +107,3 @@
     }
   });
 })(jQuery);
-
-
-// test1
-jQuery('.dateMessage10').appear(function(){
-    console.log("test1 :");
-});
-
-// test2
-jQuery('.dateMessage15').on('appear', function(){
-    console.log("test2 :");
-});
