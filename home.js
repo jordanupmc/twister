@@ -124,7 +124,8 @@ function getMessageFooter(id, comLength, likeLength, isLike,src){
   
     s += "<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:developpeMessage('"+id+"')\"><img src=\"image/message-bubble.png\" alt=\"\"></a><p class=\"message_comment\">"+comLength+"</p>";
    
-   	if(env.fromId == env.msg[arrayObjectIndexOf(env.msg, id, "id")].auteur.id)
+   	//if(env.fromId == env.msg[arrayObjectIndexOf(env.msg, id, "id")].auteur.id)
+    if(env.fromId == env.msg[id].auteur.id)
     	s +=  " <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeMessage('"+id+"')\" class=\"removePostButton\">Supprimer</a>\n"
     s+="</div>\n";
     return s;
@@ -302,8 +303,8 @@ function completeMessagesReponse(reponse){
 	lastId=tab[tab.length-1].id;
 	for(var i =0; i<tab.length; i++){
 		
-		//env.msg[tab[i].id] = tab[i];
-		env.msg.push(tab[i]);
+		env.msg[tab[i].id] = tab[i];
+		//env.msg.push(tab[i]);
 		$("#cont_message > ul").append(tab[i].getHtml());
 
 	/*	if(tab[i].id > env.maxId){
@@ -330,7 +331,9 @@ function getFormComment(id){
 }
 
 function hideComments(id){
-	var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
+	//var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
+	var m =env.msg[id];
+
 	var src=$("#like_"+id).attr("src");
 
 	$("#message_"+id+" > .liste_message_comment").empty();
@@ -343,7 +346,8 @@ function hideComments(id){
 }
 
 function developpeMessage(id){ 
-	var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
+	//var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
+	var m =env.msg[id];
 	var src=$("#like_"+id).attr("src");
 	$("#message_"+id+" > .message_footer").remove();
 
@@ -358,8 +362,7 @@ function developpeMessage(id){
 }
 
 function switchImgLike(id){
-	var ind = arrayObjectIndexOf(env.msg, id, "id");
-	var m =env.msg[ind];	
+	var m =env.msg[id];	
 	var src=$("#like_"+id).attr("src");
 
 	$.ajax({
@@ -369,12 +372,11 @@ function switchImgLike(id){
 			dataType:"json",
 			success: function(result){
 				if(result.status =='OK'){
-					
 					if(result.like.state == 1){ //DISLIKE
-						env.msg[ind].likes.splice(result.author_id,1);
+						env.msg[id].likes.splice(result.author_id,1);
 						src="image/like.png";
 					}else if(result.like.state == 0){ //LIKE
-						env.msg[ind].likes.push(new Like(result.author_id, result.date));
+						env.msg[id].likes.push(new Like(result.author_id, result.date));
 						src="image/likeFill.png";
 					}
 					$("#like_"+id).attr("src",src);
@@ -451,7 +453,8 @@ function refreshComment(id, rep){
 		var el=$("#message_"+id+" > .liste_message_comment");
 		el.append(com.getHtml());
 
-		env.msg[arrayObjectIndexOf(env.msg, id, "id")].comments.push(com); // TODO A revoir
+		//env.msg[arrayObjectIndexOf(env.msg, id, "id")].comments.push(com); // TODO A revoir
+		env.msg[id].comments.push(com);
 	}
 }
 
@@ -542,8 +545,8 @@ function refreshResponse(rep){
 		
 		for(var i=com.length-1; i>=0; i--){
 
-			//env.msg[com[i].id]=com[i];
-			env.msg.unshift(com[i]);
+			env.msg[com[i].id]=com[i];
+			//env.msg.unshift(com[i]);
 
 			el.prepend(com[i].getHtml());
 
@@ -629,7 +632,7 @@ function removeMessage(id){
 				console.log(result);
 				if(result.status == "OK"){
 					result._id=result._id.$oid;
-					removeResponse(result);
+					removeMsgResponse(result);
 				}
 				else{
 			 		if(result.code == 1000)
@@ -647,26 +650,52 @@ function removeMessage(id){
 
 }
 
-function removeResponse(rep){
+function removeMsgResponse(rep){
 
-	//var mkeys=Object.keys(env.msg);
-	var index = arrayObjectIndexOf(env.msg, rep._id, "id");
-	if(index == -1)
-		return; 
+	var arr=[];
 
+	//env.msg est un objet => les clé sont des propriétés
+	//On ne peut pas ce fier à l'ordre des propriétés d'un objet
+	//Pas de propriété length sur les objet
+	// => Compléxité pas terrible O(n)
+
+
+	//On crée un tableau temporaire pour avoir une notion d'ordre
+	for(var prop in env.msg){
+		if(env.msg[prop] != undefined)
+			arr.push([prop, env.msg[prop]])
+	}
+	
+	//On trie par la date d'un message en DESC
+	arr.sort(function(a, b) {
+    	return b[1].date - a[1].date;
+	});
+ 
+	//Si il n'y a qu'un seul message 
+ 	if(rep._id == env.minId && rep._id == env.maxId){
+ 		env.minId=-1;
+ 		env.maxId=-1;
+ 	}
+
+	//Si on supprime le message de le plus ancien et qu'il y a un autre message
+	//On enleve la bordure au niveau du css
+	//Et on met a jour minId
 	if(rep._id == env.minId){
-		if(env.msg.length > 1){
-			env.minId=env.msg[index-1].id;
-			$("#message_"+env.msg[index-1].id).css("border-bottom","none");
-		}
+		if(arr.length > 1){
+			env.minId=arr[arr.length-2][0];
+			$("#message_"+arr[arr.length-2][1].id).css("border-bottom","none");
+		}else
+			env.minId=-1;
+	}
+	//Pareil pour maxId
+	else if(rep._id == env.maxId){
+		if(arr.length > 1)
+			env.maxId=arr[1][1].id;
+		else
+			env.maxId=-1;
 	}
 
-	if(rep._id == env.maxId){
-		if(env.msg.length > 1)
-			env.maxId=env.msg[index+1].id;
-	}
-
-   	env.msg.splice(index,1);
+	delete env.msg[rep._id];
 
 	$("#message_"+rep._id).remove();
 }
