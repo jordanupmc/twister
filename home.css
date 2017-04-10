@@ -246,6 +246,7 @@ body #main {
     list-style-type: none;
 }
 
+
 #main .dateMessage{
 	font-family: 'Open Sans', sans-serif;
 	color:grey;
@@ -254,6 +255,7 @@ body #main {
 #main .dateComment{
 	color:dimgray;
 }
+
 
 /*
 a mettre dans un elmt

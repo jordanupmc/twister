@@ -42,12 +42,12 @@ function Commentaire(id, auteur, texte, date){
 Commentaire.prototype.getHtml=function(){
 	var s = "";
 	s+= "<li id=\"comment_"+this.id+"\"> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
-	+"</p> <p class=\"dateComment\">"+parseDate(this.date)+"</p>"
+	+"</p> <p class=\"dateComment\">"+parseDate(this.date)+""
 
 	if(this.auteur.id == env.fromId)
 		s+="<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeComment('"+this.id+"')\" class=\"removePostButton\"><img src=\"image/delete-message.png\" alt=\"\"></a>\n"
 
-	s+= "</li>"
+	s+= "</p><hr></li>"
 	
 	return s;
 }
@@ -184,15 +184,30 @@ function deco(){
 				makeConnectionPanel();
 			}
 		});
+	localStorage.clear();
 }
 
 
 function init(){
+	if (typeof localStorage !== 'undefined') {
+
+	    try {
+	        if(localStorage.getItem("env") != null){
+	        	env= JSON.parse(localStorage.getItem("env"));
+	        	env.noConnection = false;
+	        	makeMainPanel(env.fromId, env.fromLogin);
+	        	
+	        	return;
+	        }
+	    } catch(e) {	
+	    	console.log(e);	        
+	    }
+	}
 	env = new Object();
 	env.noConnection = false;
-	
-//	makeEnregistrementPanel();
 	makeConnectionPanel()
+	
+
 }
 
 
@@ -219,6 +234,11 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
 	}
 	if(toLogin == undefined){
 		env.toLogin = -1;
+	}
+
+	if (typeof localStorage !== 'undefined') {
+		localStorage.setItem("env",JSON.stringify(env));
+		console.log(localStorage.getItem("env"))
 	}
 
 	var s="";
@@ -775,7 +795,7 @@ function(){
 			success: function(result){
 				console.log(result);
 				if(result.status == "OK"){
-					//result._id=result._id.$oid;
+					result._id=result._id.$oid;
 					swal("Supprimer !", "Votre commentaire a bien été supprimé", "success");
 					removeComResponse(result);
 				}
@@ -799,12 +819,12 @@ function(){
 
 function removeComResponse(rep){
 	var id_post;
-	id_post=($("#comment_"+id).parent().parent()).attr('id');
+	id_post=($("#comment_"+rep._id).parent().parent()).attr('id');
 	id_post=id_post.split("_")[1];
-	var ind=arrayObjectIndexOf(env.msg[id_post].comments, rep._id, "_id");
+	var ind=arrayObjectIndexOf(env.msg[id_post].comments, rep._id, "id");
 	env.msg[id_post].comments.splice(ind,1);
 	
-	$("#comment_"+id).remove();
+	$("#comment_"+rep._id).remove();
 }
 function removeMsgResponse(rep){
 
