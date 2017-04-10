@@ -68,15 +68,23 @@
 		<servlet-name>Logout</servlet-name> 
 		<servlet-class>servlet.Logout</servlet-class> 
 	</servlet>
-	
-	
-	
-	
+	<servlet>
+		<servlet-name>DeleteMessage</servlet-name>
+		<servlet-class>servlet.DeleteMessage</servlet-class>
+	</servlet>
+
+
+
+
 	<servlet-mapping> 
 		<servlet-name>Hello</servlet-name> 
 		<url-pattern>/hello</url-pattern> 
-	</servlet-mapping> 
-	
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteMessage</servlet-name>
+		<url-pattern>/deleteMessage</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping> 
 		<servlet-name>Application</servlet-name> 
 		<url-pattern>/application</url-pattern> 

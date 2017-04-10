@@ -3,4 +3,5 @@
 <fullyQualifiedTypeName name="bd.FriendTools"/>
 <fullyQualifiedTypeName name="services.Comments"/>
 <fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="com.mongodb.DBObject"/>
 </qualifiedTypeNameHistroy>
