@@ -32,20 +32,22 @@ function enregistrement(){
  charge.text("Chargement...");
 
 
-if(checkKey(nom.val())){
+if(checkKey(nom.val()) ) {
   err.text("Nom : Caratères spéciaux interdit");
   noFail = false;
 }
 
-if(checkKey(prenom.val())){
+if(checkKey(prenom.val())) {
   err.text("Prenom : Caratères spéciaux interdit");
   noFail = false;
 }
 
-if(checkKey(login.val())){
+if(checkKey(login.val())) {
   err.text("Login : Caratères spéciaux interdit");
   noFail = false;
 }
+
+
 
  if( nom.val()==0){
   err.text("Nom trop court");
@@ -128,9 +130,11 @@ function trim(str) {
 function checkKey(v) {
   if (/\W/.test(v.value)) {
 
-    return false;
+    return true;
 
   }else{
-    return true;
+    return false;
   }
 }
+
+
