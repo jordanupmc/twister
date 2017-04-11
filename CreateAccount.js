@@ -29,9 +29,23 @@ function enregistrement(){
  var noFail = true;
  var err=$("#errMsg1");
  var charge=$("#charge");
-charge.text("Chargement...");
+ charge.text("Chargement...");
 
 
+if(checkKey(nom.val())){
+  err.text("Nom : Caratères spéciaux interdit");
+  noFail = false;
+}
+
+if(checkKey(prenom.val())){
+  err.text("Prenom : Caratères spéciaux interdit");
+  noFail = false;
+}
+
+if(checkKey(login.val())){
+  err.text("Login : Caratères spéciaux interdit");
+  noFail = false;
+}
 
  if( nom.val()==0){
   err.text("Nom trop court");
@@ -50,6 +64,7 @@ if( login.val()==0){
 }
 
 if( password1.val().length<4) {
+  console.log("non alpha ");
   err.text("Mot de passe 1 trop court");
   noFail = false;
 }
@@ -61,11 +76,10 @@ if( password2.val() !== password1.val()){
 
 if(noFail){
 
-  Create(login.val(),password2.val(),nom.val(),prenom.val());
+  Create(login.val().trim(),password2.val(),nom.val().trim(),prenom.val().trim());
 }
 else{
   document.getElementById('errMsg1').style.visibility = "visible";
-
 
 }
 }
@@ -103,4 +117,20 @@ function Create(login, pass,nom, prenom){
   });
 
 
+}
+
+function trim(str) {
+  return (""+str).replace(/^\s+|\s+$/g,"");
+}
+
+
+
+function checkKey(v) {
+  if (/\W/.test(v.value)) {
+
+    return false;
+
+  }else{
+    return true;
+  }
 }

@@ -41,6 +41,11 @@ function ConnectionLogin(){
 		err.text("Mot de passe trop court");
 		noFail = false;
 	}
+	if(VerifChamp(lg)){
+		err.text("Login : Caractères spéciaux interdit");
+		noFail = false;
+	}
+
 	if(noFail){
 		Connectex(lg.val(),password1.val());
 	}else{
@@ -90,3 +95,11 @@ function Connectex(login,password){
 
 
 
+function VerifChamp(champ) {
+	var exp=new RegExp("^[a-zA-Z0-9]{3,8}$","g");
+	if ( exp.test(champ)) {
+		return true;
+	}else{
+		return false; 
+	}
+}
