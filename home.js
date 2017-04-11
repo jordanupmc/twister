@@ -18,7 +18,7 @@ Message.prototype.getHtml=function(){
 
 	var s = "<li class=\"message\" id=\"message_"+this.id+"\">\n"
 	if(this.auteur.id != env.fromId)
-		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\">"+this.auteur.login+"</a></b>\n"
+		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"','"+false+"')\">"+this.auteur.login+"</a></b>\n"
 	else
 		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\">"+this.auteur.login+"</a></b>\n"
 	
@@ -41,12 +41,14 @@ function Commentaire(id, auteur, texte, date){
 
 Commentaire.prototype.getHtml=function(){
 	var s = "";
-	s+= "<li id=\"comment_"+this.id+"\"> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
-	+"</p> <p class=\"dateComment\">"+parseDate(this.date)+""
-
-	if(this.auteur.id == env.fromId)
+	if(this.auteur.id == env.fromId){
+		s+= "<li id=\"comment_"+this.id+"\"> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
+		+"</p> <p class=\"dateComment\">"+parseDate(this.date)
 		s+="<a href=\"javascript:(function(){return;}())\" onclick=\"javascript:removeComment('"+this.id+"')\" class=\"removePostButton\"><img src=\"image/delete-message.png\" alt=\"\"></a>\n"
-
+	}
+	else
+		s+= "<li id=\"comment_"+this.id+"\"> <p> <a  href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+this.auteur.id+"','"+this.auteur.login+"','"+false+"')\" ><b>"+this.auteur.login+"</b></a> "+emojione.shortnameToImage(this.post)
+		+"</p> <p class=\"dateComment\">"+parseDate(this.date)
 	s+= "</p><hr></li>"
 	
 	return s;
@@ -80,7 +82,23 @@ function revival(key,value){
 		return value;
 	}
 }
+function m(){
+	var text=this.post;
+	var words=text.match('/\w+/g');
+	var tf={};
 
+	for(var i=0; i<words.length; i++){
+		if(tf[words[i]] == null)
+			tf[words[i]]=1;
+		else
+			tf[words[i]]+=1;
+		for(w in tf){
+			var ret={};
+			ret[id]=tf[w];
+			emit(w,ret);
+		}
+	}
+}
 
 function parseDate(d){
 
@@ -94,8 +112,10 @@ function parseDate(d){
 
 	if(day_diff > 28)
 		return d.toLocaleDateString();
-	if(day_diff == 1 && diffHrs < 23)
+	/*if(day_diff == 1 && diffHrs < 23 && diffHrs > 0)
 		return "il y a "+diffHrs+" h";
+	if(day_diff == 1 && diffHrs < 23 && diffHrs == 0)
+		return "il y a "+diffMins+" min";*/
 	if(day_diff < 28 && day_diff > 1)
 		return "il y a "+day_diff+" jours";
 	if(day_diff == 1 )
@@ -211,7 +231,7 @@ function init(){
 }
 
 
-function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
+function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 	env.msg = [];
 	env.minId = -1;
 	env.maxId = -1;
@@ -238,7 +258,7 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
 
 	if (typeof localStorage !== 'undefined') {
 		localStorage.setItem("env",JSON.stringify(env));
-		console.log(localStorage.getItem("env"))
+		//console.log(localStorage.getItem("env"))
 	}
 
 	var s="";
@@ -282,11 +302,11 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,query){
   	"<ul>\n</div>";
 
 	document.getElementsByTagName('body')[0].innerHTML= s;
-	completeMessages();
+	completeMessages(wFriends);
 
 }
 
-function completeMessages(){
+function completeMessages(wFriends){
 	if(!env.noConnection){
 
 		var s ="";
@@ -294,7 +314,10 @@ function completeMessages(){
 			s="token="+env.token+"&from="+env.fromId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit;
 		else
 			s="token="+env.token+"&from="+env.toId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit;
-		
+
+		if(wFriends!= undefined)
+			s+="&friends="+wFriends
+
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
