@@ -126,10 +126,6 @@ body >  #connecting  p{
 
 
 
-
-
-
-
 #spinner2{
   margin-right: auto;
   margin-left: auto;
@@ -147,7 +143,28 @@ font-size: 40px;text-align: center;
   animation: spin 2s infinite;
 }
 
+/*Firefox*/
 @-moz-keyframes spin {
     from { -moz-transform: rotate(0deg); }
     to { -moz-transform: rotate(360deg); }
 }
+
+/*Opera*/
+@-o-keyframes spin {
+    from { -o-transform: rotate(0deg); }
+    to { -o-transform: rotate(360deg); }
+}
+
+
+/*Chrome*/
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+/*Others*/
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
