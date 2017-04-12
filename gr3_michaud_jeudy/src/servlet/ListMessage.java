@@ -52,9 +52,6 @@ public class ListMessage extends HttpServlet {
 			 out.println(ErrorService.serviceRefused(-1,"Param null"));
 			 return;
 		 }
-
-		 if(query == null)
-			 query="";
 		 
 		 if(idmax == null)
 			 idmax=-1+"";
@@ -99,7 +96,10 @@ public class ListMessage extends HttpServlet {
 		 JSONObject obj=new JSONObject();
 
 		 try {
-			 list = Comments.getListMessage(token, id, idmax, idmin , Integer.parseInt(nb), f);
+			 if(query == null)
+				 list = Comments.getListMessage(token, id, idmax, idmin , Integer.parseInt(nb), f);
+			 else
+				 list = Comments.getMessagesByQuery(query);
 			 
 			 if(list == null){
 				 obj.put("messages", new JSONArray());

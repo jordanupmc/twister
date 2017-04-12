@@ -20,10 +20,10 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 
 public class TestService {
-	public static void main(String [] args) throws UnknownHostException{
+	public static void main(String [] args) {
 
 		//Comments.createInverseIndex();
-	Comments.showIndex();
-		Comments.testRSV();
+	//Comments.showIndex();
+		System.out.println(Comments.getMessagesByQuery("J"));
 	}
 }
