@@ -364,7 +364,7 @@ function searchHead(){
 	if(query == undefined && query.trim() == "")
 		return;
 	
-	var s="token="+env.token+"&from="+env.toId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit+"&query="+query.trim();
+	var s="token="+env.token+"&from="+env.toId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit+"&query="+encodeURIComponent(query.trim());
 
 	$.ajax({
 			type:"POST",
@@ -375,8 +375,7 @@ function searchHead(){
 				if(result.code == 1000)
 					makeConnectionPanel();
 				else{
-					console.log(result);
-					completeSearchReponse(JSON.stringify(result.messages));
+					completeSearchReponse(result.messages);
 				}
 				
 			},
@@ -429,6 +428,8 @@ function completeMessagesReponse(reponse){
 	//for(var i =tab.length-1; i >= 0; i--){
 	env.maxId=tab[0].id;
 	lastId=tab[tab.length-1].id;
+	$("#cont_message > ul").empty();
+
 	for(var i =0; i<tab.length; i++){
 		
 		env.msg[tab[i].id] = tab[i];
@@ -451,7 +452,10 @@ function completeMessagesReponse(reponse){
 }
 function completeSearchReponse(rep){
 	$("#cont_message > ul").empty();
-	completeMessagesReponse(rep);
+	if(rep.length == 0)
+		$("#cont_message > ul").append("<p>Pas de résultat</p>");
+	else
+		completeMessagesReponse(JSON.stringify(rep));
 
 }
 
@@ -559,7 +563,7 @@ function newComment(id){
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/addComment",
-			data:"token="+env.token+"&text="+texte+"&id_post="+id,
+			data:"token="+env.token+"&text="+encodeURIComponent(texte)+"&id_post="+id,
 			dataType:"json",
 			success: function(result){
 				if(result.status =='OK'){
@@ -608,7 +612,7 @@ function newPost(){
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/insertMessage",
-			data:"token="+env.token+"&post="+texte,
+			data:"token="+env.token+"&post="+encodeURIComponent(texte),
 			dataType:"json",
 			success: function(result){
 				
