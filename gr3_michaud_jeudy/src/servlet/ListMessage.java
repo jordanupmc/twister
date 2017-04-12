@@ -104,6 +104,7 @@ public class ListMessage extends HttpServlet {
 			 if(list == null){
 				 obj.put("messages", new JSONArray());
 				 obj.put("status", "OK");
+				 out.print(obj);
 				 return;
 			 }
 			 
