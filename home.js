@@ -82,7 +82,8 @@ function revival(key,value){
 		return value;
 	}
 }
-function m(){
+
+/*function m(){
 	var text=this.post;
 	var words=text.match('/\w+/g');
 	var tf={};
@@ -99,6 +100,21 @@ function m(){
 		}
 	}
 }
+function r(key,values){
+	var ret={};
+	for(var i=0; i<values.length; i++){
+		for(var d in values[i])
+			ret[d] = values[i][d];
+	}
+	return ret;
+}
+
+function f(k, v){
+	var df= Object.keys(v).length;
+	for(d in v)
+		v[d]=v[d]*Math.log(N/df);
+	return v;
+}*/
 
 function parseDate(d){
 
@@ -262,8 +278,8 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 	}
 
 	var s="";
-	s+="<div id=\"main\"> <header> <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\" ><img src=\"image/logo.png\" alt=\"\"></a><form action=\"javascript:(function(){return;}())\">"+
-	"<input type=\"text\" name=\"search\" placeholder=\"Chercher...\">"+
+	s+="<div id=\"main\"> <header> <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\" ><img src=\"image/logo.png\" alt=\"\"></a><form onsubmit=\"javascript:searchHead()\" action=\"javascript:(function(){return;}())\">"+
+	"<input type=\"text\" id=\"inputSearch\" name=\"search\" placeholder=\"Chercher...\">"+
       "<input type=\"image\" src=\"image/Search-48.png\" alt=\"err\">"+
     "</form>"+ 
     "<div >"+
@@ -343,6 +359,35 @@ function completeMessages(wFriends){
 	}
 }
 
+function searchHead(){
+	var query=$('#inputSearch').val();
+	if(query == undefined && query.trim() == "")
+		return;
+	
+	var s="token="+env.token+"&from="+env.toId+"&id_min="+env.minId+"&id_max="+env.maxId+"&nb="+env.limit+"&query="+query.trim();
+
+	$.ajax({
+			type:"POST",
+			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
+			data: s,
+			dataType:"json",
+			success: function(result){
+				if(result.code == 1000)
+					makeConnectionPanel();
+				else{
+					console.log(result);
+					completeSearchReponse(JSON.stringify(result.messages));
+				}
+				
+			},
+			error: function(jqXHR,textStatus,errTHrown){
+				console.log(textStatus);
+				makeConnectionPanel();
+			}
+		});
+
+}
+
 function scrollMessage(){
 
 	$(function() {
@@ -404,7 +449,11 @@ function completeMessagesReponse(reponse){
 	$("#message_"+lastId).css("border-bottom","none");
 	//console.log(Object.keys(env.msg));
 }
+function completeSearchReponse(rep){
+	$("#cont_message > ul").empty();
+	completeMessagesReponse(rep);
 
+}
 
 function getFormComment(id){
 	return "<form action=\"javascript:(function(){return;}())\" onsubmit=\"newComment('"+id+"')\">"
