@@ -4,7 +4,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.bson.BSONObject;
 import org.bson.types.ObjectId;
@@ -22,6 +25,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.MapReduceCommand;
+import com.mongodb.MapReduceOutput;
 import com.mongodb.Mongo;
 
 import org.json.JSONArray;
@@ -392,7 +397,7 @@ public class Comments {
 	}
 
 	public static List<DBObject> getListMessage(String token, int author_id,
-			String maxid, String minid ,int nb) throws BDException{
+			String maxid, String minid ,int nb, boolean friends) throws BDException{
 		try {	
 
 			Mongo m =new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
@@ -403,12 +408,15 @@ public class Comments {
 			BasicDBList and = new BasicDBList();
 
 			if(author_id != -1){
-				JSONObject flist= FriendTools.getFriendList(author_id);
-				JSONArray arr=flist.getJSONArray("friendList");
-
-				for(int i=0; i<arr.length(); i++){
-					or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
-					// System.out.println(or);
+				if(friends){
+					JSONObject flist= FriendTools.getFriendList(author_id);
+				
+					JSONArray arr=flist.getJSONArray("friendList");
+	
+					for(int i=0; i<arr.length(); i++){
+						or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
+						// System.out.println(or);
+					}
 				}
 				//if(Session.getIdUser(token) == author_id )
 				or.add(new BasicDBObject("author_id", author_id));
@@ -425,12 +433,10 @@ public class Comments {
 
 				if(!and.isEmpty())
 					request.put("$and", and);
-				//				System.out.println(request);
 
 			}else{
 				return null;
 			}
-			//Voir si request vide retourne TOUT
 
 			if(nb == -1)
 				return collection.find(request).sort(new BasicDBObject("_id",-1)).toArray();
@@ -449,4 +455,143 @@ public class Comments {
 
 
 	}
+	
+//	"var words=text.match(new RegExp('\\\\w+','g')); 
+	private static String map="function(){"+
+			"var text=this.post;"+
+			"var words=text.match(new RegExp('[^ ]+','g')); var tf={}; var id=this._id.str;"+
+			"for(var i=0; words !=null && i<words.length; i++){"+
+			"if(tf[words[i]] == null)"+
+			"tf[words[i]]=1;"+
+			"else{"+
+			"tf[words[i]]+=1;}"+
+			"for(w in tf){"+
+			"var ret={};"+
+			"ret[id]=tf[w];"+
+			"emit(w,ret);"+
+			"}"+
+			"}"+
+			"}";
+//	private static String map="function() { "+
+//			"emit(this.post,1);"+
+//			"}";
+	private static String reduce="function(key,values){"+
+			"var ret={};"+
+			"for(var i=0; i<values.length; i++){"+
+			"for(var d in values[i])"+
+			"ret[d] = values[i][d];"+
+			"}"+
+			"return ret;"+
+			"}";
+	private static String finalize="function(k, v){"+
+			"var df= Object.keys(v).length;"+
+			"for(d in v)"+
+			"v[d]=v[d]*Math.log(N/df);"+
+			"return v;"+
+			"}";
+	
+	public static void createInverseIndex(){
+		Mongo m;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection coll = db.getCollection("comments");
+			MapReduceCommand cmd = new MapReduceCommand(coll, map, reduce,"tfidf", MapReduceCommand.OutputType.REPLACE, null);
+			cmd.setFinalize(finalize);
+			BasicDBObject n =new BasicDBObject();
+			n.put("N", coll.count());
+			cmd.setScope(n);
+			
+			 MapReduceOutput out =coll.mapReduce(cmd);
+			 System.out.println("OK");
+			 int i=0;
+			 try {
+			        for (DBObject o : out.results()) {
+
+			            System.out.println(o.toString());
+			            i++;
+			       }
+			    } catch (Exception e) {
+			        e.printStackTrace();
+			    }    
+			System.out.println(i);
+			//System.out.println(db.getCollection("index").find());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void showIndex(){
+		Mongo m;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection coll = db.getCollection("tfidf");
+			DBCursor arr =  coll.find();
+			for(DBObject a: arr)
+				System.out.println(a);
+	
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void testRSV(){
+		Mongo m;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection coll = db.getCollection("tfidf");
+			getMessagesByQuery(coll, null,"jordan");
+	
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public static List<BasicDBObject> getMessagesByQuery(DBCollection index, DBCollection docs, String query){
+		
+		String [] q=query.split(" ");
+		HashSet<String> w =new HashSet<String>();
+		for(String s:q){
+			if(!w.contains(s))
+				w.add(s);
+		}
+		
+		HashMap<String, Double> scores = new HashMap<String, Double>();
+		for(String s: w){
+			BasicDBObject obj = new BasicDBObject();
+			obj.put("_id", s);
+			DBCursor cursor=index.find(obj);
+			try{
+				if(cursor.hasNext()){
+					DBObject res=cursor.next();
+					BasicDBList lights = (BasicDBList) res.get("value");
+					List<DBObject> doc=(ArrayList<DBObject>)res.get("value");
+					for(DBObject d: doc){
+					
+						String id = (String) d.keySet().toArray()[0];
+						double val =Double.valueOf((String) d.get("w"));
+						
+						Double tmp = scores.get(id);
+						tmp=(tmp==null) ? val : (tmp + val);
+						scores.put(id, tmp);
+					}
+				}
+			}finally{
+				cursor.close();
+			}
+		}
+		System.out.println(scores);
+		return null;
+	}
+	
+	
+	
 }

@@ -21,77 +21,9 @@ import com.mongodb.Mongo;
 
 public class TestService {
 	public static void main(String [] args) throws UnknownHostException{
-		//JSONObject o=User.createUser("MAMAN","papa","fortiche","secret");
 
-		//User.test("toto");
-		
-		//System.out.println(Comments.insertMessage(0, "VIVE LE WEB"));
-		//List <DBObject> list= Comments.getListMessage("0");
-
-//		System.out.println(list);
-//		System.out.println(new JSONArray(list));
-
-		
-		//System.out.println(User.createUser("ruru", "mimi", "popo", "pupu"));
-		
-//		try {
-//			System.out.println(UserTools.connect("popo", "pupu"));
-//		} catch (BDException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	
-		
-		
-//		System.out.println(services.Friend.getFriend("641458553", 2));
-//		System.out.println(services.Friend.deleteFriend("641458553", 3));
-//		
-
-//
-//		try {
-//			System.out.println(Comments.getListMessage("641458553", 4));
-//		
-//			//Session.updateToken("-1742584428");
-//		} catch (BDException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-//		int []tab={6,7,2,3,5,4};
-//		try {
-//			System.out.println(Search.searchPost("241481131", tab, "VIVE"));
-//			
-//		} catch (BDException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		
-		//Comments.comment("-1082458812", "FINALLY", "58a5d3c2e4b04b3161813170");
-		//Comments.like("-1162521849", "58a5d3c2e4b04b3161813170");
-		//new token =-1162521849
-		
-//		if(Comments.isLike("2","58a5d3c2e4b04b3161813170"))
-//			System.out.println("isLIKE !");
-//		else
-//			System.out.println("PAS LIKE");
-		
-		System.out.println(Comments.removeMessage("58ea0569e4b06c887ae30519","4"));
-//			System.out.println(Comments.getListMessage("-1162521849", 4,
-//					"58a5d3d0e4b04b3161813171","58a2ff92e4b08c81a0af3b92",-1));
-		
-//		System.out.println(Comments.isExist("58a2fe57e4b0994508dcc8e7"));
-//		
-	
-		//System.out.println(User.createUser("jordan", "jordan", "papa", "jaja"));
-		
-//		try {
-//			System.out.println(Session.getIdUser("-1239313589"));
-//		} catch (BDException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		
+		//Comments.createInverseIndex();
+	Comments.showIndex();
+		Comments.testRSV();
 	}
 }
