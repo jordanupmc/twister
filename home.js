@@ -397,13 +397,12 @@ function scrollMessage(){
 			$.ajax({
 				type:"POST",
 				url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
-				data:"token="+env.token+"&from="+env.fromId+"&idmin=-1"+"&idmax="+env.idmin+"&nb="+env.limit,
+				data:"token="+env.token+"&from="+env.fromId+"&idmin=-1"+"&idmax="+env.minId+"&nb="+env.limit,
 				dataType:"json",
 				success: function(result){
 					if(result.status=="KO"){
-						console.log(result.textError);
+						makeConnectionPanel();
 					}else{
-						console.log(JSON.stringify(result.messages));
 						ScrollResponse(JSON.stringify(result.messages));
 
 						
@@ -411,6 +410,7 @@ function scrollMessage(){
       },
       error: function(jqXHR,textStatus,errTHrown){
       	console.log(textStatus);
+
       }
   });
 
@@ -419,6 +419,29 @@ function scrollMessage(){
 
 	});
 }
+
+
+function ScrollResponse(rep){
+	var com=JSON.parse(rep,revival);
+	if(com != undefined && com.erreur == undefined){
+		var el=$("#cont_message > ul");
+		
+		for(var i=com.length-1; i>=0; i--){
+
+			env.msg[com[i].id]=com[i];
+			//env.msg.unshift(com[i]);
+
+			el.append(com[i].getHtml());
+			if( env.minId <0 || com[i].id < env.minId)
+				env.minId=com[i].id;	
+
+				break;		
+		}
+
+	}
+
+}
+
 
 function completeMessagesReponse(reponse){
 
@@ -436,20 +459,23 @@ function completeMessagesReponse(reponse){
 		//env.msg.push(tab[i]);
 		$("#cont_message > ul").append(tab[i].getHtml());
 
-	/*	if(tab[i].id > env.maxId){
+		if(tab[i].id > env.maxId){
 			env.maxId = tab[i].id;
-		}*/
+		}
 
 		//if((env.maxId < 0) || (tab[i].id < env.minId)){
-	/*	if((env.minId < 0) || (tab[i].id < env.minId)){
+		if((env.minId < 0) || (tab[i].id < env.minId)){
 			env.minId = tab[i].id;
-		}*/
-		//lastId = tab[i].id;
+		}
+		lastId = tab[i].id;
 	}
 	env.minId=lastId;
 	$("#message_"+lastId).css("border-bottom","none");
 	//console.log(Object.keys(env.msg));
 }
+
+
+
 function completeSearchReponse(rep){
 	$("#cont_message > ul").empty();
 	if(rep.length == 0)
@@ -696,24 +722,6 @@ function refreshResponse(rep){
 
 }
 
-function ScrollResponse(rep){
-	var com=JSON.parse(rep,revival);
-	if(com != undefined && com.erreur == undefined){
-		var el=$("#cont_message > ul");
-		
-		for(var i=com.length-1; i>=0; i--){
-
-			env.msg[com[i].id]=com[i];
-			//env.msg.unshift(com[i]);
-
-			el.append(com[i].getHtml());
-			if( env.minId <0 || com[i].id < env.minId)
-				env.minId=com[i].id;			
-		}
-
-	}
-
-}
 
 function switchButtonFollow(code){
 	$("#follow").remove();
