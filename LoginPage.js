@@ -84,7 +84,6 @@ function Connectex(login,password){
 		},
 		error: function(jqXHR,textStatus,errTHrown){
 			err1.text("Erreur interne ");
-
 		}
 	});
 }
