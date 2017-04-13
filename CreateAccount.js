@@ -7,10 +7,10 @@ function makeEnregistrementPanel(){
   +"<input id=\"name\" name=\"Nom\" placeholder=\"Nom\" required type=\"text\">"
   +"<input id=\"prenom\"  name=\"prenom\" placeholder=\"Prenom\" required type=\"text\">"
   +"<input id=\"logIN\"  name=\"login\" placeholder=\"Login\" required type=\"text\">"
-  +"<input id=\"password1\"  name=\"password1\" placeholder=\"Password\" required=\"required\" type=\"password\">"
-  +"<input id=\"password2\"  name=\"password2\" placeholder=\"Confirm Password\" required type=\"password\">"
+  +"<input id=\"password1\"  name=\"password1\" placeholder=\"Mot de Passe\" required=\"required\" type=\"password\">"
+  +"<input id=\"password2\"  name=\"password2\" placeholder=\"Confirmer Mot de Passe\" required type=\"password\">"
   +"<button type=\"submit\" class=\"btn btn-primary btn-block btn-large\">Rejoindre</button>"
-  +"<a href=\"javascript:void(0);\" onclick=\"javascript:makeConnectionPanel()\"> Vous avez déjà un compte? </a>"
+  +"<a href=\"javascript:void(0);\" onclick=\"javascript:makeConnectionPanel()\"> Vous avez déjà un compte? Connexion </a>"
   +"</form>"
   +"<div id=\"spinner2\"style=\"visibility:hidden\"></div>\n<p id=\"charge\"  style=\"visibility:hidden\"></p>"
   +"</div>\n</div>"
@@ -30,27 +30,23 @@ function enregistrement(){
  var err=$("#errMsg1");
  var charge=$("#charge");
  charge.text("Chargement...");
+ 
 
-
-if(!(checkKey(nom.val()) )) {
+ if(checkField(nom.val()) ) {
   err.text("Nom : Caratères spéciaux interdit");
   noFail = false;
 }
 
-if(!(checkKey(prenom.val()) )) {
+if(checkField(prenom.val()))  {
   err.text("Prenom : Caratères spéciaux interdit");
   noFail = false;
 }
 
-if(!(checkKey(login.val()) )) {
+if(checkField(login.val())) {
   err.text("Login : Caratères spéciaux interdit");
   noFail = false;
 }
-
-
-
-
- if( nom.val()==0){
+if( nom.val()==0){
   err.text("Nom trop court");
   noFail = false;
 }
@@ -67,7 +63,6 @@ if( login.val()==0){
 }
 
 if( password1.val().length<4) {
-  console.log("non alpha ");
   err.text("Mot de passe 1 trop court");
   noFail = false;
 }
@@ -114,7 +109,7 @@ function Create(login, pass,nom, prenom){
       }
     },
     error: function(jqXHR,textStatus,errTHrown){
-      console.log(textStatus);
+      err1.text("Message Error : "+textStatus);
     }
 
   });
@@ -127,12 +122,9 @@ function trim(str) {
 }
 
 
-
-function checkKey(v) {
-  if (/\W/.test(v.value)) {
-
+function checkField(fieldname){
+  if(!/^[a-zA-Z0-9]+$/.test(fieldname)){              
     return true;
-
   }else{
     return false;
   }

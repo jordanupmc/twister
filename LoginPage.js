@@ -5,9 +5,9 @@ function makeConnectionPanel(){
 	+"<div class=\"login\">"
 	+"<form action=\"javascript:(function(){return;}())\" method=\"post\" onsubmit=\"javascript:ConnectionLogin()\">"
 	+"<input id=\"logIN\" name=\"login\" placeholder=\"Login\" required type=\"text\" value=''>"
-	+"<input id=\"pass\" name=\"pass\" placeholder=\"Password\" required type=\"password\">"
+	+"<input id=\"pass\" name=\"pass\" placeholder=\"Mot de Passe\" required type=\"password\">"
 	+"<button type=\"submit\" class=\"btn btn-primary btn-block btn-large\">Login</button>"
-	+"<a href=\"javascript:void(0);\" onclick=\"javascript:makeEnregistrementPanel()\"> Vous n'avez pas de compte?</a>"
+	+"<a href=\"javascript:void(0);\" onclick=\"javascript:makeEnregistrementPanel()\">Vous n'avez pas de compte? Inscritption</a>"
 	+"</form>"
 	+"<div id=\"spinner2\"style=\"visibility:hidden\"></div>\n<p id=\"charge\"  style=\"visibility:hidden\"></p>"
 	+"</div>\n</div>"
@@ -84,6 +84,12 @@ function Connectex(login,password){
 		},
 		error: function(jqXHR,textStatus,errTHrown){
 			err1.text("Erreur interne ");
+<<<<<<< HEAD
+=======
+			document.getElementById('spinner2').style.visibility = "hidden";
+			document.getElementById('charge').style.visibility = "hidden";
+
+>>>>>>> 6ba85ca784dbe79fe167e746160b6b4230368f21
 		}
 	});
 }

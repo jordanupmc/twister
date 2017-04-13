@@ -398,6 +398,34 @@ public class Comments {
 
 	}
 
+	public static List<DBObject> getListMessageByList(List<String> list_id) throws BDException{
+		try {	
+			final int limit=20;
+			Mongo m =new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection collection = db.getCollection("comments");
+			BasicDBObject request = new BasicDBObject();
+			BasicDBList or = new BasicDBList();
+			BasicDBList and = new BasicDBList();
+
+			for(int i=0; i<list_id.size(); i++){
+				or.add(new BasicDBObject("_id", new ObjectId(list_id.get(i))));
+				// System.out.println(or);
+			}
+
+			if(!or.isEmpty())
+				request.put("$or",or);
+
+			return collection.find(request).sort(new BasicDBObject("_id",-1)).limit(limit).toArray();
+
+
+		}catch(UnknownHostException e){
+			e.printStackTrace();
+			return null;
+		} 
+
+	}
+	
 	public static List<DBObject> getListMessage(String token, int author_id,
 			String maxid, String minid ,int nb, boolean friends) throws BDException{
 		try {	
@@ -457,7 +485,81 @@ public class Comments {
 
 
 	}
+	
+	public static DBObject countLike(String author_id){
+		String cm="function(){"+
+			"var isLike=false;if(this.like == undefined){return;}"+
+			"for(var i=0; i<this.like.length; i++)"+
+				"if(this.like[i].author_id == "+author_id+"){"+
+					"isLike=true;"+
+					"break;"+
+				"}"+
+			"if(isLike)"+
+				"emit("+author_id+", {nb:1, id: this._id.str});"+
+		"}";
+		String cr="function(k,v){"+
+				"var sum=0;var arr=[];"+
+				"for(var i=0; i<v.length; i++)"+
+				"sum+=v[i].nb;"+
+				"return {nb: sum, id: arr};"+
+				"}";
+		Mongo m;
+		DBObject result=null;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection coll = db.getCollection("comments");
+			MapReduceCommand cmd = new MapReduceCommand(coll, cm, cr, null, MapReduceCommand.OutputType.INLINE, null);
+			MapReduceOutput out=coll.mapReduce(cmd);
+			
+			for(DBObject obj : out.results()){
+				result=(DBObject) obj.get("value");
+				break;
+			}
+		
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	public static DBObject countPost(String author_id){
+		String cm="function(){"+
+				"var id= this.author_id;"+
+				"if(id == "+author_id+")"+
+				"emit(id,{nb: 1, id: this._id.str});"+
+				"}";
 
+		String cr="function(k,v){"+
+				"var sum=0;var arr=[];"+
+				"for(var i=0; i<v.length; i++){"+
+				"sum+=v[i].nb;arr[i]=v[i].id;}"+
+				"return {nb: sum, id: arr};"+
+				"}";
+		Mongo m;
+		DBObject result=null;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection coll = db.getCollection("comments");
+			MapReduceCommand cmd = new MapReduceCommand(coll, cm, cr, null, MapReduceCommand.OutputType.INLINE, null);
+			MapReduceOutput out=coll.mapReduce(cmd);
+			
+			for(DBObject obj : out.results()){
+				result= (DBObject) obj.get("value");
+				break;
+			}
+		
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	//	"var words=text.match(new RegExp('\\\\w+','g')); 
 	private static String map="function(){"+
 			"var text=this.post;"+
@@ -506,7 +608,7 @@ public class Comments {
 			cmd.setScope(n);
 
 			coll.mapReduce(cmd);
-			System.out.println("OK");
+			//System.out.println("OK");
 
 			//System.out.println(db.getCollection("index").find());
 		} catch (UnknownHostException e) {
