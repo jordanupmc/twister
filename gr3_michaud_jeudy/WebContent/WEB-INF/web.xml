@@ -76,6 +76,10 @@
 		<servlet-name>DeleteComment</servlet-name>
 		<servlet-class>servlet.DeleteComment</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>GetStatsUser</servlet-name>
+		<servlet-class>servlet.GetStatsUser</servlet-class>
+	</servlet>
 
 
 
@@ -91,6 +95,10 @@
 	<servlet-mapping>
 		<servlet-name>DeleteMessage</servlet-name>
 		<url-pattern>/deleteMessage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetStatsUser</servlet-name>
+		<url-pattern>/getStatsUser</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping> 

@@ -50,7 +50,7 @@ public class User {
 			j=bd.UserTools.connect(login,password);
 		} catch (BDException e1) {
 			// TODO Auto-generated catch block
-			return ErrorService.serviceRefused(100000, "Echec connexion");
+			return ErrorService.serviceRefused(100000, "Echec connexion"+e1);
 		}
 
 		try {

@@ -2,6 +2,8 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -40,6 +42,9 @@ public class ListMessage extends HttpServlet {
 		 String idmin=request.getParameter("id_min");
 		 String nb=request.getParameter("nb");
 		 String friends=request.getParameter("friends");
+		 String[] sf=request.getParameterValues("post_id");
+		 
+		 
 		 boolean f;
 		 
 		 int id=0;
@@ -91,15 +96,38 @@ public class ListMessage extends HttpServlet {
 			 return;
 		 }
 
-
 		 List<DBObject> list;
 		 JSONObject obj=new JSONObject();
+		 
+		 
+		 if(sf != null){
+			 try {
+				list =Comments.getListMessageByList(Arrays.asList(sf));
+				if(list == null)
+				 obj.put("messages", new JSONArray());
+				else
+					 obj.put("messages", list);
+				obj.put("status", "OK");
+			} catch (BDException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				out.println(ErrorService.serviceRefused(10000,"Erreur inconnu "+e));
+				return;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				out.println(ErrorService.serviceRefused(10000,"Erreur inconnu "+e));
+				return;
+			}
+		 }
+		 
+		 
 
 		 try {
 			 if(query == null)
 				 list = Comments.getListMessage(token, id, idmax, idmin , Integer.parseInt(nb), f);
 			 else
-				 list = Comments.getMessagesByQuery(query);
+				 list = Comments.getMessagesByQuery(java.net.URLDecoder.decode(query, "UTF-8"));
 			 
 			 if(list == null){
 				 obj.put("messages", new JSONArray());

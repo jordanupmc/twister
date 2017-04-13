@@ -87,8 +87,7 @@ public class UserTools {
 			c.close();
 
 		} catch (Exception e) {
-			System.out.println(e);
-			throw new BDException("echec verification password-user");
+			throw new BDException("echec verification password-user"+e);
 		}
 
 		return isOK;
