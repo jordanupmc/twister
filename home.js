@@ -535,15 +535,15 @@ function completeMessagesReponse(reponse){
 		//env.msg.push(tab[i]);
 		$("#cont_message > ul").append(tab[i].getHtml());
 
-		if(tab[i].id > env.maxId){
+	/*	if(tab[i].id > env.maxId){
 			env.maxId = tab[i].id;
-		}
+		}*/
 
 		//if((env.maxId < 0) || (tab[i].id < env.minId)){
-		if((env.minId < 0) || (tab[i].id < env.minId)){
+	/*	if((env.minId < 0) || (tab[i].id < env.minId)){
 			env.minId = tab[i].id;
-		}
-		lastId = tab[i].id;
+		}*/
+		//lastId = tab[i].id;
 	}
 	env.minId=lastId;
 	$("#message_"+lastId).css("border-bottom","none");
