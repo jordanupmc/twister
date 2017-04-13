@@ -84,12 +84,10 @@ function Connectex(login,password){
 		},
 		error: function(jqXHR,textStatus,errTHrown){
 			err1.text("Erreur interne ");
-<<<<<<< HEAD
-=======
+
 			document.getElementById('spinner2').style.visibility = "hidden";
 			document.getElementById('charge').style.visibility = "hidden";
 
->>>>>>> 6ba85ca784dbe79fe167e746160b6b4230368f21
 		}
 	});
 }
