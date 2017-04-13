@@ -255,6 +255,9 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 	env.toId=toId;
 	env.toLogin=toLogin;
 
+	env.stat_like=[];
+	env.stat_post=[];
+
 	if(fromId == undefined){
 		env.fromId = -1;
 	}
@@ -362,8 +365,8 @@ function getListMsgById(code){
 	var arr=[];
 
 	if(code == 'post'){
-		for(var i =0; i< env.stat_twist.length; i++)
-			arr[i]="post_id="+env.stat_twist[i];
+		for(var i =0; i< env.stat_post.length; i++)
+			arr[i]="post_id="+env.stat_post[i];
 	}
 	if(code == 'like'){
 		for(var i =0; i< env.stat_like.length; i++)
@@ -777,7 +780,7 @@ function refreshMessage(rep){
 	}
 }
 
-function refreshResponse(rep){
+function refreshResponse(rep){ ////////////////////////////////////////////TODO REVOIR MAXID & ENLEVER LE MINid
 	var com=JSON.parse(rep,revival);
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#cont_message > ul");
