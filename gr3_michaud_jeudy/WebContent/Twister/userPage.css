@@ -81,3 +81,15 @@ div > ul{
 	float: right
 	
 }
+
+
+
+#msg {
+    margin: 1em auto;
+    padding: 0;
+    width: 50em;
+    height: 50em;
+    overflow: auto;
+    text-align: center;
+    list-style-type: none;
+}

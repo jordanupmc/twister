@@ -1,6 +1,18 @@
 
+#main{
+	height: 100%;
+	padding: 0;
+	margin:0;
+}
+html,
+body {
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #F2EEE8;
+}
 
-header {
+#main header {
 
 	position: fixed;
 	width: 100%;
@@ -11,50 +23,54 @@ header {
 	max-height: 70px;
 }
 
-header form{
+#main header form{
 	display: flex;
 	margin: auto;	
 
 }
 
-header form input[type=text]{
+#main header form input[type=text]{
 	font-size: 22px;
 	border:none;
 	border-bottom: thin solid silver;
 }
 
-header form input[type=text]:focus{
+#main header form input[type=text]:focus{
 	 outline: none;
 }
 
-header form input[type=image]{
+#main header form input[type=image]{
 	/*background-color: #1FA1F1;*/
 	max-width: 30px;
 	max-height: 30px;
 	color:white;
 }
 
-header div{
+#main header div{
 	margin-top:auto;
 	margin-bottom: auto;
 
 }
-header a{
+#main header a{
 	text-decoration: none;
 	color:black;
-
+}
+#main aside ul a{
+	text-decoration: none;
+	color:white;
 }
 
-header img {
+#main header img {
 	max-width: 65px;
 	max-height: 65px;
 }
-#logout{
+
+#main #logout{
 	max-width: 35px;
 	max-height: 35px;
 }
 
-body {
+body #main {
   position: relative;
   margin: 0;
   font-family:  'Open Sans', Arial, Helvetica, sans-serif;
@@ -62,47 +78,48 @@ body {
   background-color:#F2EEE8;
 
 }
-aside{
+
+#main aside{
 	background-color: #1FA1F1;
 	color:white;
 	width:32vh;
-	margin-top: 65px; /*60*/ 
+	margin-top: 70px; /*60*/ 
 	position: fixed;
 	height:100vh;
 	
 }
 
-aside ul{
+#main aside ul{
 	flex-direction:column;
 	flex-wrap:wrap;
 	list-style: none;
 	font-size: 3.5vh;
 }
 
-aside h1{
+#main aside h1{
 	text-align: center;
 }
 
-section{
+#main section{
 	margin-top: 60px;
 	margin-left:35vh;
 }
-section > h1 {
+#main section > h1 {
 	display: none;
 }
 
 
-#container{
+#main #container{
 	display: flex;
 	align-items:stretch;
 }
 
-#cont_message{
+#main #cont_message{
 	margin-top: 5vh;
 	margin-left: 6vh;
 }	
 
-#post_message{
+#main #post_message{
 	
 	margin-top: 5vh;
 	margin-left: 6vh;
@@ -112,7 +129,7 @@ section > h1 {
 	min-width: 85vh; /**<---------*/
 }
 
-#post_message input[type=submit]{
+#main #post_message input[type=submit]{
 	color:white;
 	background-color: #0b6ca8;
 	border: none;
@@ -125,36 +142,36 @@ section > h1 {
 	font-size:30px;
 
 }
-#post_message input[type=text]{
-	width: 90%;
+#main #post_message input[type=text]{
+	width: 85%;
 	background-color: #1FA1F1;
 	color:white;
 	border: none;
 	margin:auto;
 	font-size: 30px;
 }
-#post_message input[type=text]{
+#main #post_message input[type=text]{
 	outline: none;
 }
 
 
 /*changer la color du placeholder*/
-#post_message input[type=text]::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+#main #post_message input[type=text]::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:   white;
 }
-#post_message input[type=text]:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+#main #post_message input[type=text]:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
    color:    white;
    opacity:  1;
 }
-#post_message input[type=text]::-moz-placeholder { /* Mozilla Firefox 19+ */
+#main #post_message input[type=text]::-moz-placeholder { /* Mozilla Firefox 19+ */
    color:   white;
    opacity:  1;
 }
-#post_message input[type=text]:-ms-input-placeholder { /* Internet Explorer 10-11 */
+#main #post_message input[type=text]:-ms-input-placeholder { /* Internet Explorer 10-11 */
    color:    white;
 }
 
-div > ul{
+#main div > ul{
 
 	list-style: none;
 	padding: 0;
@@ -163,77 +180,85 @@ div > ul{
 	background-color: white;
 	
 }
-.message a{
+#main .message a{
 	text-decoration: none;
 	color: #333333;
 }
 
-.message p{
+#main .message p{
 	font-family: 'Open Sans', sans-serif;
 	text-overflow: ellipsis;
 	color: #2d2d2d;
 }	
-.message{
+#main .message{
 	border: 15px solid white;
 	background: #ffffff;
 	border-bottom: 1px solid grey;
 	min-width: 85vh;  /*<------ */
 	
 }
-.message img{
+#main .message img{
 	max-width: 31px;
 	max-height: 31px;
 }
-.message form{
+#main .message form{
 	display: inline;
 
 }
 
-.message input[type=text]{
+#main .message input[type=text]{
 	width: 85%;
 }
-.message ul{
+#main .message ul{
 	background-color: #F2EEE8;
 }
 
-.message_like{
+#main .message_like{
 	font-family: 'Open Sans', sans-serif;
 	color:#D90022!important;
 	margin-right: 18px;
 }
 
-.message_comment{
+#main .message_comment{
 	font-family: 'Open Sans', sans-serif;
 	color: #0066cc!important;
 	margin-left: 4px;
 }
 
-.message_footer{
+#main .message_footer{
 	display: flex;
 	align-items:center;
 }
 
-.message_footer_comment p{
+#main .message_footer_comment p{
 	display:inline-block;
+	font-family: 'Open Sans', sans-serif;
 }
-.showCommentButton{
+#main .showCommentButton{
 	float:right;
 	margin-right: 1vh;
 }
-
-.liste_message_comment {
+#main .removePostButton{
+	float:right;
+	margin-right: 1vh;
+	margin-left: auto;
+	color: red;
+}
+#main .liste_message_comment {
 	padding: 0;
     list-style-type: none;
 }
 
-.dateMessage{
+
+#main .dateMessage{
 	font-family: 'Open Sans', sans-serif;
 	color:grey;
 	float: right;
 }
-.dateComment{
+#main .dateComment{
 	color:dimgray;
 }
+
 
 /*
 a mettre dans un elmt

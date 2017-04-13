@@ -1,146 +1,143 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <title>DOC API</title>
-    <style>
-      table {
-      font-family: verdana, sans-serif;
-      border-collapse: collapse;
-      width: 100%;
-      }
+<head>
+	<meta charset="utf-8">
+	<title>DOC API</title>
+	<style>
+		table {
+			font-family: verdana, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		}
+		td, th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+	</style>
+</head>
+<body>
+	<h1>Michaud Jeudy</h1>
+	<h2>Documentation API</h2>
+	<table>
+		<tr>
+			<th>Servlet</th>
+			<th>Paramètres</th>
+			<th>Return</th>
+			<th>Code</th>
+		</tr>
+		<tr>
+			<td>createUser</td>
+			<td>login&password&nom&prenom</td>
+			<td>Succes {status:OK,token:,login:,id:, friends:{status:OK, friendList[]}} || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null<br>
+				1000: ce compte existe déjà<br>
+			</td>
+		</tr>
+		<tr>
+			<td>login</td>
+			<td>login&password</td>
+			<td>Succes {status:OK,token:, friends:{status:OK, friendList[]}} || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null
+			</td>
+		</tr>
+		<tr>
+			<td>logout</td>
+			<td>token</td>
+			<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+		<tr>
+			<td>insertMessage</td>
+			<td>token&post</td>
+			<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+		<tr>
+			<td>listMessage</td>
+			<td>token&query&from&id_max&id_min&nb</td>
+			<td>Succes {status:OK, messages: [ {"post","_id","author_id","login","date","like[author_id,date]", "comments[]"} ] } || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
 
-      td, th {
-      border: 1px solid #dddddd;
-      text-align: left;
-      padding: 8px;
-      }
+		<tr>
+			<td>like</td>
+			<td>token&id_post&text</td>
+			<td>Succes {status:OK, like:{"state", "author_id", "date"} } || Echec {status:KO, code: , textError:}</td>
+			<td>state: 0:like, 1:dislike<br>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
 
-      tr:nth-child(even) {
-      background-color: #dddddd;
-      }
-    </style>
-  </head>
+		<tr>
+			<td>addComment</td>
+			<td>token&id_post</td>
+			<td>Succes {status:OK, "comments":{"post","_id","login","author_id","date"} } || Echec {status:KO, code: , textError:}</td>
+			<td>state: 0:like, 1:dislike<br>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
 
-  <body>
-    <h1>Michaud Jeudy</h1>
-    <h2>Documentation API</h2>
+		<tr>
+			<td>deleteComment</td>
+			<td>token&id_post&id_com</td>
+			<td>Succes { "_id" : { "$oid" :} , "author_id" : , "status" : "OK"} || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
 
-    <table>
-      <tr>
-	<th>Servlet</th>
-	<th>Paramètres</th>
-	<th>Return</th>
-	<th>Code</th>
-      </tr>
+		<tr>
+			<td>getFriendList</td>
+			<td>token</td>
+			<td>Succes {status:OK, friendList: [ {"prenom","nom","id","login"} ] || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+		<tr>
+			<td>getFriend</td>
+			<td>token</td>
+			<td>Succes {status:OK, friend: [ {"prenom","nom","id","login"} ] || Echec {status:KO, code: , textError:}</td>
+			<td>-1: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+		<tr>
+			<td>createFriend</td>
+			<td>token&id</td>
+			<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
 
-      
+		<tr>
+			<td>deleteFriend</td>
+			<td>token&id</td>
+			<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
 
-      <tr>
-	<td>createUser</td>
-	
-	<td>login&password&nom&prenom</td>
-	<td>Succes {status:OK,token:,login:,id:} || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà<br>
-	</td>
-      </tr>
-
-
-      <tr>
-	<td>login</td>
-	
-	<td>login&password</td>
-	<td>Succes {status:OK,token:} || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà
-	</td>
-      </tr>
-
-
-
-      <tr>
-	<td>logout</td>
-	
-	<td>token</td>
-	<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	    1000 Token obsolete
-	</td>
-      </tr>
-
-
-      <tr>
-	<td>insertMessage</td>
-	
-	<td>token&post</td>
-	<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	    1000 Token obsolete
-	</td>
-      </tr>
-
-
-      <tr>
-	<td>listMessage</td>
-	
-	<td>token</td>
-	<td>Succes {status:OK, messages: [ {"post","_id","author_id","date"} ] } || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	    1000 Token obsolete
-	</td>
-      </tr>
-
-
-      <tr>
-	<td>getFriendList</td>
-	
-	<td>token</td>
-	<td>Succes {status:OK, friendList: [ {"prenom","nom"} ]  || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	    1000 Token obsolete
-	</td>
-      </tr>
-
-        <tr>
-	<td>getFriend</td>
-	
-	<td>token</td>
-	<td>Succes {status:OK, friend: [ {"prenom","nom"} ]  || Echec {status:KO, code: , textError:}</td>
-	<td>-1: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	    1000 Token obsolete
-	</td>
-      </tr>
-	
-
-	
-      <tr>
-	<td>createFriend</td>
-	
-	<td>token&id</td>
-	<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
-	<td>0: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	    1000 Token obsolete
-	</td>
-      </tr>
-      
-      <tr>
-	<td>search</td>
-	
-	<td>token&query&friends</td>
-	<td>Succes {status:OK,search:[{"post","_id","author_id","date"}]} || Echec {status:KO, code: , textError:}</td>
-	<td>0: au moins un param est null<br> 
-	  1000: ce compte existe déjà <br>
-	  1000 Token obsolete
-	</td>
-      </tr>
-    </table>
-
-  </body>
+		<tr>
+			<td>search</td>
+			<td>token&query&friends</td>
+			<td>Succes {status:OK,search:[{"post","_id","author_id","date"}]} || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000 Token obsolete
+			</td>
+		</tr>
+	</table>
+</body>
 </html>

@@ -5,13 +5,35 @@
 <head>
   <meta charset="utf-8"></meta>
   <link href="userPage.css" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>  
+  <script type="text/javascript" src="jquery.appear.js"></script>
+ 
+
+  <script type="text/javascript">
+
+   $(function() {
+  var $appeared = $('#appeared');
+  $('#dateMessage0').appear();
+  $(document.body).on('appear', '#dateMessage0', function(e, $affected) {
+    console.log("yes yes yes");
+    
+  });
+
+  
+});
+    
+
+  </script>
+
+
+
+  
+
   <title>Twister</title>
 </head>
 
 
 <body>
-
-
   <header> 
     <img src="image/logo.png" alt="Smiley face">
     <form action="javascript:(function(){return;}())">
@@ -19,7 +41,7 @@
       <input type="submit" value="chercher" >
     </form> 
     <div>
-    <button type="button" onclick="document.location='home.html'"> Deconnexion</button>
+      <button type="button" onclick="document.location='home.html'"> Deconnexion</button>
     </div>
   </header>
 
@@ -52,81 +74,140 @@
      <div>
        <h1> DERNIERS   POSTS </h1> 
 
-       <ul>
-         <li class="message">
-           <span>
-            <a href="">JEUDY JORDAN</a>
-
-            <span id="dateMessage">24/02/2017</span>
-          </span>
-          <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
-
-          <button>LIKE</button>
-          <button>Comments</button>
-        </li>
+       <ul id="msg">
 
         <li class="message">
          <span>
           <a href="">JEUDY JORDAN</a>
 
-          <span id="dateMessage">24/02/2017</span>
+          <span id="dateMessage1">24/02/2017</span>
         </span>
         <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
 
         <button>LIKE</button>
         <button>Comments</button>
       </li>
-
       <li class="message">
        <span>
         <a href="">JEUDY JORDAN</a>
 
-        <span id="dateMessage">24/02/2017</span>
+        <span id="dateMessage2">24/02/2017</span>
       </span>
       <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
 
       <button>LIKE</button>
       <button>Comments</button>
     </li>
-
     <li class="message">
      <span>
       <a href="">JEUDY JORDAN</a>
 
-      <span id="dateMessage">24/02/2017</span>
+      <span id="dateMessage3">24/02/2017</span>
     </span>
     <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
 
     <button>LIKE</button>
     <button>Comments</button>
   </li>
+  
+</li>
 
-  <li class="message">
-   <span>
-    <a href="">JEUDY JORDAN</a>
+<li class="message">
+     <span>
+      <a href="">JEUDY JORDAN</a>
 
-    <span id="dateMessage">24/02/2017</span>
-  </span>
-  <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
+      <span id="dateMessage3">24/02/2017</span>
+    </span>
+    <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
 
-  <button>LIKE</button>
-  <button>Comments</button>
+    <button>LIKE</button>
+    <button>Comments</button>
+  </li>
+  
+</li>
+
+<li class="message">
+     <span>
+      <a href="">JEUDY JORDAN</a>
+
+      <span id="dateMessage3">24/02/2017</span>
+    </span>
+    <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
+
+    <button>LIKE</button>
+    <button>Comments</button>
+  </li>
+  
+</li>
+
+<li class="message">
+     <span>
+      <a href="">JEUDY JORDAN</a>
+
+      <span id="dateMessage3">24/02/2017</span>
+    </span>
+    <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
+
+    <button>LIKE</button>
+    <button>Comments</button>
+  </li>
+  
+</li>
+
+<li class="message">
+     <span>
+      <a href="">JEUDY JORDAN</a>
+
+      <span id="dateMessage3">24/02/2017</span>
+    </span>
+    <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
+
+    <button>LIKE</button>
+    <button>Comments</button>
+  </li>
+  
+</li>
+
+<li class="message">
+     <span>
+      <a href="">JEUDY JORDAN</a>
+
+      <span id="dateMessage3">24/02/2017</span>
+    </span>
+    <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
+
+    <button>LIKE</button>
+    <button>Comments</button>
+  </li>
+  
+</li>
+
+<li class="message">
+     <span>
+      <a href="">JEUDY JORDAN</a>
+
+      <span id="dateMessage0">24/02/2017</span>
+    </span>
+    <p>TEXTE post POst TEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POstTEXTE post POst  TEXTE post POst</p>
+
+    <button>LIKE</button>
+    <button>Comments</button>
+  </li>
+  
 </li>
 
 
+
+
+
 </ul>
+
+
 
 </div>
 </section>
 </div>
 
 </body>  
-
-
-
-
-
-
-
 
 </html>

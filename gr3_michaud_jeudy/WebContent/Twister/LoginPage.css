@@ -1,17 +1,34 @@
-
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
-*, *:after, *:before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-weight: normal;
-    margin: 0;
-    outline: 0 none;
-    font-family: "Open Sans";
-    padding: 0;
+#connecting *, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-weight: normal;
+  margin: 0;
+  outline: 0 none;
+  font-family: "Open Sans";
+  padding: 0;
 }
- img {
+
+
+#errMsg {
+  background:#ff8080 url('image/error.png') no-repeat 10px 60%;
+  background-size: 30px;
+  border:1px solid #ff0000;
+  border-radius:10px;
+  font-family: "Open Sans";
+  font-weight: bold;
+  color: red;
+  padding:20px 20px 20px 36px;
+  margin:3px;
+  width: 20%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+#connecting  img {
   margin-top: 100px;
   max-width: 200px;
   max-height: 200px;
@@ -19,67 +36,75 @@
   margin-right: auto;
 }
 
-body {
-  background: #007CC8;
-  font-family: "Open Sans";
+body #connecting  {
+ background: #1D628B;
+ font-family: "Open Sans";
+ height: 100%;
+ width: 100%;
+ padding: 0;
+ margin:0;
+ position: absolute;
 }
 
-body > p{
+body >  #connecting  p{
   text-align: center;
 }
 
-.login {
-    width: 300px;
-    margin: 0 auto;
+#connecting  .login {
+  width: 300px;
+  margin: auto;
 }
-.login form {
+#connecting  .login form {
   width: 100%;
 }
 
 
-input {
-    color: #007CC8;
-    background: #FFFFFF;
-    /*background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);*/
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px 4px 4px 4px;
-    box-shadow: 0 -5px 45px rgba(100, 100, 100, 0.2) inset, 0 1px 1px rgba(255, 255, 255, 0.2);
-    font-size: 13px;
-    margin-bottom: 10px;
-    outline: medium none;
-    padding: 10px;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    width: 100%;
+#connecting  input {
+  color: #007CC8;
+  background: #FFFFFF;
+  /*background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);*/
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 0 -5px 45px rgba(100, 100, 100, 0.2) inset, 0 1px 1px rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+  margin-bottom: 10px;
+  outline: medium none;
+  padding: 10px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  width: 100%;
 }
 
-button {
-    background: linear-gradient(to bottom, #009EFF 0px, #0075BC 100%) repeat scroll 0 0 transparent;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
-    border-radius: 6px 6px 6px 6px;
-    box-shadow: 0 1px 0 #E6F5FF inset;
-    color: #FFFFFF;
-    cursor: pointer;
-    display: block;
-    margin: 0 auto;
-    padding: 10px 25px;
-    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
-    width: 100%;
+#connecting  button {
+  background: linear-gradient(to bottom, #009EFF 0px, #0075BC 100%) repeat scroll 0 0 transparent;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 1px 0 #E6F5FF inset;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  padding: 10px 25px;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  width: 100%;
 }
 
 
-a {
+#connecting a {
   color:#FFFFFF;
   text-decoration:none;
   font-family: sans-serif;
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
 }
 
 
-a:hover {
+#connecting  a:hover { 
   color: blue;
 }
 
-footer {
+#connecting  footer {
   position: fixed;
   background-color: transparent;
   background-color: #1FA1F1;
@@ -91,10 +116,56 @@ footer {
   height: 11vh;
   width: 100%;
 }
-footer p {
+#connecting  footer p {
   float: right;
   margin-right: 30px;
   margin-top: 20px;
   color: black;
 
 }
+
+
+
+#spinner2{
+  margin-right: auto;
+  margin-left: auto;
+    color: #fff;
+  width: 50px;
+    height: 50px;
+    background: #1D628B;
+    position:relative;
+    border-radius: 100%;
+    border:5px solid rgba(255,255,255,0.4);
+    border-top:5px solid #fff;
+    border-bottom: 5px solid #fff;
+    display: inline-block;
+font-size: 40px;text-align: center;
+  animation: spin 2s infinite;
+}
+
+/*Firefox*/
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(360deg); }
+}
+
+/*Opera*/
+/*@-o-keyframes spin {
+    from { -o-transform: rotate(0deg); }
+    to { -o-transform: rotate(360deg); }
+}
+*/
+
+/*Chrome*/
+/*@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}*/
+
+/*Others*/
+/*@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+*/

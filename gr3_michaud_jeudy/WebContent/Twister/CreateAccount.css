@@ -1,7 +1,14 @@
 
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
-*, *:after, *:before {
+html,
+body {
+  min-height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+#signUp *, *:after, *:before {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -11,32 +18,41 @@
     font-family: "Open Sans";
     padding: 0;
 }
- img {
+#signUp img {
   margin-top: 100px;
   max-width: 200px;
   max-height: 200px;
   margin-left: auto;
   margin-right: auto;
 }
-body > p {
+
+#signUp  > p {
   text-align: center;
 }
-body {
-  background: #007CC8;
+
+
+
+body #signUp {
+  background: #1D628B;
   font-family: "Open Sans";
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin:0;
+  position: absolute;
 }
 
-.login {
+#signUp .login {
     width: 300px;
-    margin: 0 auto;
+    margin:  auto;
 
 }
-.login form {
+#signUp .login form {
   width: 100%;
 }
 
 
-input {
+#signUp input {
     /*background: none repeat scroll 0 0 rgba(0, 0, 0, 0.3);*/
     color: #007CC8;
     background: #FFFFFF;
@@ -51,7 +67,7 @@ input {
     width: 100%;
 }
 
-button {
+#signUp button {
     background: linear-gradient(to bottom, #009EFF 0px, #0075BC 100%) repeat scroll 0 0 transparent;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
@@ -67,19 +83,19 @@ button {
 }
 
 
-a {
+#signUp a {
   color:#FFFFFF;
   text-decoration:none;
   font-family: sans-serif;
 }
 
 
-a:hover {
+#signUp a:hover {
   color: blue;
 }
 
 
-footer {
+#signUp footer {
   position: fixed;
   background-color: transparent;
   background-color: #1FA1F1;
@@ -92,10 +108,24 @@ footer {
   width: 100%;
 }
 
-footer p {
+#signUp footer p {
   float: right;
   margin-right: 30px;
   margin-top: 20px;
   color: black;
 
+}
+#errMsg1 {
+  background:#ff8080 url('image/error.png') no-repeat 10px 60%;
+  background-size: 30px;
+  border:1px solid #ff0000;
+  border-radius:10px;
+  font-family: "Open Sans";
+  font-weight: bold;
+  color: red;
+  padding:20px 20px 20px 36px;
+  margin:3px;
+  width: 20%;
+  margin-right: auto;
+  margin-left: auto;
 }
