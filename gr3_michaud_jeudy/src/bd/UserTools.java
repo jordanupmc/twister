@@ -63,21 +63,17 @@ public class UserTools {
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection c = Database.getMySQLConnection();
-			//Statement st = c.createStatement();
-			
+
 		    byte[] byteContent = password.getBytes();
-		    java.sql.Blob blob =  c.createBlob();//Where connection is the connection to db object. 
+		    java.sql.Blob blob =  c.createBlob();
 		    blob.setBytes(1, byteContent);
 			
-		    //System.out.println(password);
+		    
 		    String query = "SELECT * FROM USER WHERE login=? AND password=? ;";
 			
 			PreparedStatement pstmt = c.prepareStatement(query);
 			pstmt.setString(1, login);
 		    pstmt.setString(2,password);
-		    
-			//String query = "SELECT * FROM USER WHERE login=\"" + login+ "\" and password=" + password + "\";";
-			
 		    
 		    ResultSet rs = pstmt.executeQuery();
 
@@ -223,7 +219,5 @@ public class UserTools {
 		}
 		return true;
 	}
-	//TODO 
-	//CHOIX connexion multiple ou pas ? 
-	// logout en fonction du choix
+
 }

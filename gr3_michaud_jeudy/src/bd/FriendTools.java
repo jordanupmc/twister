@@ -48,40 +48,16 @@ public class FriendTools {
 	
 	
 	public static JSONObject getFriendList(String token) throws BDException{
-//		JSONObject f=new JSONObject();
-//		JSONObject l=new JSONObject();
 		int moi;
-	//	JSONArray friendList =new JSONArray();
 		try{
 	
 			moi=Session.getIdUser(token);
 			return getFriendList(moi);
-//			Class.forName("com.mysql.jdbc.Driver").newInstance();
-//			Connection c = Database.getMySQLConnection();
-//			
-//			
-//			String query = "SELECT `to` FROM Friends WHERE `from`=?";
-//
-//			PreparedStatement pstmt = c.prepareStatement(query);
-//			pstmt.setInt(1, moi);
-//			
-//			ResultSet rs=pstmt.executeQuery();
-//			
-//			while(rs.next()){
-//				
-//				friendList.put(getFriend(token,rs.getInt(1)));
-//				
-//			}
-//			l.put("friendList", friendList);
-//			
-//			rs.close();
-//			pstmt.close();
-//			c.close();
+
 		
 		}catch(Exception e){
 			throw new BDException("Echec getFriendList "+e.getMessage());
 		}
-	//	return l;
 	}
 	
 	public static JSONObject getFriend(int id1, int id) throws BDException{
@@ -192,11 +168,7 @@ public class FriendTools {
 	
 	public static boolean isFriend(int id1,int id) throws BDException{
 
-		try{
-			//int moi=Session.getIdUser(token);
-//			if(moi == -1 )
-//				throw new BDException("Pas connecter");
-//			
+		try{	
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection c = Database.getMySQLConnection();
 
@@ -237,31 +209,6 @@ public class FriendTools {
 				throw new BDException("Pas connecter");
 			
 			return isFriend(moi, id);
-//			Class.forName("com.mysql.jdbc.Driver").newInstance();
-//			Connection c = Database.getMySQLConnection();
-//
-//
-//			String query = "SELECT * FROM Friends WHERE `from`=? AND `to`=?";
-//			PreparedStatement pstmt = c.prepareStatement(query);
-//		
-//			pstmt.setInt(1,moi);
-//			pstmt.setInt(2, id);
-//			
-//			ResultSet rs = pstmt.executeQuery();
-//			
-//			if(rs.next()){
-//				rs.close();
-//				pstmt.close();
-//				c.close();
-//			
-//				return true;
-//			}
-//			
-//			rs.close();
-//			pstmt.close();
-//			c.close();
-			
-			//return false;
 
 		}catch(Exception e){
 			throw new BDException(e.getMessage());
