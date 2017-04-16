@@ -180,6 +180,7 @@ body #main {
 	background-color: white;
 	
 }
+
 #main .message a{
 	text-decoration: none;
 	color: #333333;
@@ -190,6 +191,9 @@ body #main {
 	text-overflow: ellipsis;
 	color: #2d2d2d;
 }	
+
+
+
 #main .message{
 	border: 15px solid white;
 	background: #ffffff;

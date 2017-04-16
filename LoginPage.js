@@ -73,10 +73,13 @@ function Connectex(login,password){
 				
 				env.token=result.token;
 				if(result.friends.status == "OK"){
-					env.friends=result.friends.friendList;
+					env.followed=result.friends.followed;
+					env.following=result.friends.following;
 
-					if(env.friends == null || env.friends == undefined)
-						env.friends=[];
+					if(env.followed == null || env.following == undefined) {
+						env.followed=[];
+						env.following=[];
+					}
 				}
 				
 				makeMainPanel(result.id, result.login);
