@@ -262,6 +262,25 @@ body #main {
 #main .dateComment{
 	color:dimgray;
 }
+#main .buttonFriends{
+	background-color:#1FA1F1;
+	color:white;
+	border:none;
+	cursor: pointer;
+	margin:auto;
+ 	display:block;
+ }
+#main .buttonFriendsAside{
+	background-color:white;
+	color:#1FA1F1;
+	border:none;
+	cursor: pointer;
+	margin:auto;
+ 	display:block;
+ 	width: 20vh;
+    height: 3vh;
+ }
+ 
 
 
 /*

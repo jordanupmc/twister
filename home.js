@@ -262,9 +262,9 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 
 		s+="<h1 id=\"activity\"> Activités de "+env.toLogin+" </h1>"
 		if(findFriendId(env.following) != -1)
-			s+="<button id=\"follow\" type=\"button\" onclick=\"javascript:unfollow('"+env.toId+"')\">Ne plus suivre</button>"
+			s+="<button  class=\"buttonFriendsAside\"id=\"follow\" type=\"button\" onclick=\"javascript:unfollow('"+env.toId+"')\">Ne plus suivre</button>"
 		else
-			s+="<button id=\"follow\" type=\"button\" onclick=\"javascript:follow('"+env.toId+"')\">Suivre</button>"
+			s+="<button class=\"buttonFriendsAside\" id=\"follow\" type=\"button\" onclick=\"javascript:follow('"+env.toId+"')\">Suivre</button>"
 	}
 	s+="<ul>"
 	if(env.toId == -1){
@@ -1097,8 +1097,8 @@ function makeFriends(code, arr){
 		$("#cont_message > ul").append("<li><h1 style=\"text-align:center\">Abonnements</h1></li>");
 		for(var i=0; i< following.length; i++){
 			s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+following[i].id+"','"+following[i].login+"','"+false+"')\"><b>"+following[i].login+"</b></a><br>"+following[i].prenom+
-			"<button id=\"unfollow_"+following[i].id+"\" onclick=\"javascript:unfollowList('"+following[i].id+"')\">Ne plus suivre</button>"+
-			"<button id=\"follow_"+following[i].id+"\" onclick=\"javascript:followList('"+following[i].id+"','"+following[i].login+"','"+following[i].prenom+"')\">Suivre</button>"+
+			"<button class=\"buttonFriends\" id=\"unfollow_"+following[i].id+"\" onclick=\"javascript:unfollowList('"+following[i].id+"')\">Ne plus suivre</button>"+
+			"<button class=\"buttonFriends\" id=\"follow_"+following[i].id+"\" onclick=\"javascript:followList('"+following[i].id+"','"+following[i].login+"','"+following[i].prenom+"')\">Suivre</button>"+
 			"</li>";
 			$("#cont_message > ul").append(s);
 			$("#follow_"+env.following[i].id).hide();
