@@ -255,6 +255,9 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 	env.toId=toId;
 	env.toLogin=toLogin;
 
+	env.stat_like=[];
+	env.stat_post=[];
+
 	if(fromId == undefined){
 		env.fromId = -1;
 	}
@@ -349,27 +352,31 @@ function getStat(id){
 }
 
 function statResponse(rep){
-	env.stat_like=rep.like;
-	env.stat_post=rep.post;
+	env.stat_like=rep.like.id;
+	env.stat_post=rep.post.id;
 
 	$("#stat_twist > a").append(rep.post.nb);
 	$("#stat_like > a").append(rep.like.nb);
 }
 
 function getListMsgById(code){
+	console.log("OULA")
 	if(code == undefined)
 		return;
 	var arr=[];
 
-	if(code == 'post'){
-		for(var i =0; i< env.stat_twist.length; i++)
-			arr[i]="post_id="+env.stat_twist[i];
+	if(code == "post"){
+		for(var i =0; i< env.stat_post.length; i++)
+			arr[i]="post_id="+env.stat_post[i];
 	}
-	if(code == 'like'){
+	if(code == "like"){
 		for(var i =0; i< env.stat_like.length; i++)
 			arr[i]="post_id="+env.stat_like[i];
 	}
+	console.log("GOOD");
+	console.log(env.stat_like);
 
+	console.log(env.stat_post);
 	if(arr.length != 0)
 		$.ajax({
 			type:"POST",
@@ -377,6 +384,7 @@ function getListMsgById(code){
 			data: "token="+env.token+"&from="+env.fromId+"&"+arr.join("&"),
 			dataType:"json",
 			success: function(result){
+				console.log(result);
 				if(result.code == 1000){
 					localStorage.clear();
 					makeConnectionPanel();
@@ -777,7 +785,7 @@ function refreshMessage(rep){
 	}
 }
 
-function refreshResponse(rep){
+function refreshResponse(rep){ ////////////////////////////////////////////TODO REVOIR MAXID & ENLEVER LE MINid
 	var com=JSON.parse(rep,revival);
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#cont_message > ul");

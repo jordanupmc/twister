@@ -108,6 +108,8 @@ public class ListMessage extends HttpServlet {
 				else
 					 obj.put("messages", list);
 				obj.put("status", "OK");
+				out.println(obj);
+				return;
 			} catch (BDException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

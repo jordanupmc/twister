@@ -24,8 +24,11 @@ public class TestService {
 
 		//Comments.createInverseIndex();
 	//Comments.showIndex();
-		System.out.println(Comments.countPost("20"));
-		System.out.println(Comments.countLike("20"));
-		System.out.println(services.User.login("popo","pupu"));
+		//System.out.println(Comments.countPost("20"));
+		//System.out.println(Comments.countLike("20"));
+	//	System.out.println(services.User.login("popo","pupu"));
+		
+		System.out.println(Comments.countPost("4"));
+		
 	}
 }

@@ -65,6 +65,7 @@ public class Comments {
 
 
 			collection.insert(request);
+			updateInverseIndex();
 
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -298,7 +299,7 @@ public class Comments {
 			BasicDBObject request = new BasicDBObject();
 
 			request.put("_id", new ObjectId(id));
-
+			
 			return collection.findOne(request);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -335,6 +336,7 @@ public class Comments {
 			int n=collection.remove(request).getN();
 			if(n > 0){
 				request.put("status", "OK");
+				createInverseIndex();
 				return request;
 			}
 			return null;
@@ -409,7 +411,8 @@ public class Comments {
 			BasicDBList and = new BasicDBList();
 
 			for(int i=0; i<list_id.size(); i++){
-				or.add(new BasicDBObject("_id", new ObjectId(list_id.get(i))));
+				if(ObjectId.isValid(list_id.get(i)))
+					or.add(new BasicDBObject("_id", new ObjectId(list_id.get(i))));
 				// System.out.println(or);
 			}
 
@@ -499,8 +502,8 @@ public class Comments {
 		"}";
 		String cr="function(k,v){"+
 				"var sum=0;var arr=[];"+
-				"for(var i=0; i<v.length; i++)"+
-				"sum+=v[i].nb;"+
+				"for(var i=0; i<v.length; i++){"+
+				"sum+=v[i].nb;arr[i]=v[i].id}"+
 				"return {nb: sum, id: arr};"+
 				"}";
 		Mongo m;
@@ -536,7 +539,7 @@ public class Comments {
 				"var sum=0;var arr=[];"+
 				"for(var i=0; i<v.length; i++){"+
 				"sum+=v[i].nb;arr[i]=v[i].id;}"+
-				"return {nb: sum, id: arr};"+
+				"return {nb: sum, id: arr.toString()};"+
 				"}";
 		Mongo m;
 		DBObject result=null;
@@ -601,6 +604,7 @@ public class Comments {
 
 			DB db= m.getDB(DBStatic.mysqldb);
 			DBCollection coll = db.getCollection("comments");
+			
 			MapReduceCommand cmd = new MapReduceCommand(coll, map, reduce,"tfidf", MapReduceCommand.OutputType.REPLACE, null);
 			cmd.setFinalize(finalize);
 			BasicDBObject n =new BasicDBObject();
@@ -616,6 +620,26 @@ public class Comments {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void updateInverseIndex(){
+		Mongo m;
+		try {
+			m = new Mongo(DBStatic.mongohost,DBStatic.mongo_port);
+			DB db= m.getDB(DBStatic.mysqldb);
+			DBCollection coll = db.getCollection("comments");
+			MapReduceCommand cmd = new MapReduceCommand(coll, map, reduce,"tfidf", MapReduceCommand.OutputType.MERGE, null);
+			cmd.setFinalize(finalize);
+			BasicDBObject n =new BasicDBObject();
+			n.put("N", coll.count());
+			cmd.setScope(n);
+			coll.mapReduce(cmd);
+
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static void showIndex(){
 		Mongo m;
 		try {

@@ -83,39 +83,6 @@ function revival(key,value){
 	}
 }
 
-/*function m(){
-	var text=this.post;
-	var words=text.match('/\w+/g');
-	var tf={};
-
-	for(var i=0; i<words.length; i++){
-		if(tf[words[i]] == null)
-			tf[words[i]]=1;
-		else
-			tf[words[i]]+=1;
-		for(w in tf){
-			var ret={};
-			ret[id]=tf[w];
-			emit(w,ret);
-		}
-	}
-}
-function r(key,values){
-	var ret={};
-	for(var i=0; i<values.length; i++){
-		for(var d in values[i])
-			ret[d] = values[i][d];
-	}
-	return ret;
-}
-
-function f(k, v){
-	var df= Object.keys(v).length;
-	for(d in v)
-		v[d]=v[d]*Math.log(N/df);
-	return v;
-}*/
-
 function parseDate(d){
 
 	var now = new Date();
@@ -363,15 +330,16 @@ function getListMsgById(code){
 	if(code == undefined)
 		return;
 	var arr=[];
-
-	if(code == 'post'){
-		for(var i =0; i< env.stat_post.length; i++)
-			arr[i]="post_id="+env.stat_post[i];
+	if(code == "post"){
+		console.log(env.stat_post);
+		for(var i =0; i< env.stat_post.id.length; i++)
+			arr[i]="post_id="+env.stat_post.id[i];
 	}
-	if(code == 'like'){
-		for(var i =0; i< env.stat_like.length; i++)
-			arr[i]="post_id="+env.stat_like[i];
+	if(code == "like"){
+		for(var i =0; i< env.stat_like.id.length; i++)
+			arr[i]="post_id="+env.stat_like.id[i];
 	}
+	console.log(arr);
 
 	if(arr.length != 0)
 		$.ajax({
@@ -384,8 +352,10 @@ function getListMsgById(code){
 					localStorage.clear();
 					makeConnectionPanel();
 				}
-				else
+				else{
+					$("#post_message").empty();
 					completeMessagesReponse(JSON.stringify(result.messages));
+				}
 				
 			},
 			error: function(jqXHR,textStatus,errTHrown){
@@ -784,6 +754,7 @@ function refreshResponse(rep){ ////////////////////////////////////////////TODO 
 	var com=JSON.parse(rep,revival);
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#cont_message > ul");
+		env.maxId=com[0].id;
 		
 		for(var i=com.length-1; i>=0; i--){
 
