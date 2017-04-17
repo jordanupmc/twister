@@ -13,7 +13,7 @@ function makeSettingsPanel(){
 	"<br><button type=\"submit\">Modifier</button>"+
 	"</form>"+
 	"</div>";
-	$("#cont_message > ul").after(s);
+	$("#cont_message > ul").append(s);
 	$("#settings").css("border-bottom","none");
 	getUserInfo();
 }

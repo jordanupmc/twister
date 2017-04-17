@@ -822,10 +822,11 @@ function refreshResponse(rep){ ////////////////////////////////////////////TODO 
 
 function switchButtonFollow(code){
 	$("#follow").remove();
+
 	if(code == -1)
-		$("#activity").after("<button id=\"follow\" type=\"button\" onclick=\"javascript:unfollow('"+env.toId+"')\">ne plus suivre</button>");
+		$("#activity").after("<button  class=\"buttonFriendsAside\"id=\"follow\" type=\"button\" onclick=\"javascript:unfollow('"+env.toId+"')\">Ne plus suivre</button>");
 	else
-		$("#activity").after("<button id=\"follow\" type=\"button\" onclick=\"javascript:follow('"+env.toId+"')\">Suivre</button>")
+		$("#activity").after("<button class=\"buttonFriendsAside\" id=\"follow\" type=\"button\" onclick=\"javascript:follow('"+env.toId+"')\">Suivre</button>");
 }
 
 function follow(id){
@@ -838,7 +839,7 @@ function follow(id){
 		success: function(result){
 			if(result.status == "OK"){
 				switchButtonFollow(-1);
-				env.following[id]={"id":id,"login": env.toLogin};
+				env.following.push({"id":id,"login": env.toLogin});
 			}else if(result.code == 1000){
 				makeConnectionPanel();
 			}
@@ -858,7 +859,7 @@ function followList(id,login,prenom){
 		dataType:"json",
 		success: function(result){
 			if(result.status == "OK"){
-				env.following[id]={"id":id,"login": login,"prenom": prenom};
+				env.following.push({"id":id,"login": login,"prenom": prenom});
 				$("#follow_"+parseInt(id)).hide();
 				$("#unfollow_"+parseInt(id)).show();
 			}else if(result.code == 1000){
@@ -1101,7 +1102,16 @@ function makeFriends(code, arr){
 			"<button class=\"buttonFriends\" id=\"follow_"+following[i].id+"\" onclick=\"javascript:followList('"+following[i].id+"','"+following[i].login+"','"+following[i].prenom+"')\">Suivre</button>"+
 			"</li>";
 			$("#cont_message > ul").append(s);
-			$("#follow_"+env.following[i].id).hide();
+			if(arr == undefined)
+				$("#follow_"+env.following[i].id).hide();
+			else if(following[i].id == env.fromId){
+				$("#follow_"+following[i].id).hide();
+				$("#unfollow_"+following[i].id).hide();	
+			}else if(env.following[i] == following[i]){
+				$("#unfollow_"+following[i].id).hide();
+			}
+			else
+				$("#follow_"+following[i].id).hide();	
 		}
 		return;
 	}
