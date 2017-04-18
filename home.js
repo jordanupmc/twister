@@ -205,7 +205,7 @@ function init(){
 	localStorage.clear();
 	env = new Object();
 	env.noConnection = false;
-	makeConnectionPanel()
+	makeConnectionPanel();
 	
 
 }
@@ -410,6 +410,7 @@ function getListMsgById(code){
 
 }
 function completeMessages(wFriends){
+	scrollMessage();
 	if(!env.noConnection){
 
 		var s ="";
@@ -487,13 +488,15 @@ function scrollMessage(){
 			$.ajax({
 				type:"POST",
 				url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
-				data:"token="+env.token+"&from="+env.fromId+"&idmin=-1"+"&idmax="+env.minId+"&nb="+env.limit,
+				data:"token="+env.token+"&from="+env.fromId+"&id_min=-1"+"&id_max="+env.minId+"&nb="+env.limit,
 				dataType:"json",
 				success: function(result){
 					if(result.status=="KO"){
 						makeConnectionPanel();
+
 					}else{
 						ScrollResponse(JSON.stringify(result.messages));
+						//refreshResponse(JSON.stringify(result.messages));
 
 						
 					}
@@ -512,20 +515,19 @@ function scrollMessage(){
 
 
 function ScrollResponse(rep){
+	
+
+
 	var com=JSON.parse(rep,revival);
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#cont_message > ul");
-		
-		for(var i=com.length-1; i>=0; i--){
-
+		for(var i=0; i<com.length-1; i++){
 			env.msg[com[i].id]=com[i];
-			//env.msg.unshift(com[i]);
 
 			el.append(com[i].getHtml());
 			if( env.minId <0 || com[i].id < env.minId)
 				env.minId=com[i].id;	
 
-			break;		
 		}
 
 	}
@@ -554,36 +556,36 @@ function completeMessagesReponse(reponse){
 			env.maxId = tab[i].id;
 		}*/
 
-		//if((env.maxId < 0) || (tab[i].id < env.minId)){
-	/*	if((env.minId < 0) || (tab[i].id < env.minId)){
-			env.minId = tab[i].id;
-		}*/
-		//lastId = tab[i].id;
+		// if((env.maxId < 0) || (tab[i].id < env.minId)){
+			if((env.minId < 0) || (tab[i].id < env.minId)){
+				env.minId = tab[i].id;
+			}
+			lastId = tab[i].id;
+		}
+		env.minId=lastId;
+		$("#message_"+lastId).css("border-bottom","none");
 	}
-	env.minId=lastId;
-	$("#message_"+lastId).css("border-bottom","none");
-}
 
 
 
-function completeSearchReponse(rep){
-	$("#cont_message > ul").empty();
-	$("#post_message").empty();
-	if(rep.length == 0)
-		$("#cont_message > ul").append("<p>Pas de résultat</p>");
-	else
-		completeMessagesReponse(JSON.stringify(rep));
+	function completeSearchReponse(rep){
+		$("#cont_message > ul").empty();
+		$("#post_message").empty();
+		if(rep.length == 0)
+			$("#cont_message > ul").append("<p>Pas de résultat</p>");
+		else
+			completeMessagesReponse(JSON.stringify(rep));
 
-}
+	}
 
-function getFormComment(id){
-	return "<form action=\"javascript:(function(){return;}())\" onsubmit=\"newComment('"+id+"')\">"
-	+"<input style=\"display:inline-block;\" id=\"comment_new_"+id+"\" type=\"text\" placeholder=\"entrez un commentaire...\" required>"
-	+"<input  style=\"display:inline-block;\" type=\"submit\">" 
-	+"</form>";
-}
+	function getFormComment(id){
+		return "<form action=\"javascript:(function(){return;}())\" onsubmit=\"newComment('"+id+"')\">"
+		+"<input style=\"display:inline-block;\" id=\"comment_new_"+id+"\" type=\"text\" placeholder=\"entrez un commentaire...\" required>"
+		+"<input  style=\"display:inline-block;\" type=\"submit\">" 
+		+"</form>";
+	}
 
-function hideComments(id){
+	function hideComments(id){
 	//var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
 	var m =env.msg[id];
 
@@ -715,6 +717,7 @@ function refreshComment(id, rep){
 
 
 function newPost(){
+	scrollMessage();
 	var texte=$("#post_new").val();
 	texte=texte.trim();
 

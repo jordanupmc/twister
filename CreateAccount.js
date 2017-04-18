@@ -107,7 +107,6 @@ function Create(login, pass,nom, prenom){
             env.following=[];
           }
         }
-        
         makeMainPanel(r.id,r.login);
       }
     },
