@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import bd.BDException;
+import bd.Session;
 
 public class User {
 	
@@ -69,6 +70,65 @@ public class User {
 		return j;
 	}
 	
+	public static JSONObject editUser(String prenom, String nom, int id, String token){
+		JSONObject j = new JSONObject();
+		int tokenId=-1;
+		try {
+			tokenId=Session.getIdUser(token);
+		} catch (BDException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if(tokenId == -1 || tokenId != id)
+			return ErrorService.serviceRefused(100000, "Permission denied");
+		
+		try {
+			if(bd.UserTools.modifyUser(prenom, nom, id)){
+				try {
+					j.put("status","OK");
+					j.put("prenom", prenom);
+					j.put("nom", nom);
+					
+					//j.put("token",token);
+					
+				} catch (JSONException e) {
+					
+					// TODO Auto-generated catch block
+					return ErrorService.serviceRefused(100000, e.getMessage());
+				}
+			}
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			return ErrorService.serviceRefused(100000, e.toString());
+
+		}
+		return j;
+	}
+	
+	public static JSONObject getUser(String login){
+		
+		JSONObject j;
+		try {
+			j = bd.UserTools.getUser(login);
+			if(j== null){
+				return ErrorService.serviceRefused(100000, "Echec recuperation info User");
+			}
+		} catch (BDException e1) {
+			// TODO Auto-generated catch block
+			return ErrorService.serviceRefused(100000, e1.getMessage());
+		}
+		
+		try{
+			j.put("status", "OK");
+			
+		}catch (JSONException e) {
+			 ErrorService.serviceRefused(100,e.getMessage());
+			// TODO Auto-generated catch block
+		}
+		
+		return j;
+	}
+	
 	public static JSONObject logout(String token){
 		JSONObject j=new JSONObject();
 		try{
@@ -78,20 +138,11 @@ public class User {
 			 ErrorService.serviceRefused(1000,e1.getMessage());
 		}
 		
-//		try {
-//			if(!bd.UserTools.logout(login))
-//				return ErrorService.serviceRefused(1000, "erreur lors de la deconnexion");
-//		} catch (BDException e1) {
-//			// TODO Auto-generated catch block
-//			 ErrorService.serviceRefused(1000,e1.getMessage());
-//		}
-//		
-		
 		try{
 			j.put("status", "OK");
 			
 		}catch (JSONException e) {
-			 ErrorService.serviceRefused(100,e.getMessage());
+			return ErrorService.serviceRefused(100,e.getMessage());
 			// TODO Auto-generated catch block
 		}
 		

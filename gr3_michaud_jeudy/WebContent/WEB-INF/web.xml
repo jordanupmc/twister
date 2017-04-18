@@ -80,6 +80,14 @@
 		<servlet-name>GetStatsUser</servlet-name>
 		<servlet-class>servlet.GetStatsUser</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>EditUser</servlet-name>
+		<servlet-class>servlet.EditUser</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>GetUserInfo</servlet-name>
+		<servlet-class>servlet.GetUserInfo</servlet-class>
+	</servlet>
 
 
 
@@ -146,9 +154,17 @@
 		<servlet-name>GetFriendList</servlet-name> 
 		<url-pattern>/getFriendList</url-pattern> 
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetUserInfo</servlet-name>
+		<url-pattern>/getUserInfo</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping> 
 		<servlet-name>Search</servlet-name> 
 		<url-pattern>/search</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EditUser</servlet-name>
+		<url-pattern>/editUser</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Logout</servlet-name>

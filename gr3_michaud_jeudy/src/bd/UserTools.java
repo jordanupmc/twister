@@ -164,7 +164,86 @@ public class UserTools {
 			c.close();
 			
 		}catch(Exception e){
-			throw new BDException("Echec creation d'un user "+e);
+			throw new BDException("Echec creation d'un user ");
+		}
+		return true;
+	}
+	
+	public static JSONObject getUser(String login) throws BDException{
+		JSONObject o=null;
+		try {
+			o=new JSONObject();
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Connection c = Database.getMySQLConnection();
+	//		Statement st = c.createStatement();
+			
+			String query = "SELECT nom,prenom FROM USER WHERE login= ?";
+			
+			PreparedStatement pstmt = c.prepareStatement(query);
+			pstmt.setString(1, login);
+			ResultSet rs = pstmt.executeQuery();
+
+			if(rs.next()){
+				o.put("nom",rs.getString(1));
+				o.put("prenom", rs.getString(2));
+				o.put("login", login);
+			}else
+				return null;
+			
+			rs.close();
+			pstmt.close();
+			c.close();
+			
+		}catch(Exception e){
+			throw new BDException("Echec creation d'un user ");
+		}
+		return o;
+	}
+
+	public static boolean modifyUser(String prenom, String nom, int id) throws BDException{
+		try {
+			
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Connection c = Database.getMySQLConnection();
+	//		Statement st = c.createStatement();
+			
+			String query ="";
+			PreparedStatement pstmt = null;
+			if(!userExists(id))
+				return false;
+			
+			if(prenom != null && nom != null){
+				query ="UPDATE USER SET prenom = ?, nom= ? WHERE id=?";
+				pstmt=c.prepareStatement(query);
+				
+				pstmt.setString(1, prenom);
+				pstmt.setString(2, nom);
+				pstmt.setInt(3, id);
+				
+				pstmt.executeUpdate();
+			}
+			else if(prenom != null){
+				query ="UPDATE USER SET prenom = ? WHERE id=?";
+				pstmt=c.prepareStatement(query);
+				
+				pstmt.setString(1, prenom);
+				pstmt.setInt(2, id);
+				pstmt.executeUpdate();
+			}
+			else if(nom != null){
+				query ="UPDATE USER SET nom = ? WHERE id=?";
+				pstmt= c.prepareStatement(query);
+				
+				pstmt.setString(1,nom);
+				pstmt.setInt(2, id);
+				pstmt.executeUpdate();
+			}
+			
+			pstmt.close();
+			c.close();
+			
+		}catch(Exception e){
+			throw new BDException("Echec modification user");
 		}
 		return true;
 	}

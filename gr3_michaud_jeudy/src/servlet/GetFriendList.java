@@ -25,6 +25,8 @@ public class GetFriendList extends HttpServlet {
 				 
 			 	response.setContentType( "text / plain"  );
 			 	String token=request.getParameter("token");
+			 	String id=request.getParameter("id");
+			 	
 			 	PrintWriter out = response.getWriter ();
 				
 			 	if(token==null  ){
@@ -44,9 +46,13 @@ public class GetFriendList extends HttpServlet {
 					 out.println(ErrorService.serviceRefused(1000,e.getMessage()));
 					 return;
 				}
-				
-			 	JSONObject obj= services.Friend.getFriendList(token);
-			 	out.print(obj);
+				if(id == null){
+					JSONObject obj= services.Friend.getFriendList(token);
+					out.print(obj);
+				}else{
+					JSONObject obj= services.Friend.getFriendList(Integer.parseInt(id));
+					out.print(obj);
+				}
 			 	
 			 }
 }

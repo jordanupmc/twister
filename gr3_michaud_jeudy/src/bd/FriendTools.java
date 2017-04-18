@@ -12,10 +12,10 @@ import org.json.JSONObject;
 public class FriendTools {
 	
 	public static JSONObject getFriendList(int id) throws BDException{
-		JSONObject f=new JSONObject();
 		JSONObject l=new JSONObject();
 		
-		JSONArray friendList =new JSONArray();
+		JSONArray following =new JSONArray();
+		JSONArray followed =new JSONArray();
 		try{
 			
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -28,16 +28,35 @@ public class FriendTools {
 			pstmt.setInt(1, id);
 			
 			ResultSet rs=pstmt.executeQuery();
-			
+			JSONObject tmp;
 			while(rs.next()){
-				
-				friendList.put(getFriend(id,rs.getInt(1)));
+				tmp=getFriend(id,rs.getInt(1));
+				if(tmp != null)
+					following.put(tmp);
 				
 			}
-			l.put("friendList", friendList);
+			
+			String query2 = "SELECT `from` FROM Friends WHERE `to`=?";
+
+			PreparedStatement pstmt2 = c.prepareStatement(query2);
+			pstmt2.setInt(1, id);
+			
+			ResultSet rs2=pstmt2.executeQuery();
+			
+			while(rs2.next()){
+				tmp=getFriend(id,rs2.getInt(1));
+				if(tmp != null)
+					followed.put(tmp);
+			}
+			
+			
+			l.put("followed", followed);
+			l.put("following", following);
 			
 			rs.close();
 			pstmt.close();
+			rs2.close();
+			pstmt2.close();
 			c.close();
 		
 		}catch(Exception e){
@@ -61,16 +80,17 @@ public class FriendTools {
 	}
 	
 	public static JSONObject getFriend(int id1, int id) throws BDException{
-		JSONObject f=new JSONObject();
+		JSONObject f=null;
 		try{	
 			
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection c = Database.getMySQLConnection();
+			f=new JSONObject();
 			
-			if(!isFriend(id1,id)){
-				c.close();
-				return f;
-			}
+//			if(!isFriend(id1,id)){
+//				c.close();
+//				return null;
+//			}
 			
 			String query = "SELECT nom,prenom,id,login FROM USER WHERE id=?";
 
@@ -99,16 +119,16 @@ public class FriendTools {
 	}
 	
 	public static JSONObject getFriend(String token, int id) throws BDException{
-		JSONObject f=new JSONObject();
+		JSONObject f=null;
 		try{	
-			
+			f=new JSONObject();
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection c = Database.getMySQLConnection();
 			
-			if(!isFriend(token,id)){
-				c.close();
-				return f;
-			}
+//			if(!isFriend(token,id)){
+//				c.close();
+//				return f;
+//			}
 			
 			String query = "SELECT nom,prenom,id,login FROM USER WHERE id=?";
 
@@ -165,7 +185,7 @@ public class FriendTools {
 		}
 		return false;
 	}
-	
+	//isFollowing en vrai
 	public static boolean isFriend(int id1,int id) throws BDException{
 
 		try{	

@@ -31,12 +31,35 @@ public class Friend {
 		
 	}
 	
+	public static JSONObject getFriendList(int id){
+		JSONObject j=new JSONObject();
+		JSONObject friendList = null;
+	
+		try{
+			friendList=bd.FriendTools.getFriendList(id);
+		
+			friendList.put("status","OK");
+			
+			
+		}catch(JSONException je){
+			return ErrorService.serviceRefused(100, je.getMessage());
+		} catch (BDException e) {
+			// TODO Auto-generated catch block
+			return ErrorService.serviceRefused(1000, e.getMessage());
+		}
+		
+		return friendList;
+		
+	}
+	
 	public static JSONObject getFriend(String token, int id){
 		JSONObject j=new JSONObject();
 		JSONObject friend;
 		try{
 			friend=bd.FriendTools.getFriend(token,id);
-		
+			if(friend == null){
+				return ErrorService.serviceRefused(100, "Erreur get friend");
+			}
 			j.put("status","OK");
 			j.put("friend",friend);
 			

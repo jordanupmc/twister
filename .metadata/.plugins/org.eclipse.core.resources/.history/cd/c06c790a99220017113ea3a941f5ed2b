@@ -1,0 +1,113 @@
+package services;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import bd.BDException;
+
+public class User {
+	
+	public static JSONObject createUser(String prenom, String nom, String login, String password){
+
+		JSONObject j=new JSONObject();
+		try{
+			if(bd.UserTools.userExists(login))
+				return ErrorService.serviceRefused(1000, "ce compte est existe deja");
+
+			bd.UserTools.insertUser(prenom,nom,login,password);
+				
+
+		}catch(BDException bd){
+			return ErrorService.serviceRefused(1000, "Echec création de compte");
+		}
+		try {
+			j= bd.UserTools.connect(login,password);
+		} catch (BDException e1) {
+			// TODO Auto-generated catch block
+			
+			return ErrorService.serviceRefused(1000, "Echec connexion");
+		}
+		
+		try {
+			j.put("status","OK");
+			j.put("login", login);
+			j.put("friends", services.Friend.getFriendList(j.getString("token")));
+		//	j.put("token",token);
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+		return ErrorService.serviceRefused(100000, e.getMessage());
+		}
+		return j;
+		
+	}
+	public static JSONObject login(String login, String password){
+
+		JSONObject j = null;
+
+		
+		try {
+			j=bd.UserTools.connect(login,password);
+		} catch (BDException e1) {
+			// TODO Auto-generated catch block
+			return ErrorService.serviceRefused(100000, "Echec connexion"+e1);
+		}
+
+		try {
+			j.put("status","OK");
+			j.put("login", login);
+			j.put("friends", services.Friend.getFriendList(j.getString("token")));
+			
+			//j.put("token",token);
+			
+		} catch (JSONException e) {
+			
+			// TODO Auto-generated catch block
+			return ErrorService.serviceRefused(100000, e.getMessage());
+		}
+		
+		return j;
+	}
+	
+	public static JSONObject logout(String token){
+		JSONObject j=new JSONObject();
+		try{
+			bd.Session.deleteToken(token);
+		}catch (BDException e1) {
+			// TODO Auto-generated catch block
+			 ErrorService.serviceRefused(1000,e1.getMessage());
+		}
+		
+//		try {
+//			if(!bd.UserTools.logout(login))
+//				return ErrorService.serviceRefused(1000, "erreur lors de la deconnexion");
+//		} catch (BDException e1) {
+//			// TODO Auto-generated catch block
+//			 ErrorService.serviceRefused(1000,e1.getMessage());
+//		}
+//		
+		
+		try{
+			j.put("status", "OK");
+			
+		}catch (JSONException e) {
+			 ErrorService.serviceRefused(100,e.getMessage());
+			// TODO Auto-generated catch block
+		}
+		
+		return j;
+	}
+
+	public static void test(String login){
+		try{
+			System.out.println(login);
+			if(bd.UserTools.userExists(login))
+				System.out.println(login+" EXISTE");
+			else
+				System.out.println(login+" EXISTE PAS");
+				
+		}catch(BDException bd){
+			System.out.println(bd);
+		}
+	}
+}

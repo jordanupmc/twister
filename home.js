@@ -410,7 +410,6 @@ function getListMsgById(code){
 
 }
 function completeMessages(wFriends){
-	scrollMessage();
 	if(!env.noConnection){
 
 		var s ="";
@@ -515,21 +514,21 @@ function scrollMessage(){
 
 
 function ScrollResponse(rep){
-	
-
 
 	var com=JSON.parse(rep,revival);
+	$("#message_"+env.minId).css("border-bottom","1px solid grey");
+	env.minId=tab[tab.length-1].id;
+
 	if(com != undefined && com.erreur == undefined){
 		var el=$("#cont_message > ul");
 		for(var i=0; i<com.length-1; i++){
 			env.msg[com[i].id]=com[i];
 
 			el.append(com[i].getHtml());
-			if( env.minId <0 || com[i].id < env.minId)
-				env.minId=com[i].id;	
 
 		}
 
+		$("#message_"+com[env.minId]).css("border-bottom","none");
 	}
 
 }
@@ -556,15 +555,17 @@ function completeMessagesReponse(reponse){
 			env.maxId = tab[i].id;
 		}*/
 
-		// if((env.maxId < 0) || (tab[i].id < env.minId)){
-			if((env.minId < 0) || (tab[i].id < env.minId)){
-				env.minId = tab[i].id;
-			}
-			lastId = tab[i].id;
-		}
-		env.minId=lastId;
-		$("#message_"+lastId).css("border-bottom","none");
+		//if((env.maxId < 0) || (tab[i].id < env.minId)){
+	/*	if((env.minId < 0) || (tab[i].id < env.minId)){
+			env.minId = tab[i].id;
+		}*/
+		//lastId = tab[i].id;
 	}
+	env.minId=lastId;
+	$("#message_"+lastId).css("border-bottom","none");
+	scrollMessage();
+}
+
 
 
 
@@ -717,7 +718,7 @@ function refreshComment(id, rep){
 
 
 function newPost(){
-	scrollMessage();
+	
 	var texte=$("#post_new").val();
 	texte=texte.trim();
 

@@ -444,11 +444,17 @@ public class Comments {
 				if(friends){
 					JSONObject flist= FriendTools.getFriendList(author_id);
 
-					JSONArray arr=flist.getJSONArray("friendList");
-
+					JSONArray arr=flist.getJSONArray("following");
+					
 					for(int i=0; i<arr.length(); i++){
 						or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
-						// System.out.println(or);
+						
+					}
+					arr=flist.getJSONArray("followed");
+					
+					for(int i=0; i<arr.length(); i++){
+						or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
+						
 					}
 				}
 				//if(Session.getIdUser(token) == author_id )
@@ -534,12 +540,12 @@ public class Comments {
 				"if(id == "+author_id+")"+
 				"emit(id,{nb: 1, id: this._id.str});"+
 				"}";
-
+//"return {nb: sum, id: JSON.parse(\"[\"+arr.toString()+\"]\")};"+
 		String cr="function(k,v){"+
 				"var sum=0;var arr=[];"+
 				"for(var i=0; i<v.length; i++){"+
-				"sum+=v[i].nb;arr[i]=v[i].id;}"+
-				"return {nb: sum, id: arr.toString()};"+
+				"sum+=v[i].nb;arr.push(v[i].id);}"+
+				"return {nb: sum, id: arr.toString().split(\",\")};"+
 				"}";
 		Mongo m;
 		DBObject result=null;
