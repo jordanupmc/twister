@@ -380,9 +380,11 @@ function getListMsgById(code){
 	if(code == "like"){
 		for(var i =0; i< env.stat_like.id.length; i++)
 			arr[i]="post_id="+env.stat_like.id[i];
+
 	}
 
 	if(arr.length != 0)
+
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
@@ -395,6 +397,7 @@ function getListMsgById(code){
 				}
 				else{
 					$("#post_message").empty();
+					$(document.body).off('appear');
 					completeMessagesReponse(JSON.stringify(result.messages));
 				}
 				
@@ -432,7 +435,7 @@ function completeMessages(wFriends){
 					makeConnectionPanel();
 				}
 				else
-					completeMessagesReponse(JSON.stringify(result.messages));
+					completeMessagesReponse(JSON.stringify(result.messages), "home");
 				
 			},
 			error: function(jqXHR,textStatus,errTHrown){
@@ -481,8 +484,8 @@ function scrollMessage(){
 
 	$(function() {
 		var $appeared = $('#appeared');
-		$("#message_"+env.maxId).appear();
-		$(document.body).on('appear', "#message_"+env.maxId, function(e, $affected) {
+		$("#message_"+env.minId).appear();
+		$(document.body).one('appear', "#message_"+env.minId, function(e, $affected) {
 
 			$.ajax({
 				type:"POST",
@@ -516,24 +519,28 @@ function scrollMessage(){
 function ScrollResponse(rep){
 
 	var com=JSON.parse(rep,revival);
-	$("#message_"+env.minId).css("border-bottom","1px solid grey");
-	env.minId=tab[tab.length-1].id;
+	
 
 	if(com != undefined && com.erreur == undefined){
+		if(com.length == 0)
+			return;
+		$("#message_"+env.minId).css("border-bottom","1px solid grey");
+		env.minId=com[com.length-1].id;
+
 		var el=$("#cont_message > ul");
-		for(var i=0; i<com.length-1; i++){
+		for(var i=0; i<com.length; i++){
 			env.msg[com[i].id]=com[i];
-
-			el.append(com[i].getHtml());
-
+			if ( !$( "#message_"+com[i].id ).length )
+				el.append(com[i].getHtml());
 		}
 
-		$("#message_"+com[env.minId]).css("border-bottom","none");
+		$("#message_"+env.minId).css("border-bottom","none");
+		scrollMessage();
 	}
 
 }
 
-function completeMessagesReponse(reponse){
+function completeMessagesReponse(reponse, code){
 
 	var tab = JSON.parse(reponse, revival);	
 	if(tab.length === 0)
@@ -563,7 +570,8 @@ function completeMessagesReponse(reponse){
 	}
 	env.minId=lastId;
 	$("#message_"+lastId).css("border-bottom","none");
-	scrollMessage();
+	if(code != undefined)
+		scrollMessage();
 }
 
 

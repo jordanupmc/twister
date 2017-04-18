@@ -1,0 +1,14 @@
+#main #settings  label{
+	display: inline-block;
+    width: 90px;
+    text-align: right;
+}
+#main #settings button{
+	
+}
+#main #settings > form > input{
+	width: 400px!important;
+}
+#main #settings h1{
+	text-align: center;	
+}

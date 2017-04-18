@@ -180,6 +180,7 @@ body #main {
 	background-color: white;
 	
 }
+
 #main .message a{
 	text-decoration: none;
 	color: #333333;
@@ -190,6 +191,9 @@ body #main {
 	text-overflow: ellipsis;
 	color: #2d2d2d;
 }	
+
+
+
 #main .message{
 	border: 15px solid white;
 	background: #ffffff;
@@ -258,6 +262,25 @@ body #main {
 #main .dateComment{
 	color:dimgray;
 }
+#main .buttonFriends{
+	background-color:#1FA1F1;
+	color:white;
+	border:none;
+	cursor: pointer;
+	margin:auto;
+ 	display:block;
+ }
+#main .buttonFriendsAside{
+	background-color:white;
+	color:#1FA1F1;
+	border:none;
+	cursor: pointer;
+	margin:auto;
+ 	display:block;
+ 	width: 20vh;
+    height: 3vh;
+ }
+ 
 
 
 /*
@@ -269,6 +292,7 @@ a mettre dans un elmt
     from { -moz-transform: rotate(0deg); }
     to { -moz-transform: rotate(360deg); }
 }
+/*
 @-webkit-keyframes spin {
     from { -webkit-transform: rotate(0deg); }
     to { -webkit-transform: rotate(360deg); }

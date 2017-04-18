@@ -99,12 +99,14 @@ function Create(login, pass,nom, prenom){
         env.token=r.token;
 
         if(r.friends.status == "OK"){
-          env.friends=r.friends.friendList;
+          env.followed=result.friends.followed;
+          env.following=result.friends.following;
 
-          if(env.friends == null || env.friends == undefined)
-            env.friends=[];
+          if(env.followed == null || env.following == undefined) {
+            env.followed=[];
+            env.following=[];
+          }
         }
-        
         makeMainPanel(r.id,r.login);
       }
     },
