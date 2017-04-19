@@ -99,8 +99,8 @@ function Create(login, pass,nom, prenom){
         env.token=r.token;
 
         if(r.friends.status == "OK"){
-          env.followed=result.friends.followed;
-          env.following=result.friends.following;
+          env.followed=r.friends.followed;
+          env.following=r.friends.following;
 
           if(env.followed == null || env.following == undefined) {
             env.followed=[];
