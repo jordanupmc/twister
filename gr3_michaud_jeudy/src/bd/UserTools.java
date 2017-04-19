@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.mysql.jdbc.Blob;
@@ -246,6 +247,44 @@ public class UserTools {
 			throw new BDException("Echec modification user");
 		}
 		return true;
+	}
+	
+	
+	public static JSONArray findUser(String q) throws BDException{
+		JSONArray ar=new JSONArray();
+		if(q == null)
+			return null;
+		try{
+		
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			Connection c=Database.getMySQLConnection();
+		
+			
+			String query = "SELECT id,login,prenom FROM USER WHERE login LIKE ? ORDER BY login LIMIT 15";
+			
+			PreparedStatement pstmt = c.prepareStatement(query);
+			pstmt.setString(1, "%"+q+"%");
+			ResultSet rs= pstmt.executeQuery();
+			
+			JSONObject tmp;
+			while(rs.next()){
+				tmp=new JSONObject();
+
+				tmp.put("id", rs.getString(1));
+				tmp.put("login", rs.getString(2));
+				tmp.put("prenom", rs.getString(3));
+				
+				ar.put(tmp);
+			}
+		
+			rs.close();
+			pstmt.close();
+			c.close();
+			
+		}catch(Exception e){
+			throw new BDException("echec find user");
+		}
+		return ar;
 	}
 	
 	public static boolean userExists(int id) throws BDException{

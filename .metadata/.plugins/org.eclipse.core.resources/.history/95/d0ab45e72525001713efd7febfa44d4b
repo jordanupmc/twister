@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
+<web-app> 
+	<display-name>TWISTER</display-name> 
+	<servlet> 
+		<servlet-name>Hello</servlet-name> 
+		<servlet-class>servlet.HelloWorld</servlet-class> 
+	</servlet>
+	<servlet>
+		<servlet-name>Like</servlet-name>
+		<servlet-class>servlet.Like</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AddComment</servlet-name>
+		<servlet-class>servlet.AddComment</servlet-class>
+	</servlet>
+
+	<servlet> 
+		<servlet-name>Application</servlet-name> 
+		<servlet-class>servlet.Application</servlet-class> 
+	</servlet> 
+	
+	<servlet> 
+		<servlet-name>Simple</servlet-name> 
+		<servlet-class>servlet.SimpleServlet</servlet-class> 
+	</servlet> 
+	
+	<servlet> 
+		<servlet-name>CreateUser</servlet-name> 
+		<servlet-class>servlet.CreateUser</servlet-class> 
+	</servlet> 
+	
+	<servlet> 
+		<servlet-name>Login</servlet-name> 
+		<servlet-class>servlet.Login</servlet-class> 
+	</servlet> 
+	<servlet> 
+		<servlet-name>InsertMessage</servlet-name> 
+		<servlet-class>servlet.InsertMessage</servlet-class> 
+	</servlet> 
+	
+	<servlet> 
+		<servlet-name>ListMessage</servlet-name> 
+		<servlet-class>servlet.ListMessage</servlet-class> 
+	</servlet> 
+	
+	<servlet> 
+		<servlet-name>CreateFriend</servlet-name> 
+		<servlet-class>servlet.CreateFriend</servlet-class> 
+	</servlet> 
+		<servlet> 
+		<servlet-name>DeleteFriend</servlet-name> 
+		<servlet-class>servlet.DeleteFriend</servlet-class> 
+	</servlet> 
+		<servlet> 
+		<servlet-name>GetFriend</servlet-name> 
+		<servlet-class>servlet.GetFriend</servlet-class> 
+	</servlet> 
+		<servlet> 
+		<servlet-name>GetFriendList</servlet-name> 
+		<servlet-class>servlet.GetFriendList</servlet-class> 
+	</servlet> 
+
+	<servlet> 
+		<servlet-name>Logout</servlet-name> 
+		<servlet-class>servlet.Logout</servlet-class> 
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteMessage</servlet-name>
+		<servlet-class>servlet.DeleteMessage</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteComment</servlet-name>
+		<servlet-class>servlet.DeleteComment</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>GetStatsUser</servlet-name>
+		<servlet-class>servlet.GetStatsUser</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>EditUser</servlet-name>
+		<servlet-class>servlet.EditUser</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>GetUserInfo</servlet-name>
+		<servlet-class>servlet.GetUserInfo</servlet-class>
+	</servlet>
+
+
+
+
+	<servlet-mapping> 
+		<servlet-name>Hello</servlet-name> 
+		<url-pattern>/hello</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteComment</servlet-name>
+		<url-pattern>/deleteComment</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteMessage</servlet-name>
+		<url-pattern>/deleteMessage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetStatsUser</servlet-name>
+		<url-pattern>/getStatsUser</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping> 
+		<servlet-name>Application</servlet-name> 
+		<url-pattern>/application</url-pattern> 
+	</servlet-mapping> 
+	
+	<servlet-mapping> 
+		<servlet-name>Simple</servlet-name> 
+		<url-pattern>/simple</url-pattern> 
+	</servlet-mapping> 
+	
+	<servlet-mapping> 
+		<servlet-name>CreateUser</servlet-name> 
+		<url-pattern>/createUser</url-pattern> 
+	</servlet-mapping> 
+	
+	<servlet-mapping> 
+		<servlet-name>Login</servlet-name> 
+		<url-pattern>/login</url-pattern> 
+	</servlet-mapping>
+	
+	<servlet-mapping> 
+		<servlet-name>InsertMessage</servlet-name> 
+		<url-pattern>/insertMessage</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>ListMessage</servlet-name> 
+		<url-pattern>/listMessage</url-pattern> 
+	</servlet-mapping>
+	
+	<servlet-mapping> 
+		<servlet-name>CreateFriend</servlet-name> 
+		<url-pattern>/createFriend</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>DeleteFriend</servlet-name> 
+		<url-pattern>/deleteFriend</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>GetFriend</servlet-name> 
+		<url-pattern>/getFriend</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping> 
+		<servlet-name>GetFriendList</servlet-name> 
+		<url-pattern>/getFriendList</url-pattern> 
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GetUserInfo</servlet-name>
+		<url-pattern>/getUserInfo</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>EditUser</servlet-name>
+		<url-pattern>/editUser</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Logout</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Like</servlet-name>
+		<url-pattern>/like</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AddComment</servlet-name>
+		<url-pattern>/addComment</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
+</web-app>

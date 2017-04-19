@@ -374,15 +374,24 @@ function getListMsgById(code){
 		return;
 	var arr=[];
 	if(code == "post"){
-		for(var i =0; i< env.stat_post.id.length; i++)
-			arr[i]="post_id="+env.stat_post.id[i];
+		if(env.stat_post.nb == 1){
+			arr[0]="post_id="+env.stat_post.id;
+		}
+		else
+			for(var i =0; i< env.stat_post.id.length; i++)
+				arr[i]="post_id="+env.stat_post.id[i];
 	}
 	if(code == "like"){
-		for(var i =0; i< env.stat_like.id.length; i++)
-			arr[i]="post_id="+env.stat_like.id[i];
+		if(env.stat_like.nb == 1)
+			arr[0]="post_id="+env.stat_like.id;
+		else
+			for(var i =0; i< env.stat_like.id.length; i++)
+				arr[i]="post_id="+env.stat_like.id[i];
+
 	}
 
 	if(arr.length != 0)
+
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
@@ -395,6 +404,7 @@ function getListMsgById(code){
 				}
 				else{
 					$("#post_message").empty();
+					$(document.body).off('appear');
 					completeMessagesReponse(JSON.stringify(result.messages));
 				}
 				
@@ -432,7 +442,7 @@ function completeMessages(wFriends){
 					makeConnectionPanel();
 				}
 				else
-					completeMessagesReponse(JSON.stringify(result.messages));
+					completeMessagesReponse(JSON.stringify(result.messages), "home");
 				
 			},
 			error: function(jqXHR,textStatus,errTHrown){
@@ -466,6 +476,7 @@ function searchHead(){
 				makeConnectionPanel();
 			else{
 				completeSearchReponse(result.messages);
+				completeSearchUser(result.users);
 			}
 
 		},
@@ -482,12 +493,16 @@ function scrollMessage(){
 	$(function() {
 		var $appeared = $('#appeared');
 		$("#message_"+env.minId).appear();
-		$(document.body).on('appear', "#message_"+env.minId, function(e, $affected) {
-
+		$(document.body).one('appear', "#message_"+env.minId, function(e, $affected) {
+			var d;
+			if(env.toId == -1)
+				d="token="+env.token+"&from="+env.fromId+"&id_min=-1"+"&id_max="+env.minId+"&nb="+env.limit;
+			else
+				d="token="+env.token+"&from="+env.toId+"&id_min=-1"+"&id_max="+env.minId+"&nb="+env.limit+"&friends=false";
 			$.ajax({
 				type:"POST",
 				url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/listMessage",
-				data:"token="+env.token+"&from="+env.fromId+"&id_min=-1"+"&id_max="+env.minId+"&nb="+env.limit,
+				data:d,
 				dataType:"json",
 				success: function(result){
 					if(result.status=="KO"){
@@ -516,28 +531,28 @@ function scrollMessage(){
 function ScrollResponse(rep){
 
 	var com=JSON.parse(rep,revival);
-	$("#message_"+env.minId).css("border-bottom","1px solid grey");
-	console.log(com);
 	
 
 	if(com != undefined && com.erreur == undefined){
 		if(com.length == 0)
 			return;
+		$("#message_"+env.minId).css("border-bottom","1px solid grey");
 		env.minId=com[com.length-1].id;
+
 		var el=$("#cont_message > ul");
-		for(var i=0; i<com.length-1; i++){
+		for(var i=0; i<com.length; i++){
 			env.msg[com[i].id]=com[i];
 			if ( !$( "#message_"+com[i].id ).length )
 				el.append(com[i].getHtml());
-
 		}
 
-		$("#message_"+com[env.minId]).css("border-bottom","none");
+		$("#message_"+env.minId).css("border-bottom","none");
+		scrollMessage();
 	}
 
 }
 
-function completeMessagesReponse(reponse){
+function completeMessagesReponse(reponse, code){
 
 	var tab = JSON.parse(reponse, revival);	
 	if(tab.length === 0)
@@ -567,30 +582,69 @@ function completeMessagesReponse(reponse){
 	}
 	env.minId=lastId;
 	$("#message_"+lastId).css("border-bottom","none");
-	scrollMessage();
+	if(code != undefined)
+		scrollMessage();
+}
+
+function findFollow(arr,id){
+	for(var i=0; i<arr.length; i++){
+		if(arr[i].id == id)
+			return i;
+	}
+	return -1;
 }
 
 
+function completeSearchReponse(rep){
+	$("#cont_message > ul").empty();
+	$("#post_message").empty();
+	if(rep.length == 0)
+		$("#cont_message > ul").append("<p style=\"text-align:center\">Aucun résultat</p>");
+	else
+		completeMessagesReponse(JSON.stringify(rep));
+
+}
+function completeSearchUser(rep){
+	$("#cont_message > ul").prepend("<h1 style=\"text-align:center\">Twist</h1>")
+	for(var i=rep.length-1; i>=0; i--){
+			s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+rep[i].id+"','"+rep[i].login+"','"+false+"')\"><b>"+
+			rep[i].login+"</b></a><br>";
+			if(rep[i].prenom != undefined)
+				s+=rep[i].prenom;
+			s+="<button class=\"buttonFriends\" id=\"unfollow_"+rep[i].id+"\" onclick=\"javascript:unfollowList('"+rep[i].id+"')\">Ne plus suivre</button>"+
+			"<button class=\"buttonFriends\" id=\"follow_"+rep[i].id+"\" onclick=\"javascript:followList('"+rep[i].id+"','"+rep[i].login+"','"+rep[i].prenom+"')\">Suivre</button>"+
+			"</li>";
+
+			$("#cont_message > ul").prepend(s);
+			if(i== rep.length-1)
+				$("#cont_message > ul").append("<hr>");
+
+			if(rep[i].id == env.fromId){
+				$("#follow_"+rep[i].id).hide();
+				$("#unfollow_"+rep[i].id).hide();	
+			}
+			var x=findFollow(env.following, rep[i].id);
+			if(x == -1){
+				$("#unfollow_"+rep[i].id).hide();
+			}else
+				$("#follow_"+rep[i].id).hide();
+		}
+		
+		if(rep.length == 0){
+			$("#cont_message > ul").prepend("<p style=\"text-align:center\">Aucun résultat</p><hr>");
+		}
+		$("#cont_message > ul").prepend("<h1 style=\"text-align:center\">Utilisateurs</h1>");
 
 
-	function completeSearchReponse(rep){
-		$("#cont_message > ul").empty();
-		$("#post_message").empty();
-		if(rep.length == 0)
-			$("#cont_message > ul").append("<p>Pas de résultat</p>");
-		else
-			completeMessagesReponse(JSON.stringify(rep));
+}
+function getFormComment(id){
+	return "<form action=\"javascript:(function(){return;}())\" onsubmit=\"newComment('"+id+"')\">"
+	+"<input style=\"display:inline-block;\" id=\"comment_new_"+id+"\" type=\"text\" placeholder=\"entrez un commentaire...\" required>"
+	+"<input  style=\"display:inline-block;\" type=\"submit\">" 
+	+"</form>";
+}
 
-	}
-
-	function getFormComment(id){
-		return "<form action=\"javascript:(function(){return;}())\" onsubmit=\"newComment('"+id+"')\">"
-		+"<input style=\"display:inline-block;\" id=\"comment_new_"+id+"\" type=\"text\" placeholder=\"entrez un commentaire...\" required>"
-		+"<input  style=\"display:inline-block;\" type=\"submit\">" 
-		+"</form>";
-	}
-
-	function hideComments(id){
+function hideComments(id){
 	//var m =env.msg[arrayObjectIndexOf(env.msg, id, "id")];	
 	var m =env.msg[id];
 
@@ -805,7 +859,7 @@ function refreshResponse(rep){ ////////////////////////////////////////////TODO 
 		var el=$("#cont_message > ul");
 		env.maxId=com[0].id;
 		var cpt =0;
-		
+
 		for(var prop in env.msg){
 			if(env.msg[prop] != undefined){
 				cpt++;
@@ -815,6 +869,16 @@ function refreshResponse(rep){ ////////////////////////////////////////////TODO 
 		
 		if(cpt ==0){
 			env.minId=env.maxId;
+
+			if(env.msg.length ==0){
+				for(var i=com.length-1; i>=0; i--){
+					env.msg[com[i].id]=com[i];
+					el.prepend(com[i].getHtml());
+					if(i==0){
+						$("#message_"+com[i].id).css("border-bottom","none");
+					}			
+				}
+			}
 			return;
 		}
 
@@ -1105,10 +1169,19 @@ function makeFriends(code, arr){
 
 		$("#cont_message > ul").append("<li><h1 style=\"text-align:center\">Abonnements</h1></li>");
 		for(var i=0; i< following.length; i++){
-			s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+following[i].id+"','"+following[i].login+"','"+false+"')\"><b>"+following[i].login+"</b></a><br>"+following[i].prenom+
-			"<button class=\"buttonFriends\" id=\"unfollow_"+following[i].id+"\" onclick=\"javascript:unfollowList('"+following[i].id+"')\">Ne plus suivre</button>"+
+			if(following[i].id != env.fromId)
+				s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+following[i].id+"','"+following[i].login+"','"+false+"')\"><b>"+
+				following[i].login+"</b></a><br>";
+			else
+				s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\"><b>"+
+				following[i].login+"</b></a><br>";
+
+			if(following[i].prenom != undefined)
+				s+=following[i].prenom 
+			s+="<button class=\"buttonFriends\" id=\"unfollow_"+following[i].id+"\" onclick=\"javascript:unfollowList('"+following[i].id+"')\">Ne plus suivre</button>"+
 			"<button class=\"buttonFriends\" id=\"follow_"+following[i].id+"\" onclick=\"javascript:followList('"+following[i].id+"','"+following[i].login+"','"+following[i].prenom+"')\">Suivre</button>"+
 			"</li>";
+
 			$("#cont_message > ul").append(s);
 			if(arr == undefined)
 				$("#follow_"+env.following[i].id).hide();
@@ -1121,15 +1194,37 @@ function makeFriends(code, arr){
 			else
 				$("#follow_"+following[i].id).hide();	
 		}
+		$("#cont_message > ul:last-child").css("border-bottom","none");
 		return;
 	}
 	if(code == "followed"){
 		$("#cont_message > ul").append("<li><h1 style=\"text-align:center\">Abonnés</h1></li>");
 		for(var i=0; i< followed.length; i++){
-			s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+followed[i].id+"','"+followed[i].login+"','"+false+"')\"><b>"+followed[i].login+"</b></a><br>"+followed[i].prenom+
-			"</li>";
+			if(followed[i].id != env.fromId)
+				s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"','"+followed[i].id+"','"+followed[i].login+"','"+false+"')\"><b>"+followed[i].login+"</b></a><br>"+followed[i].prenom+
+				"<button class=\"buttonFriends\" id=\"unfollow_"+followed[i].id+"\" onclick=\"javascript:unfollowList('"+followed[i].id+"')\">Ne plus suivre</button>"+
+				"<button class=\"buttonFriends\" id=\"follow_"+followed[i].id+"\" onclick=\"javascript:followList('"+followed[i].id+"','"+followed[i].login+"','"+followed[i].prenom+"')\">Suivre</button>"+
+				"</li>";
+			else
+				s="<li class=\"message\"><a href=\"javascript:(function(){return;}())\"  onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\"><b>"+followed[i].login+"</b></a><br>"+followed[i].prenom+
+				"<button class=\"buttonFriends\" id=\"unfollow_"+followed[i].id+"\" onclick=\"javascript:unfollowList('"+followed[i].id+"')\">Ne plus suivre</button>"+
+				"<button class=\"buttonFriends\" id=\"follow_"+followed[i].id+"\" onclick=\"javascript:followList('"+followed[i].id+"','"+followed[i].login+"','"+followed[i].prenom+"')\">Suivre</button>"+
+				"</li>";
+			
 			$("#cont_message > ul").append(s);
+			if(followed[i].id == env.fromId){
+				$("#follow_"+followed[i].id).hide();
+				$("#unfollow_"+followed[i].id).hide();	
+			}
+			var x=findFollow(env.following, followed[i].id);
+			if(x==-1){
+				$("#unfollow_"+followed[i].id).hide();
+			}
+			else{
+				$("#follow_"+followed[i].id).hide();
+			}
 		}
+		$("#cont_message > ul:last-child").css("border-bottom","none");
 	}
 
 }

@@ -22,6 +22,7 @@ import com.mongodb.DBObject;
 
 import services.Comments;
 import services.ErrorService;
+import services.User;
 
 public class ListMessage extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
@@ -98,7 +99,7 @@ public class ListMessage extends HttpServlet {
 
 		 List<DBObject> list;
 		 JSONObject obj=new JSONObject();
-		 
+		
 		 
 		 if(sf != null){
 			 try {
@@ -124,21 +125,27 @@ public class ListMessage extends HttpServlet {
 		 }
 		 
 		 
-
+		 JSONArray user=new JSONArray();
+		 
 		 try {
 			 if(query == null)
 				 list = Comments.getListMessage(token, id, idmax, idmin , Integer.parseInt(nb), f);
-			 else
+			 else{
 				 list = Comments.getMessagesByQuery(java.net.URLDecoder.decode(query, "UTF-8"));
-			 
-			 if(list == null){
-				 obj.put("messages", new JSONArray());
-				 obj.put("status", "OK");
-				 out.print(obj);
-				 return;
+				 user= User.findUser(query);
+				 if(user == null)
+					 obj.put("users", new JSONArray());
+				 else
+					 obj.put("users", user);
 			 }
 			 
-			 obj.put("messages", list);
+			 			 
+			 if(list == null)
+				 obj.put("messages", new JSONArray());
+			 else
+				 obj.put("messages", list);
+			 
+			 
 			 obj.put("status", "OK");
 			 
 		 }catch (JSONException e) {

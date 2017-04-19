@@ -2,10 +2,6 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd"> 
 <web-app> 
 	<display-name>TWISTER</display-name> 
-	<servlet> 
-		<servlet-name>Hello</servlet-name> 
-		<servlet-class>servlet.HelloWorld</servlet-class> 
-	</servlet>
 	<servlet>
 		<servlet-name>Like</servlet-name>
 		<servlet-class>servlet.Like</servlet-class>
@@ -15,15 +11,7 @@
 		<servlet-class>servlet.AddComment</servlet-class>
 	</servlet>
 
-	<servlet> 
-		<servlet-name>Application</servlet-name> 
-		<servlet-class>servlet.Application</servlet-class> 
-	</servlet> 
 	
-	<servlet> 
-		<servlet-name>Simple</servlet-name> 
-		<servlet-class>servlet.SimpleServlet</servlet-class> 
-	</servlet> 
 	
 	<servlet> 
 		<servlet-name>CreateUser</servlet-name> 
@@ -60,10 +48,7 @@
 		<servlet-name>GetFriendList</servlet-name> 
 		<servlet-class>servlet.GetFriendList</servlet-class> 
 	</servlet> 
-	<servlet> 
-		<servlet-name>Search</servlet-name> 
-		<servlet-class>servlet.Search</servlet-class> 
-	</servlet>
+
 	<servlet> 
 		<servlet-name>Logout</servlet-name> 
 		<servlet-class>servlet.Logout</servlet-class> 
@@ -92,10 +77,6 @@
 
 
 
-	<servlet-mapping> 
-		<servlet-name>Hello</servlet-name> 
-		<url-pattern>/hello</url-pattern> 
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>DeleteComment</servlet-name>
 		<url-pattern>/deleteComment</url-pattern>
@@ -109,15 +90,6 @@
 		<url-pattern>/getStatsUser</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping> 
-		<servlet-name>Application</servlet-name> 
-		<url-pattern>/application</url-pattern> 
-	</servlet-mapping> 
-	
-	<servlet-mapping> 
-		<servlet-name>Simple</servlet-name> 
-		<url-pattern>/simple</url-pattern> 
-	</servlet-mapping> 
 	
 	<servlet-mapping> 
 		<servlet-name>CreateUser</servlet-name> 
@@ -158,10 +130,7 @@
 		<servlet-name>GetUserInfo</servlet-name>
 		<url-pattern>/getUserInfo</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping> 
-		<servlet-name>Search</servlet-name> 
-		<url-pattern>/search</url-pattern> 
-	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>EditUser</servlet-name>
 		<url-pattern>/editUser</url-pattern>

@@ -1,5 +1,6 @@
 package services;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -128,7 +129,19 @@ public class User {
 		
 		return j;
 	}
-	
+	public static JSONArray findUser(String q){
+		JSONArray j;
+		try {
+			j = bd.UserTools.findUser(q);
+			if(j== null)
+				return j;
+		} catch (BDException e1) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+		
+		return j;
+	}
 	public static JSONObject logout(String token){
 		JSONObject j=new JSONObject();
 		try{

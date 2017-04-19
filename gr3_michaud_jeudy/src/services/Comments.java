@@ -450,12 +450,12 @@ public class Comments {
 						or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
 						
 					}
-					arr=flist.getJSONArray("followed");
-					
-					for(int i=0; i<arr.length(); i++){
-						or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
-						
-					}
+//					arr=flist.getJSONArray("followed");
+//					
+//					for(int i=0; i<arr.length(); i++){
+//						or.add(new BasicDBObject("author_id", arr.getJSONObject(i).getInt("id")));
+//						
+//					}
 				}
 				//if(Session.getIdUser(token) == author_id )
 				or.add(new BasicDBObject("author_id", author_id));
@@ -510,7 +510,7 @@ public class Comments {
 				"var sum=0;var arr=[];"+
 				"for(var i=0; i<v.length; i++){"+
 				"sum+=v[i].nb;arr[i]=v[i].id}"+
-				"return {nb: sum, id: arr};"+
+				"return {nb: sum, id: arr.toString().split(\",\")};"+
 				"}";
 		Mongo m;
 		DBObject result=null;
