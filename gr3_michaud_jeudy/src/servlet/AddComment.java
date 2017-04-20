@@ -55,7 +55,7 @@ public class AddComment extends HttpServlet {
 
 		 DBObject o=services.Comments.comment(token,com, idPost);
 		 if(o == null){
-			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+			 out.println(ErrorService.serviceRefused(-100,"echec ajout du commentaire"));
 			 return;
 		 }
 		 JSONObject obj= new JSONObject();
@@ -72,16 +72,16 @@ public class AddComment extends HttpServlet {
 						obj.put("status", "OK");
 					} catch (JSONException e) {
 						e.printStackTrace();
-						 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+						 out.println(ErrorService.serviceRefused(100,"echec ajout du commentaire"));
 					}
 				 out.println(obj);
 			 }
 			else
-				 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+				 out.println(ErrorService.serviceRefused(-100,"echec ajout du commentaire"));
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
+			 out.println(ErrorService.serviceRefused(100,"echec ajout du commentaire"));
 		}
 
 		 

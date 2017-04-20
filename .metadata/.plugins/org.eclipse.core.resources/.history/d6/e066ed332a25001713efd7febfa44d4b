@@ -58,7 +58,7 @@ public class Friend {
 		try{
 			friend=bd.FriendTools.getFriend(token,id);
 			if(friend == null){
-				return ErrorService.serviceRefused(-100, "Erreur get friend");
+				return ErrorService.serviceRefused(100, "Erreur get friend");
 			}
 			j.put("status","OK");
 			j.put("friend",friend);
@@ -81,7 +81,7 @@ public class Friend {
 		
 				j.put("status","OK");
 			}else{
-				return ErrorService.serviceRefused(-100, "Erreur création de l'ami "+id);
+				return ErrorService.serviceRefused(1000, "Erreur création de l'ami "+id);
 			}
 			
 		}catch(JSONException je){
@@ -103,7 +103,7 @@ public class Friend {
 		
 				j.put("status","OK");
 			}else{
-				return ErrorService.serviceRefused(-100, "Erreur suppresion de l'ami"+id);
+				return ErrorService.serviceRefused(6, "Erreur suppresion de l'ami"+id);
 			}
 			
 		}catch(JSONException je){

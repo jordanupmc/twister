@@ -38,7 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 public class Comments {
 
-	public static boolean insertMessage(String token,String message){
+	public static boolean insertMessage(String token,String message, String color){
 		int author_id;
 		try {
 
@@ -61,6 +61,10 @@ public class Comments {
 
 			request.put("post", message);
 			request.put("date", today);
+			
+			if(color !=null)
+				request.put("color", color);
+			
 			request.put("comments", new BasicDBList());
 
 

@@ -20,7 +20,7 @@
 	</style>
 </head>
 <body>
-	<h1>Michaud Jeudy</h1>
+	<h1>Michaud / Jeudy</h1>
 	<h2>Documentation API</h2>
 	<table>
 		<tr>
@@ -32,7 +32,7 @@
 		<tr>
 			<td>createUser</td>
 			<td>login&password&nom&prenom</td>
-			<td>Succes {status:OK,token:,login:,id:, friends:{status:OK, friendList[]}} || Echec {status:KO, code: , textError:}</td>
+			<td>Succes {status:OK,token:,login:,id:, friends:{status:OK, followed[{id, login, prenom}], following[{id, login, prenom}]}} || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null<br>
 				1000: ce compte existe déjà<br>
 			</td>
@@ -40,7 +40,7 @@
 		<tr>
 			<td>login</td>
 			<td>login&password</td>
-			<td>Succes {status:OK,token:, friends:{status:OK, friendList[]}} || Echec {status:KO, code: , textError:}</td>
+			<td>Succes {status:OK,token:, friends:{status:OK, followed[{id, login, prenom}], following[{id, login, prenom}]}} || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null
 			</td>
 		</tr>
@@ -62,8 +62,8 @@
 		</tr>
 		<tr>
 			<td>listMessage</td>
-			<td>token&query&from&id_max&id_min&nb</td>
-			<td>Succes {status:OK, messages: [ {"post","_id","author_id","login","date","like[author_id,date]", "comments[]"} ] } || Echec {status:KO, code: , textError:}</td>
+			<td>token&query&from&id_max&id_min&nb&friends&post_id[]</td>
+			<td>Succes {status:OK, messages: [ {"post","_id","author_id","login","date","like[author_id,date]", "comments[]", (score)} ] } || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null<br>
 				1000 Token obsolete
 			</td>
@@ -80,9 +80,10 @@
 
 		<tr>
 			<td>addComment</td>
-			<td>token&id_post</td>
+			<td>token&id_post&text</td>
 			<td>Succes {status:OK, "comments":{"post","_id","login","author_id","date"} } || Echec {status:KO, code: , textError:}</td>
-			<td>state: 0:like, 1:dislike<br>-1: au moins un param est null<br>
+			<td>
+				-1: au moins un param est null<br>
 				1000 Token obsolete
 			</td>
 		</tr>
@@ -92,14 +93,15 @@
 			<td>token&id_post&id_com</td>
 			<td>Succes { "_id" : { "$oid" :} , "author_id" : , "status" : "OK"} || Echec {status:KO, code: , textError:}</td>
 			<td>0: au moins un param est null<br>
-				1000 Token obsolete
+				1000: Token obsolete<br>
+				-100: Erreur get friend
 			</td>
 		</tr>
 
 		<tr>
 			<td>getFriendList</td>
 			<td>token</td>
-			<td>Succes {status:OK, friendList: [ {"prenom","nom","id","login"} ] || Echec {status:KO, code: , textError:}</td>
+			<td>Succes {status:OK, followed[{id, login, prenom}], following[{id, login, prenom}] } || Echec {status:KO, code: , textError:}</td>
 			<td>-1: au moins un param est null<br>
 				1000 Token obsolete
 			</td>
@@ -112,12 +114,14 @@
 				1000 Token obsolete
 			</td>
 		</tr>
+
 		<tr>
 			<td>createFriend</td>
 			<td>token&id</td>
 			<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
 			<td>0: au moins un param est null<br>
-				1000 Token obsolete
+				1000: Token obsolete<br>
+				-100: Erreur création de l'ami
 			</td>
 		</tr>
 
@@ -126,18 +130,99 @@
 			<td>token&id</td>
 			<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
 			<td>0: au moins un param est null<br>
-				1000 Token obsolete
+				1000: Token obsolete<br>
+				-100: Erreur suppresion de l'ami x
 			</td>
 		</tr>
 
 		<tr>
-			<td>search</td>
-			<td>token&query&friends</td>
-			<td>Succes {status:OK,search:[{"post","_id","author_id","date"}]} || Echec {status:KO, code: , textError:}</td>
+			<td>getStatsUser</td>
+			<td>token&from</td>
+			<td>Succes {status:OK, like:{id:[], nb:}, post:{id:[], nb:} } || Echec {status:KO, code: , textError:}</td>
 			<td>0: au moins un param est null<br>
-				1000 Token obsolete
+				1000: Token obsolete
+			</td>
+		</tr>
+
+		<tr>
+			<td>editUser</td>
+			<td>token&id&(prenom || nom)</td>
+			<td>Succes {status:OK, prenom:, nom: } || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000: Token obsolete
+			</td>
+		</tr>
+
+		<tr>
+			<td>DeleteMessage</td>
+			<td>token&id_post</td>
+			<td>Succes {status:OK} || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000: Token obsolete<br>
+				-100: Impossible de supprimer le message
+			</td>
+		</tr>
+
+		<tr>
+			<td>DeleteCommentaire</td>
+			<td>token&id_post&id_com</td>
+			<td>Succes {status:OK } || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000: Token obsolete<br>
+				-100: Impossible de supprimer le commentaire
+			</td>
+		</tr>
+
+		<tr>
+			<td>getUserInfo</td>
+			<td>token&login</td>
+			<td>Succes {status:OK, nom:, prenom:, login: } || Echec {status:KO, code: , textError:}</td>
+			<td>0: au moins un param est null<br>
+				1000: Token obsolete<br>
+				-100: Impossible de recuperer les info du user x
 			</td>
 		</tr>
 	</table>
+	<!-- <p>
+		# twister
+Michaud / Jeudy
+
+<h1>Fonctionnalités</h1>
+
+-Inscription/Connexion/Se déconnecter
+
+-Ajout message
+
+-Suppression message
+
+-Like/Dislike message
+
+-Ajout commentaire
+
+-Suppression commentaire
+
+-Follow/Unfollow un user
+
+-Lister les messages d'un user avec (ou sans) ses amis
+
+-Chercher un message 
+
+-Chercher un utilisateur
+
+-Obtenir nombre de like et nombre de message d'un user
+
+-Lister ses abonnements/abonnés
+
+-Modifier son profil (nom et prénom)
+
+-Sauvegarde coté client du token localstorage
+
+-Support des emoji: manque de temps pour l'implémentation d'une palette contenant les emoji
+
+# Lib
+Emoji: http://emojione.com/
+
+Alert: http://t4t5.github.io/sweetalert/
+	</p> -->
 </body>
 </html>

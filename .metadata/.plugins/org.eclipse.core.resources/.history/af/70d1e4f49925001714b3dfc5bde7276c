@@ -46,7 +46,7 @@ public class InsertMessage extends HttpServlet {
 			return;
 		}
 			
-		if(services.Comments.insertMessage(token,java.net.URLDecoder.decode(post, "UTF-8")))
+		if(services.Comments.insertMessage(token,post))
 			out.println(SuccessService.serviceSuccess("message inserer avec success"));
 		 
 	 }

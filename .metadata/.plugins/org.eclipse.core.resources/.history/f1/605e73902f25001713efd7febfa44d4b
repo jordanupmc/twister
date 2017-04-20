@@ -51,7 +51,7 @@ public class GetUserInfo extends HttpServlet {
 		JSONObject obj= services.User.getUser(login);
 		
 		if(obj == null)
-			out.println(ErrorService.serviceRefused(-100,"Impossible de recuperer les info du user "+login));
+			out.println(ErrorService.serviceRefused(-2,"Impossible de supprimer le commentaire"));
 		else
 			out.print(obj);
 

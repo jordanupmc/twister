@@ -54,7 +54,7 @@ public class DeleteMessage extends HttpServlet {
 			 	DBObject obj= services.Comments.removeMessageByToken(id,token);
 			 	
 			 	if(obj == null)
-			 		out.println(ErrorService.serviceRefused(-2,"Impossible de supprimer le message"));
+			 		out.println(ErrorService.serviceRefused(-100,"Impossible de supprimer le message"));
 			 	else
 			 		out.print(obj);
 			 	

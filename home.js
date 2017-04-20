@@ -1,9 +1,12 @@
-function Message(id, auteur, texte, date, comments, likes){
+function Message(id, auteur, texte, date, comments, likes, color){
 	this.id=id;
 	this.auteur=auteur;
 	this.post=texte;
 	this.date=date;
+	this.color=color;
 
+	if(color == undefined)
+		this.color="white";
 	if(comments==undefined){
 		comments=[];
 	}
@@ -23,7 +26,7 @@ Message.prototype.getHtml=function(){
 		s+="<span>\n<b><a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\">"+this.auteur.login+"</a></b>\n"
 	
 	s+="<span class=\"dateMessage\">"+parseDate(this.date)+"</span>\n</span>\n"
-	s+="<p>"+emojione.shortnameToImage(this.post)+"</p>"
+	s+="<p style=\"background-color:"+this.color+"\">"+emojione.shortnameToImage(this.post)+"</p>"
 	s+=getMessageFooter(this.id, this.comments.length, this.likes.length, findAuteurLike(this.likes)!=-1 );
 	s += "<ul class=\"liste_message_comment\">\n</ul>\n";
 
@@ -69,7 +72,11 @@ Like.prototype.getHtml=function(){
 function revival(key,value){
 
 	if(value.comments != undefined){
-		return  new Message(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date, value.comments, value.like);;
+		if(value.color == undefined)
+			return  new Message(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date, value.comments, value.like);
+		else
+			return  new Message(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date, value.comments, value.like, value.color);
+
 	}else if(value.post != undefined){
 		return new Commentaire(value._id, {"id":value.author_id,"login": value.login}, value.post, value.date);
 	}else if(value.auteur_id != undefined){
@@ -77,7 +84,6 @@ function revival(key,value){
 	}else if(key =='date'){
 		value=value.replace(/CEST/, '+0200');
 		return new Date(value);
-
 	}else{
 		return value;
 	}
@@ -244,6 +250,7 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 		//console.log(localStorage.getItem("env"))
 	}
 
+	var colors=["blue","red","green","pink","lightblue","olive","orangered","orchid","slateblue","yellow", "plum","tomato"];
 	var s="";
 	s+="<div id=\"main\"> <header> <a href=\"javascript:(function(){return;}())\" onclick=\"javascript:makeMainPanel('"+env.fromId+"','"+env.fromLogin+"')\" ><img src=\"image/logo.png\" alt=\"\"></a><form onsubmit=\"javascript:searchHead()\" action=\"javascript:(function(){return;}())\">"+
 	"<input type=\"text\" id=\"inputSearch\" name=\"search\" placeholder=\"Recherchez sur Twister\">"+
@@ -290,6 +297,12 @@ function makeMainPanel(fromId, fromLogin, toId, toLogin,wFriends ,query){
 		"<form action=\"javascript:(function(){return;}())\"  onsubmit=\"newPost()\" >"+
 		"<input type=\"submit\" value=\"+\">"+
 		"<input type=\"text\" name=\"comments\" id=\"post_new\" placeholder=\"Composez un nouveau Twist...\" required>"+
+		"<label style=\"color:white\" for=\"selectColor\">Couleur</label><select id=\"selectColor\">"+
+  		"<option value=\"white\" selected>white</option>";
+  		for(var x=0; x<colors.length; x++){
+  			s+="<option style=\"color:"+colors[x]+"\" value=\""+colors[x]+"\">"+colors[x]+"</option>";
+  		}
+		s+="</select>"+
 		"</form>"+
 		"</div>"
 	}
@@ -787,14 +800,14 @@ function newPost(){
 
 	$("#post_new").val("");
 	if(!env.noConnection){
-
+		var color = $("#selectColor option:selected").text();
+		console.log(color);
 		$.ajax({
 			type:"POST",
 			url: "http://li328.lip6.fr:8280/gr3_michaud_jeudy/insertMessage",
-			data:"token="+env.token+"&post="+encodeURIComponent(texte),
+			data:"token="+env.token+"&post="+encodeURIComponent(texte)+"&color="+color,
 			dataType:"json",
 			success: function(result){
-				
 				if(result.code == 1000){
 					makeConnectionPanel();
 				}else

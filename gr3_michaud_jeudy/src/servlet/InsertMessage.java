@@ -26,6 +26,7 @@ public class InsertMessage extends HttpServlet {
 		 response.setContentType( "text / plain"  );
 		 String post=request.getParameter("post");
 		 String token=request.getParameter("token");
+		 String color = request.getParameter("color");
 		 
 		 PrintWriter out = response.getWriter ();
 		 
@@ -33,6 +34,7 @@ public class InsertMessage extends HttpServlet {
 	 		  out.println(ErrorService.serviceRefused(-1,"erreur arguments"));
 	 		  return;
 	 	}
+		 
 		try {
 			if(!Session.checkToken(token)){
 				 out.println(ErrorService.serviceRefused(1000,"Token obsolete"));
@@ -46,7 +48,7 @@ public class InsertMessage extends HttpServlet {
 			return;
 		}
 			
-		if(services.Comments.insertMessage(token,post))
+		if(services.Comments.insertMessage(token,post,color))
 			out.println(SuccessService.serviceSuccess("message inserer avec success"));
 		 
 	 }

@@ -53,7 +53,7 @@ public class AddComment extends HttpServlet {
 				return;
 			}
 
-		 DBObject o=services.Comments.comment(token, java.net.URLDecoder.decode(com, "UTF-8"), idPost);
+		 DBObject o=services.Comments.comment(token,com, idPost);
 		 if(o == null){
 			 out.println(ErrorService.serviceRefused(-2,"echec ajout du commentaire"));
 			 return;
